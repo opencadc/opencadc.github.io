@@ -1,0 +1,39 @@
+- name: 'cadc-util'
+  description: 'Utilities'
+  image_path: 'cadc-util.jpg'
+  github: '{{ site.organization.repository }}/core/cadc-util'
+
+- name: 'cadc-log'
+  description: 'Logging'
+  image_path: 'cadc-log.jpg'
+  github: '{{ site.organization.repository }}/core/cadc-log'
+
+- name: 'cadc-vos'
+  description: 'VOSpace core library'
+  image_path: 'cadc-vos.jpg'
+  github: '{{ site.organization.repository }}/vos/cadc-vos'
+
+- name: 'cadc-vos-server'
+  description: 'VOSpace server library'
+  image_path: 'cadc-vos-server.jpg'
+  github: '{{ site.organization.repository }}/vos/cadc-vos-server'
+
+- name: 'cadc-access-control'
+  description: 'Access Control with LDAP library'
+  image_path: 'cadc-access-control.jpg'
+  github: '{{ site.organization.repository }}/ac/cadc-access-control'
+
+- name: 'cadc-access-control-server'
+  description: 'Access Control with LDAP server library'
+  image_path: 'cadc-access-control-server.jpg'
+  github: '{{ site.organization.repository }}/ac/cadc-access-control-server'
+
+- name: 'cadc-uws'
+  description: 'Universal Worker Service library'
+  image_path: 'cadc-uws.jpg'
+  github: '{{ site.organization.repository }}/uws/cadc-uws'
+
+- name: 'cadc-tap'
+  description: 'Table Access Protocol library'
+  image_path: 'cadc-tap.jpg'
+  github: '{{ site.organization.repository }}/tap/cadc-tap'
