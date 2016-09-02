@@ -61,15 +61,18 @@ a {
 
 @media screen and (min-width: 64em) {
   .page-header {
-    padding: 5rem 6rem; } }
+    padding: 5rem 6rem;
+    margin: 0; } }
 
 @media screen and (min-width: 42em) and (max-width: 64em) {
   .page-header {
-    padding: 3rem 4rem; } }
+    padding: 3rem 4rem;
+    margin: 0;  } }
 
 @media screen and (max-width: 42em) {
   .page-header {
-    padding: 2rem 1rem; } }
+    padding: 2rem 1rem;
+    margin: 0;  } }
 
 .project-name {
   margin-top: 0;
@@ -205,7 +208,7 @@ a {
 
 @media screen and (min-width: 64em) {
   .main-content {
-    max-width: 64rem;
+    /* max-width: 64rem;*/
     padding: 2rem 6rem;
     margin: 0 auto;
     font-size: 1.1rem; } }

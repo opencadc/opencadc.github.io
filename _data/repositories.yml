@@ -1,0 +1,24 @@
+- name: 'core'
+  title: 'Core'
+  description: 'Core utilities for shared code and logging functionality.'
+  img: ''
+
+- name: 'vos'
+  title: 'VOSpace'
+  description: 'User Storage (VOSpace) as per the IVOA specifications.'
+  img: ''
+
+- name: 'uws'
+  title: 'Universal Worker Service'
+  description: 'Task (Job) oriented process management.'
+  img: ''
+
+- name: 'tap'
+  title: 'Table Access Protocol'
+  description: 'Define VOTable layout.'
+  img: ''
+
+- name: 'ac'
+  title: 'Access Control'
+  description: 'User and Group management with authentication and authorization with LDAP.'
+  img: ''  
