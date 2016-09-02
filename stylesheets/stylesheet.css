@@ -61,17 +61,17 @@ a {
 
 @media screen and (min-width: 64em) {
   .page-header {
-    padding: 5rem 6rem;
+    padding: 3rem;
     margin: 0; } }
 
 @media screen and (min-width: 42em) and (max-width: 64em) {
   .page-header {
-    padding: 3rem 4rem;
+    padding: 2rem;
     margin: 0;  } }
 
 @media screen and (max-width: 42em) {
   .page-header {
-    padding: 2rem 1rem;
+    padding: 1rem;
     margin: 0;  } }
 
 .project-name {
