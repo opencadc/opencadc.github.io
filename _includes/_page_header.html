@@ -3,8 +3,7 @@
   <h2 class="project-tagline">{{ site.tagline }}</h2>
   <div class="row">
   {% for repo in site.data.repositories %}
-    <a href="#{{ repo.name }}" class="btn">{{ repo.title }}</a>
+    <a href="#{{ repo.name }}" type="button" class="btn">{{ repo.title }}</a>
   {% endfor %}
-    <a href="{{ site.organization.repository }}" class="btn btn-sm">GitHub</a>
   </div>
 </section>
