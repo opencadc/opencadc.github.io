@@ -20,9 +20,7 @@ a {
   margin-bottom: 1rem;
   color: rgba(255, 255, 255, 0.7);
   background-color: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-  border-style: solid;
-  border-width: 1px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 0.3rem;
   transition: color 0.2s, background-color 0.2s, border-color 0.2s; }
   .btn + .btn {
@@ -56,8 +54,8 @@ a {
 .page-header {
   color: #fff;
   text-align: center;
-  background-color: #159957;
-  background-image: linear-gradient(120deg, #155799, #159957); }
+  background: #159957 linear-gradient(120deg, #155799, #159957);
+}
 
 @media screen and (min-width: 64em) {
   .page-header {
@@ -97,7 +95,7 @@ a {
 
 @media screen and (min-width: 64em) {
   .project-tagline {
-    font-size: 1.25rem; } }
+    font-size: 1.4rem; } }
 
 @media screen and (min-width: 42em) and (max-width: 64em) {
   .project-tagline {
@@ -107,8 +105,8 @@ a {
   .project-tagline {
     font-size: 1rem; } }
 
-.main-content :first-child {
-  margin-top: 0; }
+/*.main-content :first-child {*/
+  /*margin-top: 0; }*/
 .main-content img {
   max-width: 100%; }
 .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6 {
@@ -235,14 +233,86 @@ a {
 .site-footer-credits {
   color: #819198; }
 
+.repository_details {
+  position: absolute;
+  display: block;
+  text-align: right;
+  top: 50%;
+  left: 70%;
+  right: 1.0rem;
+  font-size: 3rem;
+  color: #fff;
+  text-shadow: 0 0 3rem rgba(0, 0, 0, .15);
+  opacity: 0;
+}
+
 @media screen and (min-width: 64em) {
   .site-footer {
-    font-size: 1rem; } }
+    font-size: 1rem; }
+  .repository_details {
+    opacity: 0;  }
+}
 
 @media screen and (min-width: 42em) and (max-width: 64em) {
   .site-footer {
-    font-size: 1rem; } }
+    font-size: 1rem; }
+  .repository_details {
+    opacity: 1;  }
+}
 
 @media screen and (max-width: 42em) {
   .site-footer {
-    font-size: 0.9rem; } }
+    font-size: 0.9rem; }
+  .repository_details {
+    opacity: 1;  }
+}
+
+.repository_details span.repo_github {
+  background: url("images/GitHub-Mark-32px.png") no-repeat;
+  padding-right: 1.0em;
+}
+
+.repository_details span.repo_github:hover {
+  background: url("images/GitHub-Mark-Light-32px.png") no-repeat;
+}
+
+.repository_showcase:hover {
+  background: rgba(61, 131, 64, 0.7);
+  cursor: pointer;
+}
+
+.repository_showcase:hover .repository_details {
+  opacity: 1;
+}
+
+.repository_showcase {
+  position: relative;
+  color: #fff;
+  background: rgba(61, 131, 64, 0.8);
+  border: 1px solid #159957;
+  border-radius: 0.6rem;
+  padding: 0 1.5em 0.5em 2.0em;
+  margin-bottom: 1.0em;
+  margin-top: 1.0em;
+  height: 140px;
+  min-height: 140px;
+}
+
+.repository_showcase p {
+  max-width: 34rem;
+}
+
+.repository_showcase h3 {
+  font-size: 3.0rem;
+  color: #fff;
+}
+
+.repository_details a {
+  text-decoration: none;
+  color: rgba(10, 10, 10, 0.7);
+}
+
+.repository_details a:hover {
+  text-decoration: none;
+  color: #fff;
+}

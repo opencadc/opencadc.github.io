@@ -4,13 +4,24 @@ layout: splash
 
 <section class="main-content">
 
+  <div class="row">
   {% for repo in site.data.repositories %}
-  
-  <h3><a id="{{ repo.name }}" class="anchor"
-         href="#{{ repo.name }}" aria-hidden="true">
-    <span aria-hidden="true" class="octicon octicon-link"></span></a>{{ repo.title }}</h3>
+      {% assign loopindex = forloop.index | modulo: 2 %}
+      {% if loopindex == 1 %}
+        <div class="row">
+          <div class="col-md-8 col-md-offset-2">
+            <div class="repository_showcase col-md-5">
+              {% include _repo_showcase.html %}
+            </div>
+        {% else %}
+            <div class="repository_showcase col-md-5 col-md-offset-2">
+              {% include _repo_showcase.html %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
 
-  <p>{{ repo.description }}</p>
   {% endfor %}
+  </div>
 
 </section>
