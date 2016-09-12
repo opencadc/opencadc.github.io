@@ -8,7 +8,6 @@
   projects:
 
 - name: 'core'
-  enabled: 'true'
   title: 'Core'
   description: 'Core utilities for shared code and logging functionality.'
   img: ''
