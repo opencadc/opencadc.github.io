@@ -285,6 +285,10 @@ a {
   opacity: 1;
 }
 
+.repository_showcase a {
+  color: inherit;
+}
+
 .repository_showcase {
   position: relative;
   color: #fff;
