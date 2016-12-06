@@ -65,7 +65,7 @@ that is available through all applications.
         <td>web service to support ingestion of metadadata into CAOM at CADC (requires authentication)</td>
     </tr>
     
-    <tr class="odd">
+    <!--<tr class="odd">
         <td><b>caom2</b></td>
         <td>java library for manipulating CAOM observations, including reading and writing XML documents
             <br><a href="http://code.google.com/p/caom/">source code</a></td>
@@ -100,7 +100,7 @@ that is available through all applications.
         <td><b>wcsLibJNI</b></td>
         <td>JNI binding library for <a href="http://www.atnf.csiro.au/people/mcalabre/WCS/">wcslib</a>
             <br><a href="http://code.google.com/p/opencadc/">source code</a></td>
-    </tr>
+    </tr>-->
     
 </table>
 </div>
@@ -121,6 +121,11 @@ The UML diagrams specify through the cardinality whether an object or field may 
     <li>0..1 compositions (solid black diamond at start) are equivalent to member variables; the value is optional</li>
     <li>n..* compositions signify a collection which is never null, but may be empty for n = 0</li>
 </ul>
+
+<p>
+Note about denormalisation: the CAOM data model is denormalised so that the Observation is the root class. See this
+<a href="uml/denormalisation.png">example UML</a> showing both nornmalised and denormalised forms.
+</p>
 
 <p>
 While there are a few methods shown in the model, these are to signify value conversions (e.g. wavelength to frequency) that
