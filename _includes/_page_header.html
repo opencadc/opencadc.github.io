@@ -1,0 +1,9 @@
+<section class="page-header">
+  <h1 class="project-name">{{ site.name }}</h1>
+  <h2 class="project-tagline">{{ site.tagline }}</h2>
+  <div class="row">
+  {% for repo in site.data.repositories %}
+    <a role="button" type="button" {% if repo.enabled != 'true' %}title="Coming soon." disabled="disabled"{% else %}href="#{{ repo.name }}" title="{{ repo.description }}"{% endif %}class="btn {% if repo.enabled != 'true' %}disabled{% endif %}">{{ repo.title }}</a>
+  {% endfor %}
+  </div>
+</section>
