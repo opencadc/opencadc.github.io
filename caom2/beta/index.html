@@ -5,7 +5,14 @@
       <link rel="stylesheet" href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa_wg.css" type="text/css">
       <link rel="stylesheet" href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/xmi.css" type="text/css">
    </head>
-   <body><br><hr>
+   <body>
+      <p>
+         This is the beta version of CAOM documentation generated from the VO-DML description
+         of the data model. It is currently missing some classes and descriptions and does
+         
+         not perfectly match the existing implementations.
+         
+      </p><br><hr>
       <h1>Common Archive Observation Model</h1>
       <h2><a id="contents" name="contents">Table of Contents</a></h2>
       <div class="head">
@@ -328,7 +335,7 @@
                centre
             </td>
          </tr>
-      </table><img src="CAOM-2.2.png"><hr>
+      </table><img src="CAOM-UML.png"><hr>
       <h1>2.<a name="packages">Model contents: Packages and Types</a></h1>
       <p>
          The following sub-sections present all packages in the model with their types.
@@ -569,6 +576,35 @@
                               <tr>
                                  <td class="feature-heading">description</td>
                                  <td class="feature-detail">the size of the resolved artifact; typically file size in bytes)</td>
+                              </tr>
+                              <tr>
+                                 <td colspan="3" class="info-title">compositions</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading" width="20%">name</td>
+                                 <td class="feature-heading" width="10%">feature</td>
+                                 <td class="feature-heading" width="70%">value</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Artifact.parts"></a><b>parts</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Part">Part [caom2:Part]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Artifact.parts</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..666</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">the component parts of this artifact</td>
                               </tr>
                            </table>
                         </td>
@@ -908,6 +944,119 @@
                               <tr>
                                  <td class="feature-heading">description</td>
                                  <td class="feature-detail">index of the observable axis</td>
+                              </tr>
+                              <tr>
+                                 <td colspan="3" class="info-title">compositions</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading" width="20%">name</td>
+                                 <td class="feature-heading" width="10%">feature</td>
+                                 <td class="feature-heading" width="70%">value</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Chunk.energy"></a><b>energy</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#SpectralWCS">SpectralWCS [caom2:SpectralWCS]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Chunk.energy</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">spectral WCS description of the data array or subsection thereof</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Chunk.observable"></a><b>observable</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ObservableAxis">ObservableAxis [caom2:ObservableAxis]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Chunk.observable</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">observable description of the data array or subsection thereof</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Chunk.poslarization"></a><b>polarization</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#PolarizationWCS">PolarizationWCS [caom2:PolarizationWCS]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Chunk.poslarization</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">polarization WCS description of the data array or subsection thereof</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Chunk.position"></a><b>position</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#SpatialWCS">SpatialWCS [caom2:SpatialWCS]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Chunk.position</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">spatial WCS description of the data array or subsection thereof</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Chunk.time"></a><b>time</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#TemporalWCS">TemporalWCS [caom2:TemporalWCS]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Chunk.time</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">temporal WCS description of the data array or subsection thereof</td>
                               </tr>
                            </table>
                         </td>
@@ -1931,6 +2080,203 @@
                                  <td class="feature-heading">description</td>
                                  <td class="feature-detail">the intent of the original observer in acquiring this data</td>
                               </tr>
+                              <tr>
+                                 <td colspan="3" class="info-title">compositions</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading" width="20%">name</td>
+                                 <td class="feature-heading" width="10%">feature</td>
+                                 <td class="feature-heading" width="70%">value</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Observation.algorithm"></a><b>algorithm</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Algorithm">Algorithm [caom2:Algorithm]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Observation.algorithm</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">the algorithm or process that created this observation</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Observation.environment"></a><b>environment</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Environment">Environment [caom2:Environment]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Observation.environment</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">the environmental conditions at the time of observation</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Observation.instrument"></a><b>instrument</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Instrument">Instrument [caom2:Instrument]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Observation.instrument</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">the instrument or detector used to acquire the data</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Observation.planes"></a><b>planes</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Plane">Plane [caom2:Plane]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Observation.planes</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..666</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">the component planes belonging to this observation</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Observation.Proposal"></a><b>proposal</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Proposal">Proposal [caom2:Proposal]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Observation.Proposal</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">the science proposal underwhich this observation was created</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Observation.requirements"></a><b>requirements</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Requirements">Requirements [caom2:Requirements]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Observation.requirements</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">the observational requirements specified by the observer or proposal</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Observation.target"></a><b>target</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Target">Target [caom2:Target]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Observation.target</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">the intended target of the observation</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Observation.targetPosition"></a><b>targetPosition</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#TargetPosition">TargetPosition [caom2:TargetPosition]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Observation.targetPosition</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">the intended target position for this observation</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Observation.telescope"></a><b>telescope</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Telescope">Telescope [caom2:Telescope]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Observation.telescope</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">the telescope or facility where this observation was created</td>
+                              </tr>
                            </table>
                         </td>
                      </tr>
@@ -2054,6 +2400,35 @@
                               <tr>
                                  <td class="feature-heading">description</td>
                                  <td class="feature-detail">product type of this part when it differs from the parent artifact</td>
+                              </tr>
+                              <tr>
+                                 <td colspan="3" class="info-title">compositions</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading" width="20%">name</td>
+                                 <td class="feature-heading" width="10%">feature</td>
+                                 <td class="feature-heading" width="70%">value</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Part.chunks"></a><b>chunks</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Chunk">Chunk [caom2:Chunk]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Part.chunks</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..666</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">component chunks that belong to this part</td>
                               </tr>
                            </table>
                         </td>
@@ -2186,6 +2561,182 @@
                               <tr>
                                  <td class="feature-heading">description</td>
                                  <td class="feature-detail">standard classification of the degree to which the data is calibrated</td>
+                              </tr>
+                              <tr>
+                                 <td colspan="3" class="info-title">compositions</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading" width="20%">name</td>
+                                 <td class="feature-heading" width="10%">feature</td>
+                                 <td class="feature-heading" width="70%">value</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Plane.artifacts"></a><b>artifacts</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Artifact">Artifact [caom2:Artifact]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Plane.artifacts</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..666</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">the component artifacts belonging to this plane</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Plane.energy"></a><b>energy</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Energy">Energy [caom2:Energy]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Plane.energy</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">descritpion of the energy(ies) included in the data</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Plane.metrics"></a><b>metrics</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Metrics">Metrics [caom2:Metrics]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Plane.metrics</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">collection of measured quantities that describe the content of the data</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Plane.polarization"></a><b>polarization</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Polarization">Polarization [caom2:Polarization]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Plane.polarization</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">description of the polarization(s) included in the data</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Plane.position"></a><b>position</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Position">Position [caom2:Position]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Plane.position</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">description of the position(s) included in the data</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Plane.provenance"></a><b>provenance</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Provenance">Provenance [caom2:Provenance]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Plane.provenance</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">description of the provenance of the data</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Plane.quality"></a><b>quality</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#DataQuality">DataQuality [caom2:DataQuality]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Plane.quality</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">flag indicating the quality of the data</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="5"><a name="Plane.time"></a><b>time</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#Time">Time [caom2:Time]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Plane.time</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">isOrdered</td>
+                                 <td class="feature-detail">false</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">description of the time(s) included in the data</td>
                               </tr>
                            </table>
                         </td>
@@ -6194,6 +6745,11 @@
             <td class="feature-detail">label specifying the format of the resolved artifact; typically a MIME-type</td>
          </tr>
          <tr>
+            <td class="feature-detail"><a href="#Artifact.parts">Artifact.parts</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">the component parts of this artifact</td>
+         </tr>
+         <tr>
             <td class="feature-detail"><a href="#Artifact.productType">Artifact.productType</a></td>
             <td class="feature-detail">attribute</td>
             <td class="feature-detail">TODO: define this</td>
@@ -6265,6 +6821,11 @@
             </td>
          </tr>
          <tr>
+            <td class="feature-detail"><a href="#Chunk.energy">Chunk.energy</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">spectral WCS description of the data array or subsection thereof</td>
+         </tr>
+         <tr>
             <td class="feature-detail"><a href="#Chunk.energyAxis">Chunk.energyAxis</a></td>
             <td class="feature-detail">attribute</td>
             <td class="feature-detail">index of the energy axis</td>
@@ -6275,14 +6836,29 @@
             <td class="feature-detail">number of axes in the data array</td>
          </tr>
          <tr>
+            <td class="feature-detail"><a href="#Chunk.observable">Chunk.observable</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">observable description of the data array or subsection thereof</td>
+         </tr>
+         <tr>
             <td class="feature-detail"><a href="#Chunk.observableAxis">Chunk.observableAxis</a></td>
             <td class="feature-detail">attribute</td>
             <td class="feature-detail">index of the observable axis</td>
          </tr>
          <tr>
+            <td class="feature-detail"><a href="#Chunk.poslarization">Chunk.poslarization</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">polarization WCS description of the data array or subsection thereof</td>
+         </tr>
+         <tr>
             <td class="feature-detail"><a href="#Chunk.polarizationAxis">Chunk.polarizationAxis</a></td>
             <td class="feature-detail">attribute</td>
             <td class="feature-detail">index of the polarization axis</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Chunk.position">Chunk.position</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">spatial WCS description of the data array or subsection thereof</td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.positionAxis1">Chunk.positionAxis1</a></td>
@@ -6298,6 +6874,11 @@
             <td class="feature-detail"><a href="#Chunk.productType">Chunk.productType</a></td>
             <td class="feature-detail">attribute</td>
             <td class="feature-detail">product type where it differs from the parent part</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Chunk.time">Chunk.time</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">temporal WCS description of the data array or subsection thereof</td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.timeAxis">Chunk.timeAxis</a></td>
@@ -6563,9 +7144,24 @@
             <td class="feature-detail">an observation is a single top-level entry in an astronomy data centre</td>
          </tr>
          <tr>
+            <td class="feature-detail"><a href="#Observation.algorithm">Observation.algorithm</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">the algorithm or process that created this observation</td>
+         </tr>
+         <tr>
             <td class="feature-detail"><a href="#Observation.collection">Observation.collection</a></td>
             <td class="feature-detail">attribute</td>
             <td class="feature-detail">the name of the data collection this observation belongs to</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Observation.environment">Observation.environment</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">the environmental conditions at the time of observation</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Observation.instrument">Observation.instrument</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">the instrument or detector used to acquire the data</td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Observation.intent">Observation.intent</a></td>
@@ -6583,11 +7179,41 @@
             <td class="feature-detail">the collection-specific identifier for this observation</td>
          </tr>
          <tr>
+            <td class="feature-detail"><a href="#Observation.planes">Observation.planes</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">the component planes belonging to this observation</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Observation.Proposal">Observation.Proposal</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">the science proposal underwhich this observation was created</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Observation.requirements">Observation.requirements</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">the observational requirements specified by the observer or proposal</td>
+         </tr>
+         <tr>
             <td class="feature-detail"><a href="#Observation.sequenceNumber">Observation.sequenceNumber</a></td>
             <td class="feature-detail">attribute</td>
             <td class="feature-detail">a collection-specific sequence number for observations; re-use or reset is collection
                specific
             </td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Observation.target">Observation.target</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">the intended target of the observation</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Observation.targetPosition">Observation.targetPosition</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">the intended target position for this observation</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Observation.telescope">Observation.telescope</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">the telescope or facility where this observation was created</td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Observation.type">Observation.type</a></td>
@@ -6619,6 +7245,11 @@
             </td>
          </tr>
          <tr>
+            <td class="feature-detail"><a href="#Part.chunks">Part.chunks</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">component chunks that belong to this part</td>
+         </tr>
+         <tr>
             <td class="feature-detail"><a href="#Part.name">Part.name</a></td>
             <td class="feature-detail">attribute</td>
             <td class="feature-detail">the name of this part of the artifact;
@@ -6634,6 +7265,11 @@
             <td class="feature-detail"><a href="#Plane">Plane</a></td>
             <td class="feature-detail">objectType</td>
             <td class="feature-detail">a component of an observation that describes one product of the observation</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Plane.artifacts">Plane.artifacts</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">the component artifacts belonging to this plane</td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Plane.calibrationLevel">Plane.calibrationLevel</a></td>
@@ -6655,6 +7291,11 @@
             </td>
          </tr>
          <tr>
+            <td class="feature-detail"><a href="#Plane.energy">Plane.energy</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">descritpion of the energy(ies) included in the data</td>
+         </tr>
+         <tr>
             <td class="feature-detail"><a href="#Plane.metaRelease">Plane.metaRelease</a></td>
             <td class="feature-detail">attribute</td>
             <td class="feature-detail">timestamp after which metadata for the plane is public; this metaRelease timestamp
@@ -6662,9 +7303,39 @@
             </td>
          </tr>
          <tr>
+            <td class="feature-detail"><a href="#Plane.metrics">Plane.metrics</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">collection of measured quantities that describe the content of the data</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Plane.polarization">Plane.polarization</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">description of the polarization(s) included in the data</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Plane.position">Plane.position</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">description of the position(s) included in the data</td>
+         </tr>
+         <tr>
             <td class="feature-detail"><a href="#Plane.productID">Plane.productID</a></td>
             <td class="feature-detail">attribute</td>
             <td class="feature-detail">collection- and observationID-specific identifier for this product</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Plane.provenance">Plane.provenance</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">description of the provenance of the data</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Plane.quality">Plane.quality</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">flag indicating the quality of the data</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Plane.time">Plane.time</a></td>
+            <td class="feature-detail">composition</td>
+            <td class="feature-detail">description of the time(s) included in the data</td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Polarization">Polarization</a></td>
