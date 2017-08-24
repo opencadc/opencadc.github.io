@@ -1854,7 +1854,9 @@
                               <tr>
                                  <td class="feature-heading">description</td>
                                  <td class="feature-detail">additional keywords that describe the instrument or instrument configuration
-                                    at the time of observation
+                                    at the time of observation; 
+                                    keywords cannot contain the pipe (|) character - it is reserved for use in persistence
+                                    systems (e.g. to store all keywords in a single column in a table)
                                  </td>
                               </tr>
                            </table>
@@ -3365,7 +3367,10 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">additional keywords that describe the science goals of the proposal</td>
+                                 <td class="feature-detail">additional keywords that describe the science goals of the proposal; 
+                                    keywords cannot contain the pipe (|) character - it is reserved for use in persistence
+                                    systems (e.g. to store all keywords in a single column in a table)
+                                 </td>
                               </tr>
                            </table>
                         </td>
@@ -3543,7 +3548,10 @@
                               <tr>
                                  <td class="feature-heading">description</td>
                                  <td class="feature-detail">addituional keywords that describe the processing; this may include both general
-                                    descriptive words and those specific to this particular execution of the processing
+                                    descriptive words and those specific to this particular execution of the processing;
+                                    
+                                    keywords cannot contain the pipe (|) character - it is reserved for use in persistence
+                                    systems (e.g. to store all keywords in a single column in a table)
                                  </td>
                               </tr>
                               <tr>
@@ -3961,7 +3969,10 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">additional keywords that describe the target</td>
+                                 <td class="feature-detail">additional keywords that describe the target; 
+                                    keywords cannot contain the pipe (|) character - it is reserved for use in persistence
+                                    systems (e.g. to store all keywords in a single column in a table)
+                                 </td>
                               </tr>
                            </table>
                         </td>
@@ -4225,7 +4236,10 @@
                               <tr>
                                  <td class="feature-heading">description</td>
                                  <td class="feature-detail">additional keywords that describe the telescope or telscope configuration 
-                                    at the time of observation
+                                    at the time of observation; 
+                                    keywords cannot contain the pipe (|) character - it is reserved for use in persistence
+                                    systems (e.g. to store all keywords in a single column in a table)
+                                    
                                  </td>
                               </tr>
                            </table>
@@ -4664,10 +4678,6 @@
                                  <td colspan="3" class="feature-detail"><a href="#types">types</a></td>
                               </tr>
                               <tr>
-                                 <td width="20%" class="info-title">extends</td>
-                                 <td colspan="3" class="feature-detail"><a href="#Shape">Shape [caom2:Shape]</a></td>
-                              </tr>
-                              <tr>
                                  <td colspan="3" class="info-title">attributes</td>
                               </tr>
                               <tr>
@@ -4874,7 +4884,7 @@
                               </tr>
                               <tr>
                                  <td class="info-title">Subclasses in this model</td>
-                                 <td class="feature-detail" colspan="3"><a href="#Circle">Circle</a> <a href="#MultiPolygon">MultiPolygon</a> <a href="#Polygon">Polygon</a> 
+                                 <td class="feature-detail" colspan="3"><a href="#Circle">Circle</a> <a href="#Polygon">Polygon</a> 
                                  </td>
                               </tr>
                            </table>
@@ -7348,7 +7358,9 @@
             <td class="feature-detail"><a href="#Instrument.keywords">Instrument.keywords</a></td>
             <td class="feature-detail">attribute</td>
             <td class="feature-detail">additional keywords that describe the instrument or instrument configuration
-               at the time of observation
+               at the time of observation; 
+               keywords cannot contain the pipe (|) character - it is reserved for use in persistence
+               systems (e.g. to store all keywords in a single column in a table)
             </td>
          </tr>
          <tr>
@@ -7753,7 +7765,10 @@
          <tr>
             <td class="feature-detail"><a href="#Proposal.keywords">Proposal.keywords</a></td>
             <td class="feature-detail">attribute</td>
-            <td class="feature-detail">additional keywords that describe the science goals of the proposal</td>
+            <td class="feature-detail">additional keywords that describe the science goals of the proposal; 
+               keywords cannot contain the pipe (|) character - it is reserved for use in persistence
+               systems (e.g. to store all keywords in a single column in a table)
+            </td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Proposal.pi">Proposal.pi</a></td>
@@ -7791,7 +7806,10 @@
             <td class="feature-detail"><a href="#Provenance.keywords">Provenance.keywords</a></td>
             <td class="feature-detail">attribute</td>
             <td class="feature-detail">addituional keywords that describe the processing; this may include both general
-               descriptive words and those specific to this particular execution of the processing
+               descriptive words and those specific to this particular execution of the processing;
+               
+               keywords cannot contain the pipe (|) character - it is reserved for use in persistence
+               systems (e.g. to store all keywords in a single column in a table)
             </td>
          </tr>
          <tr>
@@ -7917,7 +7935,10 @@
          <tr>
             <td class="feature-detail"><a href="#Target.keywords">Target.keywords</a></td>
             <td class="feature-detail">attribute</td>
-            <td class="feature-detail">additional keywords that describe the target</td>
+            <td class="feature-detail">additional keywords that describe the target; 
+               keywords cannot contain the pipe (|) character - it is reserved for use in persistence
+               systems (e.g. to store all keywords in a single column in a table)
+            </td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Target.moving">Target.moving</a></td>
@@ -8019,7 +8040,10 @@
             <td class="feature-detail"><a href="#Telescope.keywords">Telescope.keywords</a></td>
             <td class="feature-detail">attribute</td>
             <td class="feature-detail">additional keywords that describe the telescope or telscope configuration 
-               at the time of observation
+               at the time of observation; 
+               keywords cannot contain the pipe (|) character - it is reserved for use in persistence
+               systems (e.g. to store all keywords in a single column in a table)
+               
             </td>
          </tr>
          <tr>
