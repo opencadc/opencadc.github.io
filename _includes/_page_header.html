@@ -2,8 +2,27 @@
   <h1 class="project-name">{{ site.name }}</h1>
   <h2 class="project-tagline">{{ site.tagline }}</h2>
   <div class="row">
-  {% for repo in site.data.repositories %}
-    <a role="button" type="button" {% if repo.enabled != 'true' %}title="Coming soon." disabled="disabled"{% else %}href="#{{ repo.name }}" title="{{ repo.description }}"{% endif %}class="btn {% if repo.enabled != 'true' %}disabled{% endif %}">{{ repo.title }}</a>
-  {% endfor %}
+    {% for repo in site.data.repositories %}
+    <a role="button" type="button" {% if repo.enabled !='true' %}title="Coming soon." disabled="disabled" {% else %}href="#{{ repo.name }}"
+      title="{{ repo.description }}" {% endif %}class="btn {% if repo.enabled != 'true' %}disabled{% endif %}">{{ repo.title }}</a>
+    {% endfor %}
+  </div>
+  <div class="row">
+    <div class="col-sm-offset-5 col-sm-2">
+      <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group col-sm-12">
+          <a href="{{ site.github_url }}" type="button" class="col-sm-4 btn btn-default social-button" aria-label="Center Align">
+            <i class="fa fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+          <a href="{{ site.twitter_url }}" type="button" class="col-sm-4 btn btn-default social-button" aria-label="Center Align">
+            <i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
+          </a>
+          <a href="{{ site.slack_url }}" type="button" class="col-sm-4 btn btn-default social-button disabled" aria-label="Center Align"
+            disabled="disabled">
+            <i class="fa fa-slack fa-2x" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </section>

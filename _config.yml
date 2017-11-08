@@ -3,7 +3,11 @@ tagline: Astronomy like mum used to make, only better.
 permalink: /news/:year/:month/:day/:title/
 relative_permalinks: false
 markdown: kramdown
-organization:
-  name: opencadc
-  repository: https://github.com/opencadc
-  site_repository: https://github.com/opencadc/opencadc.github.io
+future: true
+github_url: 'https://github.com/opencadc'
+twitter_url: 'https://twitter.com/AstroCADC'
+slack_url: 'http://mach378.cadc.dao.nrc.ca:3002'
+repository: 'opencadc/opencadc.github.io'
+organization_name: 'opencadc'
+plugins:
+  - jekyll-redirect-from
