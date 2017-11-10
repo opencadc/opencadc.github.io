@@ -6,7 +6,7 @@ markdown: kramdown
 future: true
 github_url: 'https://github.com/opencadc'
 twitter_url: 'https://twitter.com/AstroCADC'
-slack_url: 'http://mach378.cadc.dao.nrc.ca:3002'
+slack_url: '/slack'
 repository: 'opencadc/opencadc.github.io'
 organization_name: 'opencadc'
 plugins:
