@@ -4,21 +4,13 @@ lang: en
 permalink: /codestyles/js
 ---
 
-<section class="main-content">
-
 # JavaScript code styles for OpenCADC
 
-<div class="row">
-<ul>
-<li>No semicolons</li>
-<li>Single-quote strings</li>
-<li>Line width is one hundred and twenty (120) characters</li>
-<li>Tab width is two (2) characters</li>
-  <li style="margin-left: 4px;">Use spaces, not Tab characters</li>
-<li>One space before function paranthesis</li>
-<li>Use condensed style</li>
-  <li style="margin-left: 4px;">Curly-braces on same line</li>
-</ul>
-</div>
-
-</section>
+* No semicolons
+* Single-quote strings
+* Line width is one hundred and twenty (120) characters
+* Tab width is two (2) characters
+  * Use spaces, not Tab characters
+* One space before function paranthesis
+* Use condensed style
+  * Curly-braces on same line
