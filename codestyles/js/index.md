@@ -6,6 +6,9 @@ permalink: /codestyles/js
 
 # JavaScript code styles for OpenCADC
 
+<section class="main-content">
+
+  <div class="row">
 * No semicolons
 * Single-quote strings
 * Line width is one hundred and twenty (120) characters
@@ -14,3 +17,6 @@ permalink: /codestyles/js
 * One space before function paranthesis
 * Use condensed style
   * Curly-braces on same line
+</div>
+
+</section>
