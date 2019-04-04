@@ -1,0 +1,28 @@
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>CAOM DataProductType ontology</title>
+</head>
+<body>
+<h1>CAOM DataProductType ontology</h1>
+<p>This is the description of the namespace <code>http://www.opencadc.org/caom2/DataProductType</code> as of 2019-04-04.</p>
+<p>
+Terms from the vocabulary may be used in CAOM instances as values of the caom2:Plane.dataProductType field. The terms that are also included in the IVOA ObsCore-1.1 dataproduct_type values are to be used 
+without the URI prefix (e.g. image instead of http://www.opencadc.org/caom2/DataProductType#image) 
+while CAOM-specific values must be fully qualified (e.g. http://www.opencadc.org/caom2/DataProductType#catalog).
+</p>
+<p>
+Alternate formats: <a href="DataProductType.rdf">RDF</a> <a href="DataProductType.ttl">TTL</a> 
+</p>
+
+<table>
+<tr><th>Predicate</th><th>Parent</th><th>Label</th><th>Comment</th></tr>
+<tr><td>#image</td><td></td><td>two-dimensional image</td><td>two-dimensional data where the axes are position (longitude and latitide)</td></tr>
+<tr><td>#cube</td><td></td><td>multi-dimensional dataset</td><td>dataset with three or more axes</td></tr>
+<tr><td>#spectrum</td><td></td><td>dataset with spectral axis</td><td>one- or two-dimensional data where the primary axis is energy</td></tr>
+<tr><td>#timeseries</td><td></td><td>time series data</td><td>data presenting some quantity as a function of time</td></tr>
+<tr><td>#visibility</td><td></td><td>visibility data</td><td>instrumental radio data that may contain positon-energy-time-polarization axes</td></tr>
+<tr><td>#event</td><td></td><td>event list</td><td>list of discrete events (usually detections of single photons)</td></tr>
+<tr><td>#measurements</td><td></td><td>derived results</td><td>a list of values extacted by analysis of other types of datasets</td></tr>
+<tr><td>#catalog</td><td>#measurements</td><td>source catalog [CAOM]</td><td>measurements of spatially resolved sources extracted from an image or cube</td></tr>
+<tr><td>#sed</td><td></td><td>spectral energy distribution</td><td>data product produced by combining flux data at different energies</td></tr>
+</table></body></html>

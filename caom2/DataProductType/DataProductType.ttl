@@ -1,0 +1,63 @@
+@base <http://www.opencadc.org/caom2/DataProductType>.
+@prefix : <#>.
+
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+<> a owl:Ontology;
+  dc:created "2019-04-04";
+  dc:creator [ foaf:name "Patrick Dowler" ];
+  rdfs:label "CAOM DataProductType ontology"@en;
+  dc:title "CAOM DataProductType ontology"@en;
+  dc:description """
+Terms from the vocabulary may be used in CAOM instances as values of the caom2:Plane.dataProductType field. The terms that are also included in the IVOA ObsCore-1.1 dataproduct_type values are to be used 
+without the URI prefix (e.g. image instead of http://www.opencadc.org/caom2/DataProductType#image) 
+while CAOM-specific values must be fully qualified (e.g. http://www.opencadc.org/caom2/DataProductType#catalog).
+""".
+
+dc:created a owl:AnnotationProperty.
+dc:creator a owl:AnnotationProperty.
+dc:title a owl:AnnotationProperty.
+dc:description a owl:AnnotationProperty.
+
+<#image> a rdf:Property;
+  rdfs:label "two-dimensional image";
+  rdfs:comment "two-dimensional data where the axes are position (longitude and latitide)".
+
+<#cube> a rdf:Property;
+  rdfs:label "multi-dimensional dataset";
+  rdfs:comment "dataset with three or more axes".
+
+<#spectrum> a rdf:Property;
+  rdfs:label "dataset with spectral axis";
+  rdfs:comment "one- or two-dimensional data where the primary axis is energy".
+
+<#timeseries> a rdf:Property;
+  rdfs:label "time series data";
+  rdfs:comment "data presenting some quantity as a function of time".
+
+<#visibility> a rdf:Property;
+  rdfs:label "visibility data";
+  rdfs:comment "instrumental radio data that may contain positon-energy-time-polarization axes".
+
+<#event> a rdf:Property;
+  rdfs:label "event list";
+  rdfs:comment "list of discrete events (usually detections of single photons)".
+
+<#measurements> a rdf:Property;
+  rdfs:label "derived results";
+  rdfs:comment "a list of values extacted by analysis of other types of datasets".
+
+<#catalog> a rdf:Property;
+  rdfs:subPropertyOf <#measurements>;
+  rdfs:label "source catalog [CAOM]";
+  rdfs:comment "measurements of spatially resolved sources extracted from an image or cube".
+
+<#sed> a rdf:Property;
+  rdfs:label "spectral energy distribution";
+  rdfs:comment "data product produced by combining flux data at different energies".
+
