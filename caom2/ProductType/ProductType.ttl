@@ -1,0 +1,77 @@
+@base <http://www.opencadc.org/caom2/ProductType>.
+@prefix : <#>.
+
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+<> a owl:Ontology;
+  dc:created "2019-04-04";
+  dc:creator [ foaf:name "Patrick Dowler" ];
+  rdfs:label "ProductType vocabulary"@en;
+  dc:title "ProductType vocabulary"@en;
+  dc:description """<div>
+Terms from the vocabulary may be used in CAOM instances as values of the 
+caom2:Artifact.productType field. Terms in the base vocabulary are to be
+used without the URI prefix (e.g. science instead of http://www.opencadc.org/caom2/productType#science).
+</div>
+""".
+
+dc:created a owl:AnnotationProperty.
+dc:creator a owl:AnnotationProperty.
+dc:title a owl:AnnotationProperty.
+dc:description a owl:AnnotationProperty.
+
+<#science> a rdf:Property;
+  rdfs:label "science data";
+  rdfs:comment "primary data file for observations that contains the science data (extraterrestrial photons)".
+
+<#calibration> a rdf:Property;
+  rdfs:label "calibration data";
+  rdfs:comment "primary file for observations intended for use in removing instrument signature".
+
+<#bias> a rdf:Property;
+  rdfs:subPropertyOf <#calibration>;
+  rdfs:label "bias frame";
+  rdfs:comment "calibration file used to correct for CCD bias".
+
+<#dark> a rdf:Property;
+  rdfs:subPropertyOf <#calibration>;
+  rdfs:label "dark frame";
+  rdfs:comment "calibration file used to correct for no exposure counts in a CCD readout".
+
+<#flat> a rdf:Property;
+  rdfs:subPropertyOf <#calibration>;
+  rdfs:label "flat field";
+  rdfs:comment "calibration file used to correct for sensitivity variation across a CCD".
+
+<#auxiliary> a rdf:Property;
+  rdfs:label "related file";
+  rdfs:comment "file that could be useful in interpreting the primary file(s)".
+
+<#noise> a rdf:Property;
+  rdfs:subPropertyOf <#auxiliary>;
+  rdfs:label "noise map";
+  rdfs:comment "auxiliary file that provides noise estimates per pixel in the primary file(s)".
+
+<#weight> a rdf:Property;
+  rdfs:subPropertyOf <#auxiliary>;
+  rdfs:label "weight map";
+  rdfs:comment "auxiliary file that provides weights that can be used when analysing the primary file(s)".
+
+<#info> a rdf:Property;
+  rdfs:label "human-readable information";
+  rdfs:comment "extra information about the primary files (e.g. processing logs)".
+
+<#preview> a rdf:Property;
+  rdfs:label "preview image";
+  rdfs:comment "a degraded representation of the data useful for display and assessing content".
+
+<#thumbnail> a rdf:Property;
+  rdfs:subPropertyOf <#preview>;
+  rdfs:label "small preview image";
+  rdfs:comment "a highly degraded representation of the data suitable for displaying in a list".
+

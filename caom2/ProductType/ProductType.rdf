@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:dc="http://purl.org/dc/terms/"
+   xmlns:foaf="http://xmlns.com/foaf/0.1/"
+   xmlns:owl="http://www.w3.org/2002/07/owl#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+   xmlns="http://www.opencadc.org/caom2/ProductType#">
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/terms/created"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/terms/creator"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/terms/description"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/terms/title"/>
+  <owl:Ontology rdf:about="http://www.opencadc.org/caom2/ProductType">
+    <dc:created>2019-04-04</dc:created>
+    <dc:creator>
+      <rdf:Description>
+        <foaf:name>Patrick Dowler</foaf:name>
+      </rdf:Description>
+    </dc:creator>
+    <dc:description>&lt;div&gt;
+Terms from the vocabulary may be used in CAOM instances as values of the 
+caom2:Artifact.productType field. Terms in the base vocabulary are to be
+used without the URI prefix (e.g. science instead of http://www.opencadc.org/caom2/productType#science).
+&lt;/div&gt;
+</dc:description>
+    <dc:title xml:lang="en">ProductType vocabulary</dc:title>
+    <rdfs:label xml:lang="en">ProductType vocabulary</rdfs:label>
+  </owl:Ontology>
+  <rdf:Property rdf:about="http://www.opencadc.org/caom2/ProductType#auxiliary">
+    <rdfs:comment>file that could be useful in interpreting the primary file(s)</rdfs:comment>
+    <rdfs:label>related file</rdfs:label>
+  </rdf:Property>
+  <rdf:Property rdf:about="http://www.opencadc.org/caom2/ProductType#bias">
+    <rdfs:comment>calibration file used to correct for CCD bias</rdfs:comment>
+    <rdfs:label>bias frame</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.opencadc.org/caom2/ProductType#calibration"/>
+  </rdf:Property>
+  <rdf:Property rdf:about="http://www.opencadc.org/caom2/ProductType#calibration">
+    <rdfs:comment>primary file for observations intended for use in removing instrument signature</rdfs:comment>
+    <rdfs:label>calibration data</rdfs:label>
+  </rdf:Property>
+  <rdf:Property rdf:about="http://www.opencadc.org/caom2/ProductType#dark">
+    <rdfs:comment>calibration file used to correct for no exposure counts in a CCD readout</rdfs:comment>
+    <rdfs:label>dark frame</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.opencadc.org/caom2/ProductType#calibration"/>
+  </rdf:Property>
+  <rdf:Property rdf:about="http://www.opencadc.org/caom2/ProductType#flat">
+    <rdfs:comment>calibration file used to correct for sensitivity variation across a CCD</rdfs:comment>
+    <rdfs:label>flat field</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.opencadc.org/caom2/ProductType#calibration"/>
+  </rdf:Property>
+  <rdf:Property rdf:about="http://www.opencadc.org/caom2/ProductType#info">
+    <rdfs:comment>extra information about the primary files (e.g. processing logs)</rdfs:comment>
+    <rdfs:label>human-readable information</rdfs:label>
+  </rdf:Property>
+  <rdf:Property rdf:about="http://www.opencadc.org/caom2/ProductType#noise">
+    <rdfs:comment>auxiliary file that provides noise estimates per pixel in the primary file(s)</rdfs:comment>
+    <rdfs:label>noise map</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.opencadc.org/caom2/ProductType#auxiliary"/>
+  </rdf:Property>
+  <rdf:Property rdf:about="http://www.opencadc.org/caom2/ProductType#preview">
+    <rdfs:comment>a degraded representation of the data useful for display and assessing content</rdfs:comment>
+    <rdfs:label>preview image</rdfs:label>
+  </rdf:Property>
+  <rdf:Property rdf:about="http://www.opencadc.org/caom2/ProductType#science">
+    <rdfs:comment>primary data file for observations that contains the science data (extraterrestrial photons)</rdfs:comment>
+    <rdfs:label>science data</rdfs:label>
+  </rdf:Property>
+  <rdf:Property rdf:about="http://www.opencadc.org/caom2/ProductType#thumbnail">
+    <rdfs:comment>a highly degraded representation of the data suitable for displaying in a list</rdfs:comment>
+    <rdfs:label>small preview image</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.opencadc.org/caom2/ProductType#preview"/>
+  </rdf:Property>
+  <rdf:Property rdf:about="http://www.opencadc.org/caom2/ProductType#weight">
+    <rdfs:comment>auxiliary file that provides weights that can be used when analysing the primary file(s)</rdfs:comment>
+    <rdfs:label>weight map</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.opencadc.org/caom2/ProductType#auxiliary"/>
+  </rdf:Property>
+</rdf:RDF>

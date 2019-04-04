@@ -1,0 +1,31 @@
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>ProductType vocabulary</title>
+</head>
+<body>
+<h1>ProductType vocabulary</h1>
+<p>This is the description of the namespace <code>http://www.opencadc.org/caom2/ProductType</code> as of 2019-04-04.</p>
+<p><div>
+Terms from the vocabulary may be used in CAOM instances as values of the 
+caom2:Artifact.productType field. Terms in the base vocabulary are to be
+used without the URI prefix (e.g. science instead of http://www.opencadc.org/caom2/productType#science).
+</div>
+</p>
+<p>
+Alternate formats: <a href="DataProductType.rdf">RDF</a> <a href="DataProductType.ttl">TTL</a> 
+</p>
+
+<table>
+<tr><th>Predicate</th><th>Parent</th><th>Label</th><th>Comment</th></tr>
+<tr><td>#science</td><td></td><td>science data</td><td>primary data file for observations that contains the science data (extraterrestrial photons)</td></tr>
+<tr><td>#calibration</td><td></td><td>calibration data</td><td>primary file for observations intended for use in removing instrument signature</td></tr>
+<tr><td>#bias</td><td>#calibration</td><td>bias frame</td><td>calibration file used to correct for CCD bias</td></tr>
+<tr><td>#dark</td><td>#calibration</td><td>dark frame</td><td>calibration file used to correct for no exposure counts in a CCD readout</td></tr>
+<tr><td>#flat</td><td>#calibration</td><td>flat field</td><td>calibration file used to correct for sensitivity variation across a CCD</td></tr>
+<tr><td>#auxiliary</td><td></td><td>related file</td><td>file that could be useful in interpreting the primary file(s)</td></tr>
+<tr><td>#noise</td><td>#auxiliary</td><td>noise map</td><td>auxiliary file that provides noise estimates per pixel in the primary file(s)</td></tr>
+<tr><td>#weight</td><td>#auxiliary</td><td>weight map</td><td>auxiliary file that provides weights that can be used when analysing the primary file(s)</td></tr>
+<tr><td>#info</td><td></td><td>human-readable information</td><td>extra information about the primary files (e.g. processing logs)</td></tr>
+<tr><td>#preview</td><td></td><td>preview image</td><td>a degraded representation of the data useful for display and assessing content</td></tr>
+<tr><td>#thumbnail</td><td>#preview</td><td>small preview image</td><td>a highly degraded representation of the data suitable for displaying in a list</td></tr>
+</table></body></html>
