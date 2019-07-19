@@ -9,7 +9,7 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
 
 <> a owl:Ontology;
-  dc:created "2019-04-04";
+  dc:created "2019-07-19";
   dc:creator [ foaf:name "Patrick Dowler" ];
   rdfs:label "DataProductType vocabulary"@en;
   dc:title "DataProductType vocabulary"@en;

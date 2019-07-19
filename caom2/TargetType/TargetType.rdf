@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:dc="http://purl.org/dc/terms/"
+   xmlns:foaf="http://xmlns.com/foaf/0.1/"
+   xmlns:owl="http://www.w3.org/2002/07/owl#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+   xmlns="http://www.opencadc.org/caom2/TargetType#">
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/terms/created"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/terms/creator"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/terms/description"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/terms/title"/>
+  <owl:Ontology rdf:about="http://www.opencadc.org/caom2/TargetType">
+    <dc:created>2019-07-19</dc:created>
+    <dc:creator>
+      <rdf:Description>
+        <foaf:name>Patrick Dowler</foaf:name>
+      </rdf:Description>
+    </dc:creator>
+    <dc:description>&lt;div&gt;
+Terms from the vocabulary may be used in CAOM instances as values of the 
+caom2:Observation.target.targetType field.
+&lt;/div&gt;
+</dc:description>
+    <dc:title xml:lang="en">TargetType vocabulary</dc:title>
+    <rdfs:label xml:lang="en">TargetType vocabulary</rdfs:label>
+  </owl:Ontology>
+  <rdf:Property rdf:about="http://www.opencadc.org/caom2/TargetType#field">
+    <rdfs:comment>the target is a patch of sky named by the project or survey</rdfs:comment>
+    <rdfs:label>survey field</rdfs:label>
+  </rdf:Property>
+  <rdf:Property rdf:about="http://www.opencadc.org/caom2/TargetType#object">
+    <rdfs:comment>an extra-terrestrial object</rdfs:comment>
+    <rdfs:label>astronomical object</rdfs:label>
+  </rdf:Property>
+</rdf:RDF>

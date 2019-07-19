@@ -1,0 +1,34 @@
+@base <http://www.opencadc.org/caom2/TargetType>.
+@prefix : <#>.
+
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+<> a owl:Ontology;
+  dc:created "2019-07-19";
+  dc:creator [ foaf:name "Patrick Dowler" ];
+  rdfs:label "TargetType vocabulary"@en;
+  dc:title "TargetType vocabulary"@en;
+  dc:description """<div>
+Terms from the vocabulary may be used in CAOM instances as values of the 
+caom2:Observation.target.targetType field.
+</div>
+""".
+
+dc:created a owl:AnnotationProperty.
+dc:creator a owl:AnnotationProperty.
+dc:title a owl:AnnotationProperty.
+dc:description a owl:AnnotationProperty.
+
+<#object> a rdf:Property;
+  rdfs:label "astronomical object";
+  rdfs:comment "an extra-terrestrial object".
+
+<#field> a rdf:Property;
+  rdfs:label "survey field";
+  rdfs:comment "the target is a patch of sky named by the project or survey".
+

@@ -11,7 +11,7 @@
   <owl:AnnotationProperty rdf:about="http://purl.org/dc/terms/description"/>
   <owl:AnnotationProperty rdf:about="http://purl.org/dc/terms/title"/>
   <owl:Ontology rdf:about="http://www.opencadc.org/caom2/DataProductType">
-    <dc:created>2019-04-04</dc:created>
+    <dc:created>2019-07-19</dc:created>
     <dc:creator>
       <rdf:Description>
         <foaf:name>Patrick Dowler</foaf:name>
