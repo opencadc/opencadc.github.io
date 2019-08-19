@@ -73,3 +73,12 @@
     description: 'Access Control with LDAP server library'
     image_path: 'cadc-access-control-server.jpg'
     github: '/ac/cadc-access-control-server'
+
+- name: 'notebook-tutorials'
+  title: 'Notebook Tutorials'
+  enabled: 'true'
+  description: 'Jupyter notebook tutorials for CADC astroquery'
+  img: ''
+  github: '/notebook-tutorials'
+  documentation: '/notebook-tutorials'
+  projects:
