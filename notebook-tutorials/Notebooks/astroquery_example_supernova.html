@@ -13129,8 +13129,15 @@ div#notebook {
 <li><a href="#2.2-From-source">2.2 From source</a></li>
 </ul>
 </li>
-<li><a href="#3.-Querying">3. Querying</a></li>
-<li><a href="#4.-Fetching-Data">4. Fetching Data</a></li>
+<li><a href="#3.-Querying">3. Querying</a><ul>
+<li><a href="#3.1-Find-suitable-targets">3.1 Find suitable targets</a></li>
+<li><a href="#3.2-Using-ADQL">3.2 Using ADQL</a> </li>
+</ul>
+</li>
+<li><a href="#4.-Fetching-Data">4. Fetching Data</a><ul>
+<li><a href="#4.1-Retrieving-Data-with-astropy.io">4.1 Retrieving Data with astropy.io</a></li>
+</ul>
+</li>
 <li><a href="#5.-Plotting-Results">5. Plotting Results</a></li>
 </ul>
 <h2 id="1.-Introduction">1. Introduction<a class="anchor-link" href="#1.-Introduction">&#182;</a></h2><p>The <a href="https://sne.space/">Open Supernova Catalog</a> is an open data collection of supernova and their parameters, such as position, redshifts, and light-curve shape. This tutorial will query the catalog for supernova with a redshift between 0.2 and 0.3. After selecting a supernova target, we will query the CADC database for the target, then display some images.</p>
@@ -13147,7 +13154,7 @@ div#notebook {
     cd astroquery
     python setup.py install</code></pre>
 <p>Note that these commands can also be done in a Jupyter notebook by either declaring the code cell a bash cell by pasting <code>%%bash</code> at the top of the cell, or preceding each line with a <code>!</code>. More information about astroquery can be found at the <a href="https://github.com/astropy/astroquery">astroquery github repository</a>.</p>
-<h2 id="3.-Querying">3. Querying<a class="anchor-link" href="#3.-Querying">&#182;</a></h2><h3 id="Find-suitable-targets">Find suitable targets<a class="anchor-link" href="#Find-suitable-targets">&#182;</a></h3><p>For this tutorial, we want to display type Ia supernova and their host galaxy in the CFHT Legacy Survey field. To find a suitable supernova, we can query the <a href="https://sne.space/">Open Supernova Catalog</a> then refine the results to get a list of supernova with <code>claimedtype</code> of <code>Ia</code> and <code>redshift</code> between <code>0.2</code> and <code>0.3</code> that are part of the Supernova Legacy Survey (SNLS) where the <code>discoverdate</code> is before the <code>maxdate</code> so we can see the supernova before maximum light. The <a href="https://github.com/astrocatalogs/OACAPI">Open Supernova Catalog API</a> was used to build the catalog query.</p>
+<h2 id="3.-Querying">3. Querying<a class="anchor-link" href="#3.-Querying">&#182;</a></h2><h3 id="3.1-Find-suitable-targets">3.1 Find suitable targets<a class="anchor-link" href="#3.1-Find-suitable-targets">&#182;</a></h3><p>For this tutorial, we want to display type Ia supernova and their host galaxy in the CFHT Legacy Survey field. To find a suitable supernova, we can query the <a href="https://sne.space/">Open Supernova Catalog</a> then refine the results to get a list of supernova with <code>claimedtype</code> of <code>Ia</code> and <code>redshift</code> between <code>0.2</code> and <code>0.3</code> that are part of the Supernova Legacy Survey (SNLS) where the <code>discoverdate</code> is before the <code>maxdate</code> so we can see the supernova before maximum light. The <a href="https://github.com/astrocatalogs/OACAPI">Open Supernova Catalog API</a> was used to build the catalog query.</p>
 
 </div>
 </div>
@@ -13502,7 +13509,7 @@ Query date range: 2003-08-14T00:00:00.000 to 2003-12-12T00:00:00.000
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Using-ADQL">Using ADQL<a class="anchor-link" href="#Using-ADQL">&#182;</a></h3><p>The astroquery CADC python module has a <code>exec_sync</code> function which allows you to query the CADC archive database using ADQL. The query syntax requires a string and will execute the query in a batch job, which once finished, will contain the query output results. In this tutorial, we want to query images that:</p>
+<h3 id="3.2-Using-ADQL">3.2 Using ADQL<a class="anchor-link" href="#3.2-Using-ADQL">&#182;</a></h3><p>The astroquery CADC python module has a <code>exec_sync</code> function which allows you to query the CADC archive database using ADQL. The query syntax requires a string and will execute the query in a batch job, which once finished, will contain the query output results. In this tutorial, we want to query images that:</p>
 <ul>
 <li>contain the supernova coordinates</li>
 <li>have been taken in between the <code>start_date</code> and <code>end_date</code> calculated above</li>
@@ -13593,7 +13600,7 @@ Query date range: 2003-08-14T00:00:00.000 to 2003-12-12T00:00:00.000
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <i>Table masked=True length=5</i>
-<table id="table140542820938136" class="table-striped table-bordered table-condensed">
+<table id="table140156183802040" class="table-striped table-bordered table-condensed">
 <thead><tr><th>productID</th><th>collection</th><th>energy_bandpassName</th><th>time_bounds_samples</th><th>time_bounds_lower</th><th>time_exposure</th></tr></thead>
 <thead><tr><th></th><th></th><th></th><th>m</th><th>d</th><th>s</th></tr></thead>
 <thead><tr><th>bytes64</th><th>bytes32</th><th>bytes32</th><th>object</th><th>float64</th><th>float64</th></tr></thead>
@@ -13663,7 +13670,7 @@ Query date range: 2003-08-14T00:00:00.000 to 2003-12-12T00:00:00.000
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <i>Table masked=True length=1</i>
-<table id="table140542946381720" class="table-striped table-bordered table-condensed">
+<table id="table140156262596336" class="table-striped table-bordered table-condensed">
 <thead><tr><th>productID</th><th>collection</th><th>energy_bandpassName</th><th>time_bounds_samples</th><th>time_bounds_lower</th><th>time_exposure</th></tr></thead>
 <thead><tr><th></th><th></th><th></th><th>m</th><th>d</th><th>s</th></tr></thead>
 <thead><tr><th>bytes64</th><th>bytes32</th><th>bytes32</th><th>object</th><th>float64</th><th>float64</th></tr></thead>
@@ -13713,7 +13720,7 @@ Query date range: 2003-08-14T00:00:00.000 to 2003-12-12T00:00:00.000
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Retriving-Data-with-astropy.io">Retriving Data with astropy.io<a class="anchor-link" href="#Retriving-Data-with-astropy.io">&#182;</a></h3><p>Using the <code>get_image_list</code> function, we will fetch the data access urls and then use the <code>astropy.io.fits</code> module to access the data.</p>
+<h3 id="4.1-Retrieving-Data-with-astropy.io">4.1 Retrieving Data with astropy.io<a class="anchor-link" href="#4.1-Retrieving-Data-with-astropy.io">&#182;</a></h3><p>Using the <code>get_image_list</code> function, we will fetch the data access urls and then use the <code>astropy.io.fits</code> module to access the data.</p>
 
 </div>
 </div>
