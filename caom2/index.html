@@ -617,7 +617,8 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">common name of the algorithm; for SimpleObservation: exposure; 
+                                 <td class="feature-detail">common name of the algorithm; the value 'exposure' is reserved for use in SimpleObservation;
+                                    
                                     TBD: publish a list of acceptable values as a machine-readable vocabulary?
                                  </td>
                               </tr>
@@ -1206,7 +1207,18 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">number of axes in the data array</td>
+                                 <td class="feature-detail">number of axes in the data array; value must be in [1,7] since CAOM supports a maximum
+                                    of seven axes; furthermore, if naxis has a value, the axis index values 1 to {naxis}
+                                    must be assigned
+                                    (to positionAxis1, positionAxis2, energyAxis, timeAxis, polarizationAxis, customAxis,
+                                    and/or observableAxis) 
+                                    and each axis index value assigned to those fields must be unique; axis index values
+                                    above {naxis} may be 
+                                    assigned in order to preserve the ordering  of metadata-only WCS (see FITS-WCS WCSAXES
+                                    defintion for an example
+                                    of how this could originate and be used)
+                                    
+                                 </td>
                               </tr>
                               <tr>
                                  <td class="feature-detail" valign="top" rowspan="4"><a name="Chunk.positionAxis1"></a><b>positionAxis1</b></td>
@@ -1223,7 +1235,9 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">index of the first position axis</td>
+                                 <td class="feature-detail">index of the first position axis; if set: positionAxis2 and position must also have
+                                    values
+                                 </td>
                               </tr>
                               <tr>
                                  <td class="feature-detail" valign="top" rowspan="4"><a name="Chunk.positionAxis2"></a><b>positionAxis2</b></td>
@@ -1240,7 +1254,9 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">index of the second position axis</td>
+                                 <td class="feature-detail">index of the second position axis; if set: positionAxis1 and position must also have
+                                    values
+                                 </td>
                               </tr>
                               <tr>
                                  <td class="feature-detail" valign="top" rowspan="4"><a name="Chunk.energyAxis"></a><b>energyAxis</b></td>
@@ -1257,7 +1273,7 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">index of the energy axis</td>
+                                 <td class="feature-detail">index of the energy axis; if set: energy must have a value</td>
                               </tr>
                               <tr>
                                  <td class="feature-detail" valign="top" rowspan="4"><a name="Chunk.timeAxis"></a><b>timeAxis</b></td>
@@ -1274,7 +1290,7 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">index of the time axis</td>
+                                 <td class="feature-detail">index of the time axis; if set: time must have a value</td>
                               </tr>
                               <tr>
                                  <td class="feature-detail" valign="top" rowspan="4"><a name="Chunk.polarizationAxis"></a><b>polarizationAxis</b></td>
@@ -1291,7 +1307,7 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">index of the polarization axis</td>
+                                 <td class="feature-detail">index of the polarization axis; if set: polarization must have a value</td>
                               </tr>
                               <tr>
                                  <td class="feature-detail" valign="top" rowspan="4"><a name="Chunk.customAxis"></a><b>customAxis</b></td>
@@ -1308,7 +1324,7 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">index of the custom axis</td>
+                                 <td class="feature-detail">index of the custom axis; if set: custom must have a value</td>
                               </tr>
                               <tr>
                                  <td class="feature-detail" valign="top" rowspan="4"><a name="Chunk.observableAxis"></a><b>observableAxis</b></td>
@@ -1325,7 +1341,7 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">index of the observable axis</td>
+                                 <td class="feature-detail">index of the observable axis; if set: observable must have a value</td>
                               </tr>
                               <tr>
                                  <td colspan="3" class="info-title">compositions</td>
@@ -1354,7 +1370,11 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">custom WCS description of the data array or subsection thereof</td>
+                                 <td class="feature-detail">custom WCS description of the data array or subsection thereof; if customAxis index
+                                    is null or has a value
+                                    above {naxis}, then the custom WCS is metadata only (usually the degenerate case of
+                                    one custom pixel)
+                                 </td>
                               </tr>
                               <tr>
                                  <td class="feature-detail" valign="top" rowspan="5"><a name="Chunk.energy"></a><b>energy</b></td>
@@ -1375,7 +1395,11 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">spectral WCS description of the data array or subsection thereof</td>
+                                 <td class="feature-detail">spectral WCS description of the data array or subsection thereof; if energyAxis index
+                                    is null or has a value
+                                    above {naxis}, then the spectral WCS is metadata only (usually the degenerate case
+                                    of one spectral pixel)
+                                 </td>
                               </tr>
                               <tr>
                                  <td class="feature-detail" valign="top" rowspan="5"><a name="Chunk.observable"></a><b>observable</b></td>
@@ -1396,7 +1420,11 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">observable description of the data array or subsection thereof</td>
+                                 <td class="feature-detail">observable description of the data array or subsection thereof; if observableAxis
+                                    index is null or has a value
+                                    above {naxis}, then the observable axis is metadata only (usually the degenerate case
+                                    of one observable for the whole data array)
+                                 </td>
                               </tr>
                               <tr>
                                  <td class="feature-detail" valign="top" rowspan="5"><a name="Chunk.polarization"></a><b>polarization</b></td>
@@ -1417,7 +1445,11 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">polarization WCS description of the data array or subsection thereof</td>
+                                 <td class="feature-detail">polarization WCS description of the data array or subsection thereof; if polarizationAxis
+                                    index is null or has a value
+                                    above {naxis}, then the polarization WCS is metadata only (usually the degenerate
+                                    case of one polarization pixel)
+                                 </td>
                               </tr>
                               <tr>
                                  <td class="feature-detail" valign="top" rowspan="5"><a name="Chunk.position"></a><b>position</b></td>
@@ -1438,7 +1470,11 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">spatial WCS description of the data array or subsection thereof</td>
+                                 <td class="feature-detail">spatial WCS description of the data array or subsection thereof; if positionAxis1
+                                    and positionAxis2 indices are null
+                                    or have values above {naxis}, then the spatial WCS is metadata only (usually the degenerate
+                                    case of one spatial pixel)
+                                 </td>
                               </tr>
                               <tr>
                                  <td class="feature-detail" valign="top" rowspan="5"><a name="Chunk.time"></a><b>time</b></td>
@@ -1459,7 +1495,11 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">temporal WCS description of the data array or subsection thereof</td>
+                                 <td class="feature-detail">temporal WCS description of the data array or subsection thereof; if timeAxis index
+                                    is null or has a value
+                                    above {naxis}, then the time WCS is metadata only (usually the degenerate case of
+                                    one time pixel for the whole data array)
+                                 </td>
                               </tr>
                            </table>
                         </td>
@@ -4788,7 +4828,9 @@
                               </tr>
                               <tr>
                                  <td class="feature-heading">description</td>
-                                 <td class="feature-detail">common name of the telescope; TBD: reference to a standard list of names?</td>
+                                 <td class="feature-detail">common name of the telescope; 
+                                    TBD: reference to a standard list of names?
+                                 </td>
                               </tr>
                               <tr>
                                  <td class="feature-detail" valign="top" rowspan="4"><a name="Telescope.geoLocationX"></a><b>geoLocationX</b></td>
@@ -7719,7 +7761,8 @@
          <tr>
             <td class="feature-detail"><a href="#Algorithm.name">Algorithm.name</a></td>
             <td class="feature-detail">attribute</td>
-            <td class="feature-detail">common name of the algorithm; for SimpleObservation: exposure; 
+            <td class="feature-detail">common name of the algorithm; the value 'exposure' is reserved for use in SimpleObservation;
+               
                TBD: publish a list of acceptable values as a machine-readable vocabulary?
             </td>
          </tr>
@@ -7926,62 +7969,97 @@
          <tr>
             <td class="feature-detail"><a href="#Chunk.custom">Chunk.custom</a></td>
             <td class="feature-detail">composition</td>
-            <td class="feature-detail">custom WCS description of the data array or subsection thereof</td>
+            <td class="feature-detail">custom WCS description of the data array or subsection thereof; if customAxis index
+               is null or has a value
+               above {naxis}, then the custom WCS is metadata only (usually the degenerate case of
+               one custom pixel)
+            </td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.customAxis">Chunk.customAxis</a></td>
             <td class="feature-detail">attribute</td>
-            <td class="feature-detail">index of the custom axis</td>
+            <td class="feature-detail">index of the custom axis; if set: custom must have a value</td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.energy">Chunk.energy</a></td>
             <td class="feature-detail">composition</td>
-            <td class="feature-detail">spectral WCS description of the data array or subsection thereof</td>
+            <td class="feature-detail">spectral WCS description of the data array or subsection thereof; if energyAxis index
+               is null or has a value
+               above {naxis}, then the spectral WCS is metadata only (usually the degenerate case
+               of one spectral pixel)
+            </td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.energyAxis">Chunk.energyAxis</a></td>
             <td class="feature-detail">attribute</td>
-            <td class="feature-detail">index of the energy axis</td>
+            <td class="feature-detail">index of the energy axis; if set: energy must have a value</td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.naxis">Chunk.naxis</a></td>
             <td class="feature-detail">attribute</td>
-            <td class="feature-detail">number of axes in the data array</td>
+            <td class="feature-detail">number of axes in the data array; value must be in [1,7] since CAOM supports a maximum
+               of seven axes; furthermore, if naxis has a value, the axis index values 1 to {naxis}
+               must be assigned
+               (to positionAxis1, positionAxis2, energyAxis, timeAxis, polarizationAxis, customAxis,
+               and/or observableAxis) 
+               and each axis index value assigned to those fields must be unique; axis index values
+               above {naxis} may be 
+               assigned in order to preserve the ordering  of metadata-only WCS (see FITS-WCS WCSAXES
+               defintion for an example
+               of how this could originate and be used)
+               
+            </td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.observable">Chunk.observable</a></td>
             <td class="feature-detail">composition</td>
-            <td class="feature-detail">observable description of the data array or subsection thereof</td>
+            <td class="feature-detail">observable description of the data array or subsection thereof; if observableAxis
+               index is null or has a value
+               above {naxis}, then the observable axis is metadata only (usually the degenerate case
+               of one observable for the whole data array)
+            </td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.observableAxis">Chunk.observableAxis</a></td>
             <td class="feature-detail">attribute</td>
-            <td class="feature-detail">index of the observable axis</td>
+            <td class="feature-detail">index of the observable axis; if set: observable must have a value</td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.polarization">Chunk.polarization</a></td>
             <td class="feature-detail">composition</td>
-            <td class="feature-detail">polarization WCS description of the data array or subsection thereof</td>
+            <td class="feature-detail">polarization WCS description of the data array or subsection thereof; if polarizationAxis
+               index is null or has a value
+               above {naxis}, then the polarization WCS is metadata only (usually the degenerate
+               case of one polarization pixel)
+            </td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.polarizationAxis">Chunk.polarizationAxis</a></td>
             <td class="feature-detail">attribute</td>
-            <td class="feature-detail">index of the polarization axis</td>
+            <td class="feature-detail">index of the polarization axis; if set: polarization must have a value</td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.position">Chunk.position</a></td>
             <td class="feature-detail">composition</td>
-            <td class="feature-detail">spatial WCS description of the data array or subsection thereof</td>
+            <td class="feature-detail">spatial WCS description of the data array or subsection thereof; if positionAxis1
+               and positionAxis2 indices are null
+               or have values above {naxis}, then the spatial WCS is metadata only (usually the degenerate
+               case of one spatial pixel)
+            </td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.positionAxis1">Chunk.positionAxis1</a></td>
             <td class="feature-detail">attribute</td>
-            <td class="feature-detail">index of the first position axis</td>
+            <td class="feature-detail">index of the first position axis; if set: positionAxis2 and position must also have
+               values
+            </td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.positionAxis2">Chunk.positionAxis2</a></td>
             <td class="feature-detail">attribute</td>
-            <td class="feature-detail">index of the second position axis</td>
+            <td class="feature-detail">index of the second position axis; if set: positionAxis1 and position must also have
+               values
+            </td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.productType">Chunk.productType</a></td>
@@ -7991,12 +8069,16 @@
          <tr>
             <td class="feature-detail"><a href="#Chunk.time">Chunk.time</a></td>
             <td class="feature-detail">composition</td>
-            <td class="feature-detail">temporal WCS description of the data array or subsection thereof</td>
+            <td class="feature-detail">temporal WCS description of the data array or subsection thereof; if timeAxis index
+               is null or has a value
+               above {naxis}, then the time WCS is metadata only (usually the degenerate case of
+               one time pixel for the whole data array)
+            </td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Chunk.timeAxis">Chunk.timeAxis</a></td>
             <td class="feature-detail">attribute</td>
-            <td class="feature-detail">index of the time axis</td>
+            <td class="feature-detail">index of the time axis; if set: time must have a value</td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#CustomAxis">CustomAxis</a></td>
@@ -8964,7 +9046,9 @@
          <tr>
             <td class="feature-detail"><a href="#Telescope.name">Telescope.name</a></td>
             <td class="feature-detail">attribute</td>
-            <td class="feature-detail">common name of the telescope; TBD: reference to a standard list of names?</td>
+            <td class="feature-detail">common name of the telescope; 
+               TBD: reference to a standard list of names?
+            </td>
          </tr>
          <tr>
             <td class="feature-detail"><a href="#Time">Time</a></td>
