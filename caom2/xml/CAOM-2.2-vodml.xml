@@ -57,8 +57,8 @@
     <uri/>
     <title>Common Archive Observation Model</title>
     <author>Patrick Dowler, Canadian Astronomy Data Centre</author>
-    <version>2.3</version>
-    <lastModified>2018-04-04T09:00:00</lastModified>
+    <version>2.2</version>
+    <lastModified>2017-01-26T15:00:00</lastModified>
     
     <import>
         <name>ivoa</name>
@@ -77,6 +77,14 @@
         <!-- TODO: restrict format like we do in the xsd -->
     </primitiveType>
         
+    <!--
+        Notes:
+        * multiplicity/maxOccurs=666 is used to work around the fact that maxOccurs is required by the xsd
+        * experimented with putting the really core classes (observation-plane-artifact-part-chunk) into
+          the root package but it only changes the documentation organisation; that should be done by 
+          improving the vo-dml2html transform to organise things according to a configurable policy
+    -->
+    
     <package>
         <vodml-id>caom2</vodml-id>
         <name>caom2</name>
@@ -133,37 +141,68 @@
             <vodml-id>CalibrationLevel</vodml-id>
             <name>CalibrationLevel</name>
             <description>the degree to which data has been calibrated to remove instrumental effects;
-                issue: there is no way to convey the integer serialised values here so it is in the
-                description of each value</description>
-            <literal>
-                <vodml-id>CalibrationLevel.PLANNED</vodml-id>
-                <name>PLANNED</name>
-                <description>(-1) planned data product that does not yet exist</description>
-            </literal>
+                issue: there is no way to convey the integer serialised values here</description>
             <literal>
                 <vodml-id>CalibrationLevel.RAW_INSTRUMENTAL</vodml-id>
                 <name>RAW_INSTRUMENTAL</name>
-                <description>(0) raw data in some opaque instrument-specific format</description>
+                <description>raw data in some opaque instrument-specific format</description>
             </literal>
             <literal>
                 <vodml-id>CalibrationLevel.RAW_STANDARD</vodml-id>
                 <name>RAW_STANDARD</name>
-                <description>(1) raw data in a common format</description>
+                <description>raw data in a common format</description>
             </literal>
             <literal>
                 <vodml-id>CalibrationLevel.CALIBRATED</vodml-id>
                 <name>CALIBRATED</name>
-                <description>(2) standard calibration steps have been applied</description>
+                <description>standard calibration steps have been applied</description>
             </literal>
             <literal>
                 <vodml-id>CalibrationLevel.PRODUCT</vodml-id>
                 <name>PRODUCT</name>
-                <description>(3) additional non-standard calibration steps have been applied</description>
+                <description>additional non-standard calibration steps have been applied</description>
+            </literal>
+        </enumeration>
+        
+        <enumeration>
+            <vodml-id>DataProductType</vodml-id>
+            <name>DataProductType</name>
+            <description>a general description of the type or structure of the data;
+                work-around: using the name of the literal to convey the serialised value</description>
+            <literal>
+                <vodml-id>DataProductType.IMAGE</vodml-id>
+                <name>image</name>
+                <description>TODO</description>
             </literal>
             <literal>
-                <vodml-id>CalibrationLevel.ANALYSIS_PRODUCT</vodml-id>
-                <name>ANALYSIS_PRODUCT</name>
-                <description>(4) : data product from scientific analysis</description>
+                <vodml-id>DataProductType.SPECTRUM</vodml-id>
+                <name>spectrum</name>
+                <description>TODO</description>
+            </literal>
+            <literal>
+                <vodml-id>DataProductType.TIMESERIES</vodml-id>
+                <name>timeseries</name>
+                <description>TODO</description>
+            </literal>
+            <literal>
+                <vodml-id>DataProductType.VISIBILITY</vodml-id>
+                <name>visibility</name>
+                <description>TODO</description>
+            </literal>
+            <literal>
+                <vodml-id>DataProductType.EVENTLIST</vodml-id>
+                <name>eventlist</name>
+                <description>TODO</description>
+            </literal>
+            <literal>
+                <vodml-id>DataProductType.CUBE</vodml-id>
+                <name>cube</name>
+                <description>TODO</description>
+            </literal>
+            <literal>
+                <vodml-id>DataProductType.CATALOG</vodml-id>
+                <name>catalog</name>
+                <description>TODO</description>
             </literal>
         </enumeration>
         
@@ -325,24 +364,55 @@
             </literal>
         </enumeration>
         
+        <!-- artifact enums -->
         <enumeration>
-            <vodml-id>SegmentType</vodml-id>
-            <name>SegmentType</name>
-            <description>code used in CAG description of polygons</description>
+            <vodml-id>ProductType</vodml-id>
+            <name>ProductType</name>
+            <description>a general classification of the content of data files or parts thereof;
+                work-around: using the name of the literal to convey the serialised value</description>
             <literal>
-                <vodml-id>SegmentType.LINE</vodml-id>
-                <name>LINE</name>
-                <description>(0) line from previous to this vertex</description>
+                <vodml-id>ProductType.SCIENCE</vodml-id>
+                <name>science</name>
+                <description>this is the science data; data values come from extraterrestrial photons</description>
             </literal>
             <literal>
-                <vodml-id>SegmentType.MOVE</vodml-id>
-                <name>MOVE</name>
-                <description>(1) move from previous to this vertex</description>
+                <vodml-id>ProductType.CALIBRATION</vodml-id>
+                <name>calibration</name>
+                <description>this is calibration data; </description>
             </literal>
             <literal>
-                <vodml-id>SegmentType.CLOSE</vodml-id>
-                <name>CLOSE</name>
-                <description>(2) line from previous vertex to last vertex with type MOVE</description>
+                <vodml-id>ProductType.INFO</vodml-id>
+                <name>info</name>
+                <description>the content provides additional information: explanations, logs, etc</description>
+            </literal>
+            <literal>
+                <vodml-id>ProductType.PREVIEW</vodml-id>
+                <name>preview</name>
+                <description>this is non-science preview data</description>
+            </literal>
+            <literal>
+                <vodml-id>ProductType.THUMBNAIL</vodml-id>
+                <name>thumbnail</name>
+                <description>this is a small non-science preview data; small means that this preview is suitable to display
+                    in a popup window or with multiple displayed together</description>
+            </literal>
+            <literal>
+                <vodml-id>ProductType.NOISE</vodml-id>
+                <name>noise</name>
+                <description>this is auxiliary data with some measure of the noise;
+                    to be used when analysing the science data</description>
+            </literal>
+            <literal>
+                <vodml-id>ProductType.WEIGHT</vodml-id>
+                <name>weight</name>
+                <description>this is auxiliary data which provides weight values;
+                    to be used when analysing the science data</description>
+            </literal>
+            <literal>
+                <vodml-id>ProductType.AUXILIARY</vodml-id>
+                <name>auxiliary</name>
+                <description>this is auxiliary data;
+                    to be used when analysing the science data</description>
             </literal>
         </enumeration>
         
@@ -362,79 +432,6 @@
                 <description>access permission checks assume the protected item is metadata</description>
             </literal>
         </enumeration>
-        
-        <dataType abstract="true">
-            <vodml-id>VocabularyTerm</vodml-id>
-            <name>VocabularyTerm</name>
-            <description>base class of a single term (word) in a vocabulary
-                (NEW in CAOM-2.3)</description>
-            <attribute>
-                <vodml-id>VocabularyTerm.namespace</vodml-id>
-                <name>namespace</name>
-                <description>globally unique namespace for the vocabulary</description>
-                <datatype>
-                    <vodml-ref>ivoa:anyURI</vodml-ref>
-                </datatype>
-                <multiplicity>
-                    <minOccurs>1</minOccurs>
-                    <maxOccurs>1</maxOccurs>
-                </multiplicity>
-            </attribute>
-            <attribute>
-                <vodml-id>VocabularyTerm.term</vodml-id>
-                <name>term</name>
-                <description>the word from the vocabulary</description>
-                <datatype>
-                    <vodml-ref>ivoa:string</vodml-ref>
-                </datatype>
-                <multiplicity>
-                    <minOccurs>1</minOccurs>
-                    <maxOccurs>1</maxOccurs>
-                </multiplicity>
-            </attribute>
-            <attribute>
-                <vodml-id>VocabularyTerm.base</vodml-id>
-                <name>term</name>
-                <description>flag indicating of the vocabulary namespace is a base vocabulary</description>
-                <datatype>
-                    <vodml-ref>ivoa:boolean</vodml-ref>
-                </datatype>
-                <multiplicity>
-                    <minOccurs>1</minOccurs>
-                    <maxOccurs>1</maxOccurs>
-                </multiplicity>
-            </attribute>
-        </dataType>
-        
-        <dataType abstract="false">
-            <vodml-id>DataProductType</vodml-id>
-            <name>DataProductType</name>
-            <description>vocabulary term used in CAOM; this class defines constants for the CAOM
-                DataProductType vocabulary which includes all the terms from the IVOA ObsCore
-                data model plus additional terms used in CAOM and not in ObsCore
-                (CHANGED in CAOM-2.3)</description>
-            <extends>
-                <vodml-ref>caom2:VocabularyTerm</vodml-ref>
-            </extends>
-            <!-- intent is to define constants of type DataProductType in this class so
-                it behaves more or less like an enum but is extensible
-                TODO: can that be done in VODML?
-            -->
-        </dataType>
-        
-        <dataType abstract="false">
-            <vodml-id>ProductType</vodml-id>
-            <name>ProductType</name>
-            <description>this class defines constants for the CAOM ProductType vocabulary
-                (CHANGED in CAOM-2.3)</description>
-            <extends>
-                <vodml-ref>caom2:VocabularyTerm</vodml-ref>
-            </extends>
-            <!-- intent is to define constants of type ProductType in this class so
-                it behaves more or less like an enum but is extensible
-                TODO: can that be done in VODML?
-            -->
-        </dataType>
         
         <objectType abstract="true">
             <vodml-id>CaomEntity</vodml-id>
@@ -458,9 +455,7 @@
             <attribute>
                 <vodml-id>CaomEntity.lastModified</vodml-id>
                 <name>lastModified</name>
-                <description>timestamp of last modification of this entity; the timestamp is intended to be applied
-                    or updated when the entity is stored 
-                    (e.g. in a database)</description>
+                <description>timestamp of last modification of this entity</description>
                 <datatype>
                     <vodml-ref>ivoa:datetime</vodml-ref>
                 </datatype>
@@ -472,65 +467,9 @@
             <attribute>
                 <vodml-id>CaomEntity.maxLastModified</vodml-id>
                 <name>maxLastModified</name>
-                <description>maximum timestamp of last modification of this entity and all child entities;
-                    the timestamp is intended to be applied or updated when the entity is stored 
-                    (e.g. in a database)</description>
+                <description>maximum timestamp of last modification of this entity and all child entities</description>
                 <datatype>
                     <vodml-ref>ivoa:datetime</vodml-ref>
-                </datatype>
-                <multiplicity>
-                    <minOccurs>0</minOccurs>
-                    <maxOccurs>1</maxOccurs>
-                </multiplicity>
-            </attribute>
-            
-            <attribute>
-                <vodml-id>CaomEntity.metaChecksum</vodml-id>
-                <name>metaChecksum</name>
-                <description>checksum of this entity; (NEW in CAOM-2.3)
-                    
-                    The URI must conform to the pattern {algorithm}:{value}, for example: md5:4be91751541fd804e7207663a0822f56.
-                    The checksum of an entity is computed by accumulating byte representation of individual metadata values in
-                    the following order: (1) CaomEntity.id for entities, (2) state fields in alphabetic order (foo.a comes before 
-                    foo.b) and using depth-first recursion (foo.abc.x comes before foo.def). Null values are ignored so that the 
-                    addition of new fields in future versions will not change/invalidate existing checksums until values are assigned.
-                    Non-null values are converted to bytes as follows. 
-                    
-                    string: UTF-8 encoded bytes
-                    URI: UTF-8 encoded bytes of string representation
-                    float: IEEE754 single (4 bytes)
-                    double: IEEE754 double (8 bytes)
-                    boolean: convert to single byte, false=0, true=1 (1 bytes)
-                    byte: as-is (1 byte)
-                    short: (2 bytes, network byte order == big endian))
-                    integer: (4 bytes, network byte order == big endian)
-                    long: (8 bytes, network byte order == big endian)
-                    date: truncate time to whole number of seconds and treat as a long (seconds since 1970-01-01 00:00:00 UTC)
-                    </description>
-                <datatype>
-                    <!-- TODO: should be ChecksumURI -->
-                    <vodml-ref>ivoa:anyURI</vodml-ref>
-                </datatype>
-                <multiplicity>
-                    <minOccurs>0</minOccurs>
-                    <maxOccurs>1</maxOccurs>
-                </multiplicity>
-            </attribute>
-            <attribute>
-                <vodml-id>CaomEntity.accMetaChecksum</vodml-id>
-                <name>accMetaChecksum</name>
-                <description>accumulated checksum of the metadata of this entity and all child entities; (NEW in CAOM-2.3)
-                    
-                    The URI must conform to the pattern {algorithm}:{value}, for example: md5:4be91751541fd804e7207663a0822f56.
-                    The accumulated checksum of an entity is computed by accumulating the byte representation of entity checksums
-                    in the following order: (1) the metaChecksum of the current entity, (2) the accMetaChecksum of all child entities
-                    accumulated in order of the child's CaomEntity.id. For an entity with no children, the accMetaChecksum is derived
-                    only from the metaChecksum but it is not equal to it because it is a checksum of that checksum and not a checksum
-                    of the same metadata directly.
-                    </description>
-                <datatype>
-                    <!-- TODO: should be ChecksumURI -->
-                    <vodml-ref>ivoa:anyURI</vodml-ref>
                 </datatype>
                 <multiplicity>
                     <minOccurs>0</minOccurs>
@@ -725,7 +664,7 @@
                 </datatype>
                 <multiplicity>
                     <minOccurs>0</minOccurs>
-                    <maxOccurs>-1</maxOccurs>
+                    <maxOccurs>666</maxOccurs>
                 </multiplicity>
             </composition>
         </objectType>
@@ -756,7 +695,7 @@
                 </datatype>
                 <multiplicity>
                     <minOccurs>0</minOccurs>
-                    <maxOccurs>-1</maxOccurs>
+                    <maxOccurs>666</maxOccurs>
                 </multiplicity>
             </attribute>
         </objectType>
@@ -768,20 +707,6 @@
             <extends>
                 <vodml-ref>caom2:CaomEntity</vodml-ref>
             </extends>
-            <attribute>
-                <vodml-id>Plane.creatorID</vodml-id>
-                <name>creatorID</name>
-                <description>identifier for this product assigned by the creator; 
-                    typically made up of the Observation.collection, Observation.observationID, and Plane.productID
-                    and in the form of an IVOA dataset identifier (NEW in CAOM-2.3)</description>
-                <datatype>
-                    <vodml-ref>ivoa:anyURI</vodml-ref>
-                </datatype>
-                <multiplicity>
-                    <minOccurs>0</minOccurs>
-                    <maxOccurs>1</maxOccurs>
-                </multiplicity>
-            </attribute>
             <attribute>
                 <vodml-id>Plane.productID</vodml-id>
                 <name>productID</name>
@@ -821,18 +746,6 @@
                 </multiplicity>
             </attribute>
             <attribute>
-                <vodml-id>Plane.calibrationLevel</vodml-id>
-                <name>calibrationLevel</name>
-                <description>standard classification of the degree to which the data is calibrated</description>
-                <datatype>
-                    <vodml-ref>caom2:CalibrationLevel</vodml-ref>
-                </datatype>
-                <multiplicity>
-                    <minOccurs>0</minOccurs>
-                    <maxOccurs>1</maxOccurs>
-                </multiplicity>
-            </attribute>
-            <attribute>
                 <vodml-id>Plane.dataProductType</vodml-id>
                 <name>dataProductType</name>
                 <description>standard classification of the type of data product; describes the logical data type
@@ -845,7 +758,19 @@
                     <maxOccurs>1</maxOccurs>
                 </multiplicity>
             </attribute>
-            
+            <attribute>
+                <vodml-id>Plane.calibrationLevel</vodml-id>
+                <name>calibrationLevel</name>
+                <description>standard classification of the degree to which the data is calibrated</description>
+                <datatype>
+                    <vodml-ref>caom2:CalibrationLevel</vodml-ref>
+                </datatype>
+                <multiplicity>
+                    <minOccurs>0</minOccurs>
+                    <maxOccurs>1</maxOccurs>
+                </multiplicity>
+            </attribute>
+
             <composition>
                 <vodml-id>Plane.quality</vodml-id>
                 <name>quality</name>
@@ -940,7 +865,7 @@
                 </datatype>
                 <multiplicity>
                     <minOccurs>0</minOccurs>
-                    <maxOccurs>-1</maxOccurs>
+                    <maxOccurs>666</maxOccurs>
                 </multiplicity>
             </composition>
         </objectType>
@@ -1003,24 +928,9 @@
             <attribute>
                 <vodml-id>Artifact.contentLength</vodml-id>
                 <name>contentLength</name>
-                <description>the size of the resolved artifact; typically file size in bytes</description>
+                <description>the size of the resolved artifact; typically file size in bytes)</description>
                 <datatype>
                     <vodml-ref>ivoa:integer</vodml-ref>
-                </datatype>
-                <multiplicity>
-                    <minOccurs>0</minOccurs>
-                    <maxOccurs>1</maxOccurs>
-                </multiplicity>
-            </attribute>
-            <attribute>
-                <vodml-id>Artifact.contentChecksum</vodml-id>
-                <name>contentChecksum</name>
-                <description>the checksum of the artifact data; 
-                    the URI must conform to the pattern {algorithm}:{value}, for example: md5:4be91751541fd804e7207663a0822f56
-                    (NEW in CAOM-2.3)</description>
-                <datatype>
-                    <!-- should be ChecksumURI -->
-                    <vodml-ref>ivoa:anyURI</vodml-ref>
                 </datatype>
                 <multiplicity>
                     <minOccurs>0</minOccurs>
@@ -1037,7 +947,7 @@
                 </datatype>
                 <multiplicity>
                     <minOccurs>0</minOccurs>
-                    <maxOccurs>-1</maxOccurs>
+                    <maxOccurs>666</maxOccurs>
                 </multiplicity>
             </composition>
         </objectType>
@@ -1066,7 +976,7 @@
             <attribute>
                 <vodml-id>Part.productType</vodml-id>
                 <name>productType</name>
-                <description>TODO: define this</description>
+                <description>product type of this part when it differs from the parent artifact</description>
                 <datatype>
                     <vodml-ref>caom2:ProductType</vodml-ref>
                 </datatype>
@@ -1075,7 +985,7 @@
                     <maxOccurs>1</maxOccurs>
                 </multiplicity>
             </attribute>
-            
+
             <composition>
                 <vodml-id>Part.chunks</vodml-id>
                 <name>chunks</name>
@@ -1085,7 +995,7 @@
                 </datatype>
                 <multiplicity>
                     <minOccurs>0</minOccurs>
-                    <maxOccurs>-1</maxOccurs>
+                    <maxOccurs>666</maxOccurs>
                 </multiplicity>
             </composition>
         </objectType>
@@ -1101,7 +1011,7 @@
             <attribute>
                 <vodml-id>Chunk.productType</vodml-id>
                 <name>productType</name>
-                <description>TODO: define this</description>
+                <description>product type where it differs from the parent part</description>
                 <datatype>
                     <vodml-ref>caom2:ProductType</vodml-ref>
                 </datatype>
@@ -1332,16 +1242,13 @@
                 <vodml-id>Telescope.keywords</vodml-id>
                 <name>keywords</name>
                 <description>additional keywords that describe the telescope or telscope configuration 
-                    at the time of observation; 
-                    keywords cannot contain the pipe (|) character - it is reserved for use in persistence
-                    systems (e.g. to store all keywords in a single column in a table)
-                </description>
+                    at the time of observation</description>
                 <datatype>
                     <vodml-ref>ivoa:string</vodml-ref>
                 </datatype>
                 <multiplicity>
                     <minOccurs>0</minOccurs>
-                    <maxOccurs>-1</maxOccurs>
+                    <maxOccurs>666</maxOccurs>
                 </multiplicity>
             </attribute>
         </objectType>
@@ -1366,15 +1273,13 @@
                 <vodml-id>Instrument.keywords</vodml-id>
                 <name>keywords</name>
                 <description>additional keywords that describe the instrument or instrument configuration
-                    at the time of observation; 
-                    keywords cannot contain the pipe (|) character - it is reserved for use in persistence
-                    systems (e.g. to store all keywords in a single column in a table)</description>
+                    at the time of observation</description>
                 <datatype>
                     <vodml-ref>ivoa:string</vodml-ref>
                 </datatype>
                 <multiplicity>
                     <minOccurs>0</minOccurs>
-                    <maxOccurs>-1</maxOccurs>
+                    <maxOccurs>666</maxOccurs>
                 </multiplicity>
             </attribute>
         </objectType>
@@ -1526,15 +1431,13 @@
             <attribute>
                 <vodml-id>Proposal.keywords</vodml-id>
                 <name>keywords</name>
-                <description>additional keywords that describe the science goals of the proposal; 
-                    keywords cannot contain the pipe (|) character - it is reserved for use in persistence
-                    systems (e.g. to store all keywords in a single column in a table)</description>
+                <description>additional keywords that describe the science goals of the proposal</description>
                 <datatype>
                     <vodml-ref>ivoa:string</vodml-ref>
                 </datatype>
                 <multiplicity>
                     <minOccurs>0</minOccurs>
-                    <maxOccurs>-1</maxOccurs>
+                    <maxOccurs>666</maxOccurs>
                 </multiplicity>
             </attribute>
         </objectType>
@@ -1608,15 +1511,13 @@
             <attribute>
                 <vodml-id>Target.keywords</vodml-id>
                 <name>keywords</name>
-                <description>additional keywords that describe the target; 
-                    keywords cannot contain the pipe (|) character - it is reserved for use in persistence
-                    systems (e.g. to store all keywords in a single column in a table)</description>
+                <description>additional keywords that describe the target</description>
                 <datatype>
                     <vodml-ref>ivoa:string</vodml-ref>
                 </datatype>
                 <multiplicity>
                     <minOccurs>0</minOccurs>
-                    <maxOccurs>-1</maxOccurs>
+                    <maxOccurs>666</maxOccurs>
                 </multiplicity>
             </attribute>
         </objectType>
@@ -1776,9 +1677,7 @@
                 <vodml-id>Provenance.keywords</vodml-id>
                 <name>keywords</name>
                 <description>addituional keywords that describe the processing; this may include both general
-                    descriptive words and those specific to this particular execution of the processing; 
-                    keywords cannot contain the pipe (|) character - it is reserved for use in persistence
-                    systems (e.g. to store all keywords in a single column in a table)</description>
+                    descriptive words and those specific to this particular execution of the processing</description>
                 <datatype>
                     <vodml-ref>ivoa:string</vodml-ref>
                 </datatype>
@@ -1797,7 +1696,7 @@
                 </datatype>
                 <multiplicity>
                     <minOccurs>0</minOccurs>
-                    <maxOccurs>-1</maxOccurs>
+                    <maxOccurs>666</maxOccurs>
                 </multiplicity>
             </attribute>
         </objectType>
@@ -1961,7 +1860,7 @@
             <attribute>
                 <vodml-id>Energy.bounds</vodml-id>
                 <name>bounds</name>
-                <description>energy bounds that include the data (barycentric vacuum wavelength)</description>
+                <description>energy bounds that include the data</description>
                 <datatype>
                     <vodml-ref>caom2:Interval</vodml-ref>
                 </datatype>
@@ -2054,6 +1953,31 @@
                     <maxOccurs>1</maxOccurs>
                 </multiplicity>
             </attribute>
+            <!-- alternate representations -->
+            <attribute>
+                <vodml-id>Energy.freqWidth</vodml-id>
+                <name>freqWidth</name>
+                <description>width of the bounding interval expressed in frequency</description>
+                <datatype>
+                    <vodml-ref>ivoa:real</vodml-ref>
+                </datatype>
+                <multiplicity>
+                    <minOccurs>0</minOccurs>
+                    <maxOccurs>1</maxOccurs>
+                </multiplicity>
+            </attribute>
+            <attribute>
+                <vodml-id>Energy.freqSampleSize</vodml-id>
+                <name>freqSampleSize</name>
+                <description>median pixekl size expressed in frequency</description>
+                <datatype>
+                    <vodml-ref>ivoa:real</vodml-ref>
+                </datatype>
+                <multiplicity>
+                    <minOccurs>0</minOccurs>
+                    <maxOccurs>1</maxOccurs>
+                </multiplicity>
+            </attribute>
         </objectType>
         
         <objectType>
@@ -2135,7 +2059,7 @@
                 </datatype>
                 <multiplicity>
                     <minOccurs>0</minOccurs>
-                    <maxOccurs>-1</maxOccurs>
+                    <maxOccurs>666</maxOccurs>
                 </multiplicity>
             </attribute><attribute>
                 <vodml-id>Polarization.dimension</vodml-id>
@@ -2183,38 +2107,11 @@
                     </multiplicity>
                 </attribute>
             </dataType>
-            <dataType>
-                <vodml-id>Vertex</vodml-id>
-                <name>Vertex</name>
-                <extends>
-                    <vodml-ref>caom2:Point</vodml-ref>
-                </extends>
-                <attribute>
-                    <vodml-id>Vertex.type</vodml-id>
-                    <name>type</name>
-                    <datatype>
-                        <vodml-ref>caom2:SegmentType</vodml-ref>
-                    </datatype>
-                    <multiplicity>
-                        <minOccurs>1</minOccurs>
-                        <maxOccurs>1</maxOccurs>
-                    </multiplicity>
-                </attribute>
-                
-            </dataType>
             
             <dataType abstract="true">
                 <vodml-id>Shape</vodml-id>
                 <name>Shape</name>
-                <!-- tagging base class -->
-            </dataType>
-            
-            <dataType>
-                <vodml-id>Circle</vodml-id>
-                <name>Circle</name>
-                <extends>
-                    <vodml-ref>caom2:Shape</vodml-ref>
-                </extends>
+                <!-- these attributes may be core or computed from other attributes -->
                 <attribute>
                     <vodml-id>Shape.center</vodml-id>
                     <name>center</name>
@@ -2226,6 +2123,36 @@
                         <maxOccurs>1</maxOccurs>
                     </multiplicity>
                 </attribute>
+                <attribute>
+                    <vodml-id>Shape.area</vodml-id>
+                    <name>area</name>
+                    <datatype>
+                        <vodml-ref>ivoa:real</vodml-ref>
+                    </datatype>
+                    <multiplicity>
+                        <minOccurs>1</minOccurs>
+                        <maxOccurs>1</maxOccurs>
+                    </multiplicity>
+                </attribute>
+                <attribute>
+                    <vodml-id>Shape.size</vodml-id>
+                    <name>size</name>
+                    <datatype>
+                        <vodml-ref>ivoa:real</vodml-ref>
+                    </datatype>
+                    <multiplicity>
+                        <minOccurs>1</minOccurs>
+                        <maxOccurs>1</maxOccurs>
+                    </multiplicity>
+                </attribute>
+            </dataType>
+            
+            <dataType>
+                <vodml-id>Circle</vodml-id>
+                <name>Circle</name>
+                <extends>
+                    <vodml-ref>caom2:Shape</vodml-ref>
+                </extends>
                 <attribute>
                     <vodml-id>Circle.radius</vodml-id>
                     <name>radius</name>
@@ -2240,47 +2167,20 @@
             </dataType>
             
             <dataType>
-                <vodml-id>MultiPolygon</vodml-id>
-                <name>MultiPolygon</name>
-                <attribute>
-                    <vodml-id>MultiPolygon.vertices</vodml-id>
-                    <name>vertices</name>
-                    <datatype>
-                        <vodml-ref>caom2:Vertex</vodml-ref>
-                    </datatype>
-                    <multiplicity>
-                        <minOccurs>3</minOccurs>
-                        <maxOccurs>-1</maxOccurs>
-                    </multiplicity>
-                </attribute>
-            </dataType>
-            
-            <dataType>
                 <vodml-id>Polygon</vodml-id>
                 <name>Polygon</name>
                 <extends>
                     <vodml-ref>caom2:Shape</vodml-ref>
                 </extends>
                 <attribute>
-                    <vodml-id>Polygon.points</vodml-id>
-                    <name>points</name>
+                    <vodml-id>Polygon.vertices</vodml-id>
+                    <name>vertices</name>
                     <datatype>
                         <vodml-ref>caom2:Point</vodml-ref>
                     </datatype>
                     <multiplicity>
                         <minOccurs>3</minOccurs>
-                        <maxOccurs>-1</maxOccurs>
-                    </multiplicity>
-                </attribute>
-                <attribute>
-                    <vodml-id>Polygon.samples</vodml-id>
-                    <name>samples</name>
-                    <datatype>
-                        <vodml-ref>caom2:MultiPolygon</vodml-ref>
-                    </datatype>
-                    <multiplicity>
-                        <minOccurs>1</minOccurs>
-                        <maxOccurs>1</maxOccurs>
+                        <maxOccurs>666</maxOccurs>
                     </multiplicity>
                 </attribute>
             </dataType>
@@ -2345,7 +2245,19 @@
                     </datatype>
                     <multiplicity>
                         <minOccurs>1</minOccurs>
-                        <maxOccurs>-1</maxOccurs>
+                        <maxOccurs>666</maxOccurs>
+                    </multiplicity>
+                </attribute>
+                <!-- computed -->
+                <attribute>
+                    <vodml-id>Interval.width</vodml-id>
+                    <name>width</name>
+                    <datatype>
+                        <vodml-ref>ivoa:real</vodml-ref>
+                    </datatype>
+                    <multiplicity>
+                        <minOccurs>1</minOccurs>
+                        <maxOccurs>1</maxOccurs>
                     </multiplicity>
                 </attribute>
             </dataType>
@@ -2441,24 +2353,24 @@
                 <vodml-id>CoordError</vodml-id>
                 <name>CoordError</name>
                 <attribute>
-                    <vodml-id>CoordError.rnder</vodml-id>
+                    <vodml-id>CoordError.crder</vodml-id>
                     <name>crder</name>
                     <datatype>
                         <vodml-ref>ivoa:real</vodml-ref>
                     </datatype>
                     <multiplicity>
-                        <minOccurs>0</minOccurs>
+                        <minOccurs>1</minOccurs>
                         <maxOccurs>1</maxOccurs>
                     </multiplicity>
                 </attribute>
                 <attribute>
-                    <vodml-id>CoordError.syser</vodml-id>
+                    <vodml-id>CoordError.csyer</vodml-id>
                     <name>csyer</name>
                     <datatype>
                         <vodml-ref>ivoa:real</vodml-ref>
                     </datatype>
                     <multiplicity>
-                        <minOccurs>0</minOccurs>
+                        <minOccurs>1</minOccurs>
                         <maxOccurs>1</maxOccurs>
                     </multiplicity>
                 </attribute>
@@ -2583,7 +2495,7 @@
                     </datatype>
                     <multiplicity>
                         <minOccurs>1</minOccurs>
-                        <maxOccurs>-1</maxOccurs>
+                        <maxOccurs>666</maxOccurs>
                     </multiplicity>
                 </attribute>
             </dataType>
@@ -2724,7 +2636,7 @@
                     </datatype>
                     <multiplicity>
                         <minOccurs>1</minOccurs>
-                        <maxOccurs>-1</maxOccurs>
+                        <maxOccurs>666</maxOccurs>
                     </multiplicity>
                 </attribute>
             </dataType>
