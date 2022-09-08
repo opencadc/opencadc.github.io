@@ -1,0 +1,8 @@
+version: '2.4'
+services:
+  tantar:
+    hostname: tantarnode
+    image: bucket.canfar.net/tantar:0.3-20210622T175602 
+    volumes:
+      - ${HOME}tantar/config:/config:ro
+    user: opencadc:opencadc
