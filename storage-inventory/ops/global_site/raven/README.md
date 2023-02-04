@@ -3,8 +3,7 @@
 ## Example docker-compose.yml
 This [`docker-compose.yml`](docker-compose.yml) file will need to be editted for your local environment.
 
-
-
+To 
 
 ## Required configuration (below /config in container instance)
 

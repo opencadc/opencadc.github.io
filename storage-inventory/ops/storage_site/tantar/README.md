@@ -20,7 +20,6 @@ See the example configuration files for more information
   - This will change depending on what storage type (class name) you specify in the minoc.properties file.
     - [posix file system](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-fs)
     - [swift](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-swift)
-    - [s3](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-s3)
 - cadcproxy.pem
   - This proxy certificate must be for a user that is authorized to access services to retrieve files and to query luskan.  This user should appear in the groups that are authorized via the baldur service to access files in collections.  This user should also be in an `allowedGroup` in the luskan service configuration.
   - this is very CADC-specific at this point.

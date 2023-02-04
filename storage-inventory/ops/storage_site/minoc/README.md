@@ -29,7 +29,6 @@ See the example configuration files for more information
   - This will change depending on what storage type (class name) you specify in the minoc.properties file.
     - [posix file system](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-fs)
     - [swift](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-swift)
-    - [s3](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-s3)
 - cadcproxy.pem
   - x509 proxy certificate
   - for minoc, the user identified by this certificate needs to be able to call A&A services and verify the identity and group membership of _other_ users. 

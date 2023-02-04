@@ -40,7 +40,7 @@
   
   A _Global site_ runs three services:
   - [`raven`](global_site/raven/README.md) - file transfer negotiation.  A request for a file through `raven` will not deliver the bytes of the file, but rather a redirect to the `minoc` service at a _Storage site_ that has the requested file.
-  - [`luskan`](global_site/raven/README.md) - inventory database query.  Same service as for the _Storage sites_, but for the global inventory.
+  - [`luskan`](global_site/luskan/README.md) - inventory database query.  Same service as for the _Storage sites_, but for the global inventory.
   - [`baldur`](global_site/baldur/README.md) - file access authorization based on file namespace and authorization groups.  Not really a _Global site_ service, more like one of the ancillary services mentioned above.
     - If you only plan to have a single _Storage site_, and have no need of a _Global site_, you'll still need to deploy `baldur` if you want to grant authorization for users to upload or retrieve files.
 
