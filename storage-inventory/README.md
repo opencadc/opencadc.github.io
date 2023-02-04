@@ -1,3 +1,4 @@
 # Storage Inventory Operator and Deployment Documentation
 
-- [Deployment Quick Start](quick-start/README.md)
+- [Operator Documentation](ops/README.md)
+<!-- - [Example Storage Site Deployment](example_storage_site_deployment/README.md) -->

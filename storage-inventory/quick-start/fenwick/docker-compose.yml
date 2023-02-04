@@ -1,9 +1,0 @@
-version: '2.4'
-services:
-  fenwick:
-    # this is a docker-internal name, but will show up in, e.g., connections to postgres
-    image: bucket.canfar.net/fenwick:0.5-20210618T201621
-    volumes:
-      - ${HOME}/fenwick/config:/config:ro
-    user: opencadc:opencadc
-    
