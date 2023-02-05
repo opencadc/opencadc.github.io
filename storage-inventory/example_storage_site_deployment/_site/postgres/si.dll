@@ -1,43 +1,28 @@
-```
 --
 -- Server users and roles
 --
---  Change the password from XXXX to something of your choice: the password should be different for each account.
 CREATE ROLE tapadm;
-ALTER ROLE tapadm WITH NOSUPERUSER NOINHERIT NOCREATEROLE CREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'XXXX';
+ALTER ROLE tapadm WITH NOSUPERUSER NOINHERIT NOCREATEROLE CREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'tapAdmPass0';
 CREATE ROLE tapuser;
-ALTER ROLE tapuser WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'XXXX';
+ALTER ROLE tapuser WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'tapUserPass1';
 CREATE ROLE invadm;
-ALTER ROLE invadm WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'XXXX';
+ALTER ROLE invadm WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'invAdmPass2';
 --
 -- Create database
 --
--- Change the LOCATION to match what is used for the '-D` option to initdb.
-CREATE TABLESPACE si_data OWNER postgres LOCATION '/var/lib/postgresql/data/si_data';
-create database si_db with owner=postgres tablespace=si_data;
+create database storedb;
 --
 -- Users server privilleges
 --
-REVOKE ALL ON DATABASE si_db FROM PUBLIC;
-REVOKE ALL ON DATABASE si_db FROM postgres;
-GRANT ALL ON DATABASE  si_db TO postgres;
-GRANT CONNECT,TEMPORARY ON DATABASE si_db TO PUBLIC;
+REVOKE ALL ON DATABASE storedb FROM PUBLIC;
+REVOKE ALL ON DATABASE storedb FROM postgres;
+GRANT ALL ON DATABASE  storedb TO postgres;
+GRANT CONNECT,TEMPORARY ON DATABASE storedb TO PUBLIC;
 
-GRANT ALL ON TABLESPACE si_data TO postgres;
-GRANT ALL ON TABLESPACE si_data TO tapadm;
-GRANT ALL ON TABLESPACE si_data TO tapuser;
-GRANT ALL ON TABLESPACE si_data TO invadm;
---
--- Per-Database Role Settings
---
-
-ALTER ROLE tapadm IN DATABASE si_db SET default_tablespace TO 'si_data';
-ALTER ROLE tapuser IN DATABASE si_db SET default_tablespace TO 'si_data';
-ALTER ROLE invadm IN DATABASE si_db SET default_tablespace TO 'si_data';
 --
 -- Crate schemas and extensions
 --
-\connect si_db
+\connect storedb
 
 SET default_transaction_read_only = off;
 CREATE SCHEMA inventory;
@@ -64,10 +49,10 @@ COMMENT ON EXTENSION pgrowlocks IS 'show row-level locking information';
 --
 -- Users grants to db objects
 --
-GRANT CONNECT ON DATABASE si_db to invadm;
-GRANT CONNECT ON DATABASE si_db to tapuser;
-GRANT CONNECT ON DATABASE si_db  to tapadm;
-GRANT CONNECT ON DATABASE si_db to public;
+GRANT CONNECT ON DATABASE storedb to invadm;
+GRANT CONNECT ON DATABASE storedb to tapuser;
+GRANT CONNECT ON DATABASE storedb  to tapadm;
+GRANT CONNECT ON DATABASE storedb to public;
 --
 -- Inventory schema grants
 --
@@ -93,4 +78,3 @@ GRANT USAGE ON SCHEMA tap_upload to tapadm;
 GRANT ALL ON SCHEMA uws TO tapadm;
 GRANT USAGE on schema uws to tapadm;
 GRANT USAGE ON SCHEMA uws to tapuser;
-```

@@ -2,7 +2,7 @@
 - Storage Inventory services have been tested with postgres 12.3.  Newer versions will likely work as well.
 - It is assumed that you already have postgres installed.
 - As the content in the database grows, you'll need to think about its storage requirements.  For the PG data and indices, this is roughly 1KB/artifact (storage site) or 1.5KB/artifact (global site)
-- In the following, the database being created is called `si_db`, but you can change that name as you see fit.
+- In the following, the database being created is called `global_db`, but you can change that name as you see fit.
 - Initialize the database: `initdb -D /var/lib/postgresql/data --encoding=UTF8 --lc-collate=C --lc-ctype=C`
   - You might need to change the data location (`-D`), depending on your postgres installation and hardware layout.
 - As the postgres user, create a file named [si.dll](si.dll) with the linked content and run `psql -f si.dll -a`
@@ -18,19 +18,19 @@ Example of how to set up _Storage site_ database for testing purposes:
 1. Create a docker volume for the database.  
 
     ```
-    docker volume create STORAGE_SITE_PG_DATA
+    docker volume create GLOBAL_SITE_PG_DATA
     ```
 
 1. Initialize the database:
 
     ```
-    POSTGRES_PASSWORD=xxyyzz PGHOME=/var/lib/postgresql PG_INSTALL_DIR=/usr/lib/postgresql/12 sh -c 'docker run --rm  --volume STORAGE_SITE_PG_DATA:/${PGHOME}/data -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} postgres:12 su -l postgres -c "${PG_INSTALL_DIR}/bin/initdb -D ${PGHOME}/data --encoding=UTF8 --lc-collate=C --lc-ctype=C"'
+    POSTGRES_PASSWORD=xxyyzz PGHOME=/var/lib/postgresql PG_INSTALL_DIR=/usr/lib/postgresql/12 sh -c 'docker run --rm  --volume GLOBAL_SITE_PG_DATA:/${PGHOME}/data -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} postgres:12 su -l postgres -c "${PG_INSTALL_DIR}/bin/initdb -D ${PGHOME}/data --encoding=UTF8 --lc-collate=C --lc-ctype=C"'
     ```
 
 1. Start the database:
 
     ```
-    POSTGRES_PASSWORD=xxyyzz PGHOME=/var/lib/postgresql PG_INSTALL_DIR=/usr/lib/postgresql/12 sh -c 'docker run --rm --volume STORAGE_SITE_PG_DATA:${PGHOME}/data -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} --detach --name storage_db postgres:12 su -l postgres -c "${PG_INSTALL_DIR}/bin/postgres -D ${PGHOME}/data"'
+    POSTGRES_PASSWORD=xxyyzz PGHOME=/var/lib/postgresql PG_INSTALL_DIR=/usr/lib/postgresql/12 sh -c 'docker run --rm --volume GLOBAL_SITE_PG_DATA:${PGHOME}/data -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} --detach --name storage_db postgres:12 su -l postgres -c "${PG_INSTALL_DIR}/bin/postgres -D ${PGHOME}/data"'
 
 1. Copy the [`pg_hba.conf`](pg_hba.conf) and [`si.dll`](si.dll) files to the container:
 
@@ -42,5 +42,5 @@ Example of how to set up _Storage site_ database for testing purposes:
 1. Run the `si.dll` file in the database, then restart the server:
 
     ```
-    PGHOME=/var/lib/postgresql sh -c 'docker exec storage_db su postgres -c "mkdir ${PGHOME}/data/si_data; psql -f ${PGHOME}/si.dll -a"'
+    PGHOME=/var/lib/postgresql sh -c 'docker exec storage_db su postgres -c "mkdir ${PGHOME}/data/global_data; psql -f ${PGHOME}/si.dll -a"'
     PG_INSTALL_DIR=/usr/lib/postgresql/12 sh -c 'docker exec storage_db su postgres -c "${PG_INSTALL_DIR}/bin/pg_ctl reload"'

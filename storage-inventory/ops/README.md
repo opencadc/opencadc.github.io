@@ -6,45 +6,63 @@
 ## Basic Concepts
 ### Storage site
 <center>
-<img src="StorageInventory-StorageSite.png" width="600">
+<img src="StorageInventory-StorageSite.png" width="500">
 </center>
 
 
 
-- a _Storage site_ maintains an inventory of the files stored at a particular location, and provides mechanisms to access (minoc) those files  and query (luskan) the local inventory.  If you have files in multiple data centres, or more than one storage platform in one data centre (e.g. some files on a posix file-system and some on Ceph object storage), you would have _more than one Storage site, and each site would run its own services, database, storage, and applications_.   
+A _Storage site_ maintains an inventory of the files stored at a particular location, and provides mechanisms to access (minoc) those files  and query (luskan) the local inventory.  If you have files in multiple data centres, or more than one storage platform in one data centre (e.g. some files on a posix file-system and some on Ceph object storage), you would have _more than one Storage site, and each site would run its own services, database, storage, and applications_.   
 
-  (Note: in the links below, example `docker-compose.yml` files are shown.  You may need to edit these files for your local site, after which you could run them with `docker-compose up -d`.)
+  In the links below, example `docker-compose.yml` files are provided.  You may need to edit these files for your local site, after which you could run them with `docker-compose up -d`.
 
-  A _Storage site_ runs two services:
-  - [`minoc`](storage_site/minoc/README.md) - file service. Provides a file upload and download service.  
-  - [`luskan`](storage_site/luskan/README.md) - metadata query service. Provides a service for querying the inventory database using the TAP protocol.  
+  1. **Proxy** - All interaction with _Storage site_ services needs to go through a [`proxy`](storage_site/proxy/README.md).  The proxy will provide SSL termination and will ensure that authentication headers are correctly set before connecting to the backend services.  The proxy will need a public IP address and a valid SSl certificate (e.g. [Let's Encrypt](https://www.letsencrypt.org)).  
+  1. **Services** - A _Storage site_ runs two services:
 
-  These services will need to behind a [proxy](storage_site/proxy/README.md) (e.g. haproxy).
+      - [`minoc`](storage_site/minoc/README.md) - file service. Provides a file upload and download service.  
+      - [`luskan`](storage_site/luskan/README.md) - metadata query service. Provides a service for querying the inventory database using the TAP protocol.
   
-  A _Storage site_ will also need to run applications to validate the inventory contents:
-  - [`tantar`](storage_site/tantar/README.md) - file validation.  This compares the artifact metadata in the inventory database with the actual storage, ensuring that they are in sync.  
+      Services are all containerized, with the service listening by default on port `8080` -- the example `docker-compose.yml` files given in the above links set different external ports for each service, which the proxy connects to.  
+
+      Both `minoc` and `luskan` require access to the _Storage site's_ inventory database, but only `minoc` will require access to the _site's_ storage.
+
+  1. **Resources** - A _Storage site_ will also need access to a database and a storage platform:
+
+      - **Database** - The _Storage Inventory_ [`database`](storage_site/database/README.md) is the ledger tracking all the files storage at the site.  Applications and services will access this database in parallel so it will need to have good performance, especially as the content as the site grows.  
+      - **Storage** - _Storage Inventory_ services currently work with two storage backends: [`POSIX file-systems`](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-fs) and [`object storage via the Swift API`](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-swift).  Example config files:
+          - [`POSIX file-system adapter`](storage_site/minoc/config/cadc-storage-adapter-fs.properties)
+          - [`Swift object storage adapter`](storage_site/minoc/config/cadc-storage-adapter-swift.properties)
+
+
+  1. **Applications** - A _Storage site_ will also need to run applications to validate the inventory contents:
+      - [`tantar`](storage_site/tantar/README.md) - file validation.  This compares the artifact metadata in the inventory database with the actual storage, ensuring that they are in sync.  
   
-  Additional applications will be needed if the _Storage site_ is meant to be synced with other _Storage sites_, via a _Global site_.
-  - [`fenwick`](storage_site/fenwick/README.md) - incremental metadata synchronization between the _Storage site_ and _Global site_.  Only compares artifacts since the last run.  
-  - [`ratik`](storage_site/ratik/README.md) - full metadata validation between the _Storage site_ and _Global site_.
-  - [`ringhold`](storage_site/ringhold/README.md) - artifact removal after a namespace/collection is removed from a site.
-  - [`critwall`](storage_site/critwall/README.md) - file synchronization.  If metadata synchronization (`fenwick`, `ratik`) results in aritfacts in a site inventory without the associated files, critwall will negotiate the file transfers with the _Global site raven_ service.
+      Additional applications will be needed if the _Storage site_ is meant to be synced with other _Storage sites_, via a _Global site_.
+      - [`fenwick`](storage_site/fenwick/README.md) - incremental metadata synchronization between the _Storage site_ and _Global site_.  Only compares artifacts since the last run.  
+      - [`ratik`](storage_site/ratik/README.md) - full metadata validation between the _Storage site_ and _Global site_.
+      - [`ringhold`](storage_site/ringhold/README.md) - artifact removal after a namespace/collection is removed from a site.
+      - [`critwall`](storage_site/critwall/README.md) - file synchronization.  If metadata synchronization (`fenwick`, `ratik`) results in aritfacts in a site inventory without the associated files, critwall will negotiate the file transfers with the _Global site raven_ service.
 
 ### Global site
 
 <center>
-<img src="StorageInventory-GlobalSite.png" width="400">
+<img src="StorageInventory-GlobalSite.png" width="500">
 </center>
 
-- a _Global site_ maintains a view of the inventory of artifacts at all configured _Storage sites_.  _Storage sites_ do not know about other _Storage sites_: if two _Storage sites_ are meant to be kept in sync, they will query (via `fenwick` and `ratik`) the _Global site_ for files that they are missing.
+A _Global site_ maintains a view of the inventory of artifacts at all configured _Storage sites_.  _Storage sites_ do not know about other _Storage sites_: if two _Storage sites_ are meant to be kept in sync, they will query (via `fenwick` and `ratik`) the _Global site_ for files that they are missing.
   
-  A _Global site_ runs three services:
-  - [`raven`](global_site/raven/README.md) - file transfer negotiation.  A request for a file through `raven` will not deliver the bytes of the file, but rather a redirect to the `minoc` service at a _Storage site_ that has the requested file.
-  - [`luskan`](global_site/luskan/README.md) - inventory database query.  Same service as for the _Storage sites_, but for the global inventory.
-  - [`baldur`](global_site/baldur/README.md) - file access authorization based on file namespace and authorization groups.  Not really a _Global site_ service, more like one of the ancillary services mentioned above.
-    - If you only plan to have a single _Storage site_, and have no need of a _Global site_, you'll still need to deploy `baldur` if you want to grant authorization for users to upload or retrieve files.
+1. **Proxy** - As with the _Storage site_ all interaction with _Global site_ services needs to go through a [`proxy`](global_site/proxy/README.md).  This proxy serves the same function as that for the _Storage site_, and could even be the same proxy but you'd need to ensure that the `resourceID` (explained elsewhere...???) for the _Storage site_ and _Global site_ resolve to different paths.
 
-These services will need to behind a [proxy](global_site/proxy/README.md) (e.g. haproxy), possibly a different proxy than being used for any local _Storage site_ services.
+1. **Services** - A _Global site_ runs three services:
+    - [`raven`](global_site/raven/README.md) - file transfer negotiation.  A request for a file through `raven` will not deliver the bytes of the file, but rather a redirect to the `minoc` service at a _Storage site_ that has the requested file.
+    - [`luskan`](global_site/luskan/README.md) - inventory database query.  Same service as for the _Storage sites_, but for the global inventory.
+    - [`baldur`](global_site/baldur/README.md) - file access authorization based on file namespace and authorization groups.  Not really a _Global site_ service, more like one of the ancillary services mentioned above.
+      - If you only plan to have a single _Storage site_, and have no need of a _Global site_, you'll still need to deploy `baldur` if you want to grant authorization for users to upload or retrieve files.
+
+1. **Database** - The _Global site_ [`database`](global_site/database/README.md) serves a similar but larger function than the _Storage site_ database: it tracks the artifacts that are at each _Storage site_, or that should be at each site.  Each _Storage site_ will query the _Global site_ to determine if new files have been uploaded to other sites.
+1. **Applications** - A _Global site_ needs to run applicaitons to scan the inventory of remote _Storage sites_.
+
+    - [`fenwick`](global_site/fenwick/README.md) - A _global site_ will need to run an instance of `fenwick` for _each_ site that it is monitoring.  These instances will scan the remote inventory (via that site's `luskan` service) and record in its own inventory what files have been added or removed. This acts as an incremental harvest of the site's artifact metadata.
+    - [`ratik`](global_site/ratik/README.md) - As with `fenwick`, a _global site_ will run an instance of `ratik` for each site that it is monitoring, but it only will run these instances when it wants to do a full metadata validation between the remote storage and global site.
 
 ### Artifact Metadata sync between Global and Storage sites
 

@@ -13,31 +13,31 @@ ALTER ROLE invadm WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLI
 -- Create database
 --
 -- Change the LOCATION to match what is used for the '-D` option to initdb.
-CREATE TABLESPACE si_data OWNER postgres LOCATION '/var/lib/postgresql/data/si_data';
-create database si_db with owner=postgres tablespace=si_data;
+CREATE TABLESPACE global_data OWNER postgres LOCATION '/var/lib/postgresql/data/global_data';
+create database global_db with owner=postgres tablespace=global_data;
 --
 -- Users server privilleges
 --
-REVOKE ALL ON DATABASE si_db FROM PUBLIC;
-REVOKE ALL ON DATABASE si_db FROM postgres;
-GRANT ALL ON DATABASE  si_db TO postgres;
-GRANT CONNECT,TEMPORARY ON DATABASE si_db TO PUBLIC;
+REVOKE ALL ON DATABASE global_db FROM PUBLIC;
+REVOKE ALL ON DATABASE global_db FROM postgres;
+GRANT ALL ON DATABASE  global_db TO postgres;
+GRANT CONNECT,TEMPORARY ON DATABASE global_db TO PUBLIC;
 
-GRANT ALL ON TABLESPACE si_data TO postgres;
-GRANT ALL ON TABLESPACE si_data TO tapadm;
-GRANT ALL ON TABLESPACE si_data TO tapuser;
-GRANT ALL ON TABLESPACE si_data TO invadm;
+GRANT ALL ON TABLESPACE global_data TO postgres;
+GRANT ALL ON TABLESPACE global_data TO tapadm;
+GRANT ALL ON TABLESPACE global_data TO tapuser;
+GRANT ALL ON TABLESPACE global_data TO invadm;
 --
 -- Per-Database Role Settings
 --
 
-ALTER ROLE tapadm IN DATABASE si_db SET default_tablespace TO 'si_data';
-ALTER ROLE tapuser IN DATABASE si_db SET default_tablespace TO 'si_data';
-ALTER ROLE invadm IN DATABASE si_db SET default_tablespace TO 'si_data';
+ALTER ROLE tapadm IN DATABASE global_db SET default_tablespace TO 'global_data';
+ALTER ROLE tapuser IN DATABASE global_db SET default_tablespace TO 'global_data';
+ALTER ROLE invadm IN DATABASE global_db SET default_tablespace TO 'global_data';
 --
 -- Crate schemas and extensions
 --
-\connect si_db
+\connect global_db
 
 SET default_transaction_read_only = off;
 CREATE SCHEMA inventory;
@@ -64,10 +64,10 @@ COMMENT ON EXTENSION pgrowlocks IS 'show row-level locking information';
 --
 -- Users grants to db objects
 --
-GRANT CONNECT ON DATABASE si_db to invadm;
-GRANT CONNECT ON DATABASE si_db to tapuser;
-GRANT CONNECT ON DATABASE si_db  to tapadm;
-GRANT CONNECT ON DATABASE si_db to public;
+GRANT CONNECT ON DATABASE global_db to invadm;
+GRANT CONNECT ON DATABASE global_db to tapuser;
+GRANT CONNECT ON DATABASE global_db  to tapadm;
+GRANT CONNECT ON DATABASE global_db to public;
 --
 -- Inventory schema grants
 --
