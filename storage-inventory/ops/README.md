@@ -141,9 +141,9 @@ GI consists of following components:
 The following Web services are required but their functionality is very basic and might be achieved through other mechanisms: 
    - **proxy**: All the calls the front-end Web services need to go through a proxy that provides SSL termination and ensures that authentication 
      headers are correctly set before being routed to the actual service. The proxy needs a public IP address and a valid SSl certificate (e.g. [Let's Encrypt](https://www.letsencrypt.org)).
-   - **registry**: Used to map service IDs to the actual URLs where the service is deployed decoupling the service from its actual location. The simplest **registry** is a static page but the **reg** container
+   - [`registry`](https://ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/reg/): Used to map service IDs to the actual URLs where the service is deployed decoupling the service from its actual location. The simplest **registry** is a static page but the **reg** container
      included with the SI distribution allows the information to be configured on the fly.
-   - **baldur**: permissions service API using configurable rules to grant access based on resource identifiers (Artifact.uri values in the inventory data model).
+   - [`baldur`](https://ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/baldur): permissions service API using configurable rules to grant access based on resource identifiers (Artifact.uri values in the inventory data model).
      his service is required if Authentication and Authorization (A&A) is required for the SI deployment.
      
 #### Client Software
@@ -237,6 +237,8 @@ Web Services:
 - [`raven`](https://github.com/opencadc/storage-inventory/tree/master/raven)
 - [`luskan`](https://github.com/opencadc/storage-inventory/tree/master/luskan)
 - [`baldur`](https://github.com/opencadc/storage-inventory/tree/master/baldur)
+- [`registry`](https://github.com/opencadc/reg/tree/master/cadc-registry)
+- [`haproxy`](https://github.com/opencadc/docker-base/tree/master/cadc-haproxy-dev)
 
 Applications:
 - [`critwall`](https://github.com/opencadc/storage-inventory/tree/master/critwall)
