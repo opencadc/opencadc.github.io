@@ -100,6 +100,7 @@ have more than one Storage site, and each site would run its own services, datab
 <center>
 <img src="StorageInventory-StorageSite.png" width="500">
 </center>
+
 An SI site represents a local storage location associated with a storage.
 - Front-end Web services:
     - [`minoc`](https://ws-cadc.canfar.net/minoc/): REST based file service that supports HEAD, GET, PUT, POST, DELETE operations.
