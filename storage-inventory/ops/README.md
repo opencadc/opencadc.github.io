@@ -72,13 +72,14 @@ Before proceeding with the deployment of the system, it is important to understa
 
 **SI concepts**:
 - **Artifact**: a representation of a file and its metadata in SI. File and artifact are used interchangebly through the document
-- **resourceID/serviceID**: Unique ID in a URI form associated with a deployed service. Examples: 'ivo://opencadc.org/minoc'
+- **resourceID/serviceID**: Unique ID in a URI form associated with a deployed service. Examples: `ivo://opencadc.org/minoc`
 
 ### Target Audience
 This document is intended for system administrators and other technical users who are responsible for deploying, configuring, and maintaining the system.
 
 ### Document Conventions
 Throughout the document, the following conventions will be used:
+- Names of SI components are in **bold** font, key concepts are in _italic_ font, examples of values are in `code` font.
 - Notes provide additional information that is relevant but not essential to understanding the main text.
 - Warnings highlight important information that must be taken into consideration to prevent potential problems.
 
@@ -88,6 +89,8 @@ Throughout the document, the following conventions will be used:
 The system is built on a distributed architecture that leverages the power of containerization to provide high availability, scalability, and resilience. The system consists 
 of multiple nodes that run the Web services on top of various back end storage systems. Software applications are used to synchronize file data and metadata across 
 the configured nodes.
+
+A detailed description of the data model, features and limitations can be found [here](https://github.com/opencadc/storage-inventory/tree/master/docs)
 
 ### Key Components
 SI can be be used for single or multiple sites. The multi-site configurations require a **global inventory** service with a view of all the sites. It is through this service that
@@ -307,6 +310,8 @@ in the service configuration files, check that the configuration keys are correc
 for the service minoc is org.opencadc.minoc.inventory.url. It is easy to cut and paste between config files and forget to change the key.
 
 This section provides a step-by-step guide to troubleshoot common issues that may arise during deployment.
+
+Additional FAQ can be found [`here`](https://github.com/opencadc/storage-inventory/blob/master/docs/FAQ.md)
 
 ### Contact Information
 
