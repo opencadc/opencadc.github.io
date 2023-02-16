@@ -9,57 +9,36 @@ Read the entire document or jump to a relevant section below.
 ### Table of Contents
 
 1. [Introduction](#introduction)
-    * [Key Terms and Concepts](#key-terms-and-concepts)
-    * [Document Conventions](#document-conventions)
+    * [Key Storage Inventory Terms and Concepts](#key-storage-inventory-terms-and-concepts)
 2. [Overview of the System](#overview-of-the-system)
     * [System Architecture](#system-architecture)
-    * [Key Components](#key-components)
-    * [Communication between Components](#communication-between-components)
-    * [System Workflow](#system-workflow)
+    * [Basic Standalone Storage Site](#basic-standalone-storage-site)
+    * [Supporting Infrastructure and Services](#supporting-infrastructure-and-services)
+    * [Client Software](#client-software)
 3. [Deployment Prerequisites](#deployment-prerequisites)
     * [Hardware Requirements](#hardware-requirements)
     * [Software Requirements](#software-requirements)
-    * [Network Configuration](#network-configuration)
-    * [Security Considerations](#security-considerations)
-4. [Deployment Process](#deployment-process)
-    * [Deployment Steps](#deployment-steps)
-    * [Deployment Scenarios](#deployment-scenarios)
-    * [Deployment Best Practices](#deployment-best-practices)
-    * [Common Deployment Issues and Troubleshooting](#common-deployment-issues-and-troubleshooting)
+4. [Deployment Steps](#deployment-steps)
 5. [Configuration and Customization](#configuration-and-customization)
-    * [System Configuration](#system-configuration)
+    * [Web Services Configuration](#web-services-configuration)
     * [Application Configuration](#application-configuration)
-    * [Customizing System Behaviour](#customizing-system-behaviour)
-    * [Customizing User Interfaces](#customizing-user-interfaces)
-6. [Management and Monitoring](#management-and-monitoring)
-    * [System Management](#system-management)
-    * [Performance Monitoring](#performance-monitoring)
-    * [Logging and Auditing](#logging-and-auditing)
-    * [Alerts and Notifications](#alerts-and-notifications)
+    * [A word about credentials](#a-word-about-credentials)
+6. [Management and Monitoring](#management-and-monitoring)    
 7. [Maintenance and Upgrades](#maintenance-and-upgrades)
-    * [Updating the System](#updating-the-system)
-    * [Backups and Disaster Recovery](#backups-and-disaster-recovery)
-    * [System Maintenance and Optimization](#system-maintenance-and-optimization)
-    * [Upgrading to New Versions](#upgrading-to-new-versions)
 8. [Conclusion](#conclusion)
-    * [Summary](#summary)
-    * [Future Enhancements](#future-enhancements)
-    * [Feedback and Support](#feedback-and-support)
-9. [Appendices](#appendices)
-    * [Glossary](#glossary)
-    * [Deployment Scenarios](#deployment-scenarios-1)
+    * [Deployment Scenarios](#deployment-scenarios)
     * [Troubleshooting Guide](#troubleshooting-guide)
-    * [Contact Information](#contact-information)
 
 
 ## Introduction
 
-### Key Storage Inventory (SI) Terms and Concepts
+### Key Storage Inventory Terms and Concepts
 
 - _Artifact_: a representation of a file and its metadata in SI. File and artifact are used interchangebly through the document
 - _resourceID/serviceID_: Unique ID in a URI form associated with a deployed service. Examples: `ivo://opencadc.org/minoc`
 - _bucket_: unit of work for SI applications. More details TBD.
 
+## Overview of the System
 
 ### System Architecture
 A detailed description of the data model, features and limitations can be found [here](https://github.com/opencadc/storage-inventory/tree/master/docs)
@@ -130,24 +109,14 @@ In a production setting it would be best not to mix services and applications on
      
 
 ## Deployment Steps
-
-### Step 1: Install the Required Software
-To deploy the system, you must first install the required software, including the operating system, Docker, and Docker Compose.
-
-### Step 2: Configure the Network
-Next, you must configure the network to ensure that the system components can communicate with each other and the outside world.
-
-### Step 3: Deploy the System Components
-After the required software and network are in place, you can deploy the system components using Docker Compose. The process involves defining the desired state of the system in a `docker-compose.yml` file and then using the `docker-compose up` command to bring the components online.
-
-### Step 4: Verify the Deployment
-After the deployment is complete, you can verify that the system is functioning as expected by accessing the front-end web server and interacting with the system.
+TBD
 
 ## Configuration and Customization
 
 Services and applications expect all configuration files and credentials to be available in the container instance below the directory `/config`. Config files are plain-text key-value files, 
 with the key usually being of the form org.opencadc.serviceName.keyName configuration descriptions. Details for each service/application:
 
+### Web Services Configuration
 Web Services:
 - [`minoc`](https://github.com/opencadc/storage-inventory/tree/master/minoc)
 - [`luskan`](https://github.com/opencadc/storage-inventory/tree/master/luskan)
@@ -155,10 +124,10 @@ Web Services:
 - [`registry`](https://github.com/opencadc/reg/tree/master/cadc-registry)
 - [`haproxy`](https://github.com/opencadc/docker-base/tree/master/cadc-haproxy-dev)
 
-Applications:
+### Application Configuration:
 - [`tantar`](https://github.com/opencadc/storage-inventory/tree/master/tantar)
 
-## A word about credentials
+### A word about credentials
 Services and applications use x509 proxy certificates for authorization and authentication.
 - Applications (**tantar**) will require credentials for a user that has
   been granted permissions to access files by a grant provider (e.g. **baldur**). This user doesn't make privileged calls and has no access to the actual storage or to other credentials.
