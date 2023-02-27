@@ -67,7 +67,7 @@ especially as the content as the site grows.
 The following external services are required for the SI deployment. Images with default implementations are available: 
    - **proxy/ingress**: All the calls the front-end Web services need to go through a proxy/ingress that provides SSL termination and ensures that authentication 
      headers are correctly set before being routed to the actual service. The proxy needs a public IP address and a valid SSl certificate (e.g. [Let's Encrypt](https://www.letsencrypt.org)).
-   - [`registry`](https://ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/reg/): Used to map service IDs to the actual URLs where the service is deployed decoupling the service from its actual location. The simplest **registry** is a static page but the **reg** container
+   - [`reg`](https://ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/reg/): Used to map service IDs to the actual URLs where the service is deployed decoupling the service from its actual location. The simplest **registry** is a static page but the **reg** container
      included with the SI distribution allows the information to be configured on the fly.
    - [`baldur`](https://ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/baldur): permissions service API using configurable rules to grant access based on resource identifiers (Artifact.uri values in the inventory data model).
      his service is required if Authentication and Authorization (A&A) is required for the SI deployment. Most of the time, **baldur** works with a Group Management Service (GMS) and/or User Service.
@@ -121,18 +121,11 @@ Web Services:
 - [`minoc`](https://github.com/opencadc/storage-inventory/tree/master/minoc)
 - [`luskan`](https://github.com/opencadc/storage-inventory/tree/master/luskan)
 - [`baldur`](https://github.com/opencadc/storage-inventory/tree/master/baldur)
-- [`registry`](https://github.com/opencadc/reg/tree/master/cadc-registry)
+- [`reg`](https://github.com/opencadc/reg/tree/master/reg)
 - [`haproxy`](https://github.com/opencadc/docker-base/tree/master/cadc-haproxy-dev)
 
 ### Application Configuration:
 - [`tantar`](https://github.com/opencadc/storage-inventory/tree/master/tantar)
-
-### A word about credentials
-Services and applications use x509 proxy certificates for authorization and authentication.
-- Applications (**tantar**) will require credentials for a user that has
-  been granted permissions to access files by a grant provider (e.g. **baldur**). This user doesn't make privileged calls and has no access to the actual storage or to other credentials.
-- Services (**baldur**, **luskan**, **minoc**, **raven**) will require credentials that allow privileged operations on behalf of a user (e.g. minoc checking baldur if a particular user is allowed to download a file, baldur checking group membership against a group management service). Currently, this privileged account is one that needs to be recognized by the CADC services.
-- services and applications both expect the above credentials to be provided as an x509 proxy certificate presented in the container instance as `/config/cadcproxy.pem`.
 
 
 ### Management and Monitoring
