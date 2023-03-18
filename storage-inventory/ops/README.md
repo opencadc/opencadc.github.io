@@ -27,18 +27,21 @@ Read the entire document or jump to a relevant section below.
 
 ### Key Storage Inventory Terms and Concepts
 
-- _Artifact_: a representation of a file and its metadata in SI. The terms _file_ and _artifact_ are often used interchangeably through the document.
+- _Artifact_: a representation of a file and its metadata in SI. The terms _file_, _object_, and _artifact_ are often used interchangeably through the document.
+    - an artifact _URI_ is a unique idenitfier for a file (or object) stored in SI.  The last path component of a _URI_ is always the _filename_.
 - _bucket_: Analogous to an S3 bucket or a folder, but specifically referring to the Storage Inventory implmentation. Buckets are created on storage (on a POSIX file-system, these would be just directories) and artifacts are distributed among these.  SI applications can be configured to work on subsets of buckets. 
-- _collection_: A _collection_ is a set of artifacts/files/observations that form a logical group in your system.  For example, for a multi-mission data centre like the CADC, collections are often the set of all data from a telescope.  A collection could also be all artifacts/files that compose a special data release for a single telescope (e.g. 'DR1').  
+- _collection_: A _collection_ is a set of artifacts/files/observations that form a logical group in your site's operations.  For example, for a multi-mission data centre like the CADC, collections are often the set of all data from a telescope.  A collection could also be all artifacts/files that compose a special data release for a single telescope (e.g. 'DR1').  
     - The terms _collection_ and _namespace_ are occasionally used interchangeably, but _namespace_ has a key role in artifact metadata whereas _collection_ is just a term used to understand how artifacts are logically grouped.
-- _namespace_: A _namespace_ is the SI identifier for a _collection_ or part of a _collection_ -- the namespace is part of artifact's unique metadata: the URI for an artifact is '_namespace/filepath_'. SI services and applications -- such as during file replication and determining access permissions -- often act on namespaces which are defined using regex patterns, so some thought must be put into what is used.  See the [SI data model page](https://github.com/opencadc/storage-inventory/tree/master/storage-inventory-dm) for more detail on the URI and namespace.
-    - URIs are parsed using `:` and `/` as delimiters. 
-    - _filepath_ could be just the _filename_ (e.g. test1.fits) -- although this is not recommended -- but could also have one or more path elements delimited by `:` (e.g. data/raw/test1.fits)
-    - The _filename_ is always the last part of the artifact URI.  So, `test1.fits` is the filename in the following URIs, and the preceding parts of the URI are the namespace for that file: `tmp:test1.fits`, `tmp:TEST/test1.fits`, `tmp:TEST/data/test1.fits`.  
-        - `tmp:` could be a namespace for all three files.
-        - `tmp:TEST/` could be a namespace for the second two files.
-        - `tmp:TEST/data/` could be a namespace for the last file.
-    - The part of the namespace preceding the `:` is refered to as the 'scheme' elsewhere in the documentation.  This could be thought of as defining a group of collections (e.g. `cadc:DAO`, `cadc:CFHT`, `cadc:JCMT`)
+- _namespace_: A _namespace_ is an SI identifier for a _collection_ or part of a _collection_.  For example, `cadc:CFHT` might be used to identify all CFHT files held at the CADC (the CFHT 'collection'); `cadc:CFHT/raw` might be used to identify all of the raw CFHT files held at the CADC -- both `cadc:CFHT` and `cadc:CFHT/raw` are _namespaces_ but they identify different scopes of the CFHT _collection_.  SI services and applications often act on namespaces which are defined using regex patterns -- such as during file replication and determining access permissions -- so some thought must be put into what is used.  See the [SI data model page](https://github.com/opencadc/storage-inventory/tree/master/storage-inventory-dm) for more detail on the concepts of _URI_ and _namespace_.
+    - artifact URIs are parsed using `:` and `/` as delimiters.
+    - the URI for an artifact is '_namespace/filepath_'.  A _namespace_ which includes an artifact can include any delimited path defined by the artifact's URI, e.g. all of the following are namespaces which include the artifact `cadc:TEST/data/raw/example/test1.fits`:
+        - `cadc:`
+        - `cadc:TEST`
+        - `cadc:TEST/data`
+        - `cadc:TEST/data/raw`
+        - `cadc:TEST/data/raw/example`
+    - A _URI_ which has a _filepath_ of just the _filename_ (e.g. `cadc:test1.fits`) is not recommended.
+    - The part of the namespace preceding the `:` is referred to as the 'scheme' elsewhere in the documentation.  This could be thought of as defining a group of collections (e.g. `cadc:DAO`, `cadc:CFHT`, `cadc:JCMT`)
     - The namespace hierarchy should be chosen to suit your project or telescope operations: a practical example of defining a namespace for a collection _might_ be:
         - `cadc:DAO/` - the namespace for all files from the DAO telescope which are unique to the CADC.
         - `cadc:DAO/camera1/raw/` - the namespace for all files from the DAO which are unprocessed raw observations using camera 1.
@@ -46,8 +49,7 @@ Read the entire document or jump to a relevant section below.
         - `cadc:DAO/camera1/processed/` - the namespace for the subset of all processed frames from camera 1.
         - `cadc:DAO/pi2023011/` - the namespace for the PI project designated '2023011'.
         - alternatively, you could choose a simple flat namespace for all files, e.g. `cadc:DAO/`.
-    - A namespace can be any unique name in SI and should be parseable on the `:` and `/` delimeters. ie. `tmp:TEST` and `tmp:TESTDATA` could be accidentally confused depending on the regex used when specifying namespaces in configuration. 
-- _resourceID/serviceID_: Unique ID in a URI form associated with a deployed service. A registry service provides a look-up to translate these IDs into service URLs.  Example: `ivo://opencadc.org/minoc`
+- _resourceID/serviceID_: Unique ID in a URI form associated with a deployed service. A registry service provides a look-up to translate these IDs into service URLs.  Example: `ivo://opencadc.org/minoc`, which might resolve to `https://www.opencadc.org/minoc`.
 
 ### Storage Inventory Resources
 - Container image repository: https://images.opencadc.org
@@ -104,13 +106,13 @@ A Storage Inventory Storage site consists of following:
     - **Storage platform**: the actual back-end storage platform. Currently, SI supports two platforms: [POSIX filesystem](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-fs) and the [Swift Object Store API](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-swift) (e.g. CEPH Object Store)
 - Applications that run at a storage site:
     - [`tantar`](https://github.com/opencadc/storage-inventory/tree/master/tantar): artifact-validate application that compares the inventory database against the back-end storage.
-    - [`ringhold`](https://github.com/opencadc/storage-inventory/tree/master/ringhold): Removes the local copy of an artifacts. Use with caution: essentially the same as `\rm -r` on a _namespace_ at a storage site.
+    - [`ringhold`](https://github.com/opencadc/storage-inventory/tree/master/ringhold): Removes the local copy of artifacts. Use with caution: essentially the same as `\rm -r` on a _namespace_ at a storage site.
 - Supporting Infrastructure and Services
     - **proxy/ingress**: All the calls the front-end Web services need to go through a proxy/ingress that provides SSL termination and ensures that authentication headers are correctly set before being routed to the actual service. The proxy needs a public IP address and a valid SSL certificate (e.g. [Let's Encrypt](https://www.letsencrypt.org)).  This proxy service might be an external load balancer (e.g. [haproxy](www.haproxy.org)) or an ingress in your container orchestration system -- the details will vary depending on your deployment environment.  Whichever proxy or ingress is chosen, it must support x509 client proxy certificates.
         - Note: although the diagram above shows a separate proxy for Storage site services and supporting services, this might not be necessary on all infrastructure.
     - [`Registry`](https://github.com/opencadc/reg/tree/master/cadc-registry-server): Used to map serviceIDs and resourceIDs to the actual URLs where the service is deployed.  Client software, services, and applications will use a registry to look up the locations of services. The linked `cadc-registry-server` is provided as an example implementation.
     - [`baldur`](https://github.com/opencadc/storage-inventory/tree/master/baldur): permissions service which uses configurable rules to grant access based on resource identifiers (_Artifact.uri_ values in the [inventory data model](https://github.com/opencadc/storage-inventory/tree/master/storage-inventory-dm)).
-    This service is required if Authentication and Authorization (A&A) is required for the SI deployment. Generally, **baldur** works along with a Group Management Service (GMS) and/or User Service.
+    This service is required if Authentication and Authorization (A&A) is required for the SI deployment. Generally, **baldur** works along with a Group Membership Service (GMS) and/or User Service.
     - `GMS`: Group Membership Service.  Needed for providing the [IVAO group membership look-up API](https://github.com/ivoa-std/GMS) used by `baldur` and other services when determining access permissions.  For an example implementation, built on top of [Indigio IAM](https://indigo-iam.github.io/v/current/), see https://github.com/brianmajor/cadc-si-deployement-setup (more implementation details to follow soon).
      
 ## Client Software
@@ -150,15 +152,15 @@ Worker nodes:
 
 ## Deployment 
 
-Note on logging: Storage inventory services and application containers all log to `stdout` by default -- for a production deployment, these should be captured and preserved by whatever mechanism is available on your system.
+**Note on logging:** Storage inventory services and application containers all log to `stdout` by default -- for a production deployment, these should be captured and preserved by whatever mechanism is available on your system.
 
 1. **Storage**
-
     - How to configure your storage is dependent upon your local hardware and data centre details.  However -- 
         - There are two types of storage supported:
             - [POSIX filesystem](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-fs)
                 - for POSIX storage, the storage will need to be mounted directly into the containers (e.g. a 'volume' path in Docker or a PVC in kubernetes).  Since the storage will be mounted by several containers, it will need to be a _shared_ file-system which supports writes from multiple hosts. 
                 - in the SI configuration for POSIX storage the `org.opencadc.inventory.storage.fs.baseDir` parameter must point to the location that the storage is mounted _inside the container._
+                - Note: the currently implemented version of this storage adapter is the 'OpaqueFileSystem' adapter -- the structure of subdirectories is not something which can easily be mounted and used elsewhere.  It would be possible to develop a filesystem adapter which provides a human readable directory structure.
             - [Swift Object Store API](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-swift) (e.g. CEPH Object Store)
                 - for Swift storage, the Ceph gateway URL must be reachable from inside the containers.
         - Whatever storage you use, it must be directly available to certain storage inventory services and applications.  These are
