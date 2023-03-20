@@ -110,7 +110,7 @@ A Storage Inventory Storage site consists of following:
 - Supporting Infrastructure and Services
     - **proxy/ingress**: All the calls the front-end Web services need to go through a proxy/ingress that provides SSL termination and ensures that authentication headers are correctly set before being routed to the actual service. The proxy needs a public IP address and a valid SSL certificate (e.g. [Let's Encrypt](https://www.letsencrypt.org)).  This proxy service might be an external load balancer (e.g. [haproxy](www.haproxy.org)) or an ingress in your container orchestration system -- the details will vary depending on your deployment environment.  Whichever proxy or ingress is chosen, it must support x509 client proxy certificates.
         - Note: although the diagram above shows a separate proxy for Storage site services and supporting services, this might not be necessary on all infrastructure.
-    - [`Registry`](https://github.com/opencadc/reg/tree/master/cadc-registry-server): Used to map serviceIDs and resourceIDs to the actual URLs where the service is deployed.  Client software, services, and applications will use a registry to look up the locations of services. The linked `cadc-registry-server` is provided as an example implementation.
+    - [`reg`](https://github.com/opencadc/reg/tree/master/reg): Used to map serviceIDs and resourceIDs to the actual URLs where the service is deployed.  Client software, services, and applications will use a registry to look up the locations of services. The linked `cadc-registry-server` is provided as an example implementation.
     - [`baldur`](https://github.com/opencadc/storage-inventory/tree/master/baldur): permissions service which uses configurable rules to grant access based on resource identifiers (_Artifact.uri_ values in the [inventory data model](https://github.com/opencadc/storage-inventory/tree/master/storage-inventory-dm)).
     This service is required if Authentication and Authorization (A&A) is required for the SI deployment. Generally, **baldur** works along with a Group Membership Service (GMS) and/or User Service.
     - `GMS`: Group Membership Service.  Needed for providing the [IVAO group membership look-up API](https://github.com/ivoa-std/GMS) used by `baldur` and other services when determining access permissions.  For an example implementation, built on top of [Indigio IAM](https://indigo-iam.github.io/v/current/), see https://github.com/brianmajor/cadc-si-deployement-setup (more implementation details to follow soon).
@@ -174,23 +174,23 @@ Worker nodes:
     - Storage Inventory services have been tested with postgres 12.3.  Newer versions will likely work as well.
     - As the content in the database grows, you'll need to think about its storage requirements.  For the PG data and indices, this is roughly 1KB/artifact (storage site) or 1.5KB/artifact (global site)
     - In the following, the database being created is called `si_db`, but you can change that name as you see fit.  Whatever you choose, it will need to be referenced in the service and application configuration.
-        - Initialize the database: `initdb -D /var/lib/postgresql/data --encoding=UTF8 --lc-collate=C --lc-ctype=C`
+        - Initialize the database: `initdb -D /var/lib/postgresql/data --encoding=UTF8 --lc-collate=C --lc-ctype=C`. These database initialization options are required so that column sorting matches what is expected by the software.
         - You might need to change the data location (`-D`), depending on your postgres installation and hardware layout.
     - As the postgres user, create a file named [si.dll](si.dll) with the linked content, edit to add appropriate passwords, and run `psql -f si.dll -a`
     - This will create three users:
-        - `tapadm` - privileged user.  Manages the tap schema with permissions to create, alter, and drop tables. Used by:
+        - `tapadm` - privileged user.  Manages the tap and uws schemas with permissions to create, alter, and drop tables. Used by:
             - **luskan**
         - `tapuser` - unprivileged user.  Used by the `luskan` service to query the inventory database. Used by:
             - **luskan**
             - **raven**
-        - `invadm` - privileged user. Manages the inventory schema with privileges to create, alter, and drop tables, and is also used to insert, update, and delete rows in the inventory tables. Used by:
+        - `invadm` - privileged content admin user. Manages the database schema with privileges to create, alter, and drop tables, and is also used to insert, update, and delete rows in the inventory tables. Used by:
             - **critwall**
             - **fenwick**
             - **minoc**
             - **ratik**
             - **ringhold**
             - **tantar**
-    - NOTE: The first service to connect to the database will create and initialize the tables and indices using the above privileged user roles.
+    - NOTE: The first service with write permissions to connect to the database will create and initialize the tables and indices using the above privileged user roles.
     - a basic example of a developer deployment of a compatible database can be found in [here](https://github.com/opencadc/docker-base/tree/master/cadc-postgresql-dev). (Except _pgsphere_ is not required...)
 
 1. **Proxy**
