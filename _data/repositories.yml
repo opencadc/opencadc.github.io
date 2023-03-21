@@ -82,3 +82,12 @@
   github: '/notebook-tutorials'
   documentation: '/notebook-tutorials'
   projects:
+
+- name: 'storage-inventory'
+  title: 'Storage Inventory'
+  enabled: 'true'
+  description: 'Storage Inventory Operator and Deployment Documentation'
+  img: ''
+  github: '/storage-inventory'
+  documentation: '/storage-inventory'
+  projects:
