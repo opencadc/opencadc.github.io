@@ -5,15 +5,15 @@
 ## Introduction
 ### Storage Inventory Terms and Concepts
 <a id='term-artifact'>**artifact**</a>  
-A representation of a file and its metadata in the SI database, specifically the _inventory.Artifact_ table (see the [SI data model](https://github.com/opencadc/storage-inventory/tree/master/storage-inventory-dm).  The term _artifact_ is often used to refer to both the database representation of a file and the file itself as one thing, but when an SI application is acting on an _artifact_, it specifically refers to the database.
-- an artifact _URI_ is a unique idenitfier for a file (or object) stored in SI.  The last path component of a _URI_ is always the _filename_.
+A representation of a file and its metadata in the SI database, specifically the _inventory.Artifact_ table (see the [SI data model](https://github.com/opencadc/storage-inventory/tree/master/storage-inventory-dm)).  The term _artifact_ is often used to refer to both the database representation of a file and the file itself as one thing, but when an SI application is acting on an _artifact_, it specifically refers to the database.
+- ➡️ an artifact _URI_ is a unique idenitfier for a file (or object) stored in SI.  The last path component of a _URI_ is always the _filename_.
 
 <a id='term-bucket'>**bucket**</a>  
 SI can organize units of work (number of files or artifacts) by `buckets` and applications can be configured to work on subsets of these buckets.  
 - Buckets are represented by hex strings, e.g. `a74`.
 - When applications refer to buckets on storage, it refers to the location (e.g., an S3 bucket or a directory) in which files are stored.  This is dependent upon your storage configuration.
 - When applications refer to buckets in the SI database, it refers to the _inventory.Artifact.uriBucket_ column in the database.  This column is populated with a random hex string on artifact creation.
-- ❗_storage_ buckets and _uri_ buckets are not the same thing, e.g. files in _storage_ bucket `04c` are not necessarily the same as artifacts in _uri_ bucket `04c`.
+- ❗ _storage_ buckets and _uri_ buckets are not the same thing, e.g. files in _storage_ bucket `04c` are not necessarily the same as artifacts in _uri_ bucket `04c`.
 
 <a id='term-collection'>**collection**</a>  
 A _collection_ is a set of artifacts/files/observations that form a logical group in your site's operations.  For example, for a multi-mission data centre like the CADC, collections are often the set of all data from a telescope.  A collection could also be all artifacts/files that compose a special data release for a single telescope (e.g. 'DR1').  
@@ -116,11 +116,11 @@ A standalone Storage Inventory Storage site will consist of following:
             - [POSIX filesystem adapter](#POSIX)
             - [Swift Object Store adapter](#Swift)
 - Applications:
-    - A **File validation application** ([`tantar`](#configuration-tantar): Artifact validation application that compares the inventory database with the contents of the back-end storage.
+    - A **File validation application** ([`tantar`](#configuration-tantar)): Artifact validation application that compares the inventory database with the contents of the back-end storage.
     - An **artifact removal tool** ([`ringhold`](#configuration-ringhold)): Removes the local copy of artifacts. Use with caution: essentially the same as `\rm -r` on a [_namespace_](#term-namespace) at a storage site.
 - Supporting Infrastructure and Services:
     - A **proxy/ingress** service: All the calls the front-end Web services need to go through a proxy/ingress that provides SSL termination and ensures that authentication headers are correctly set before being routed to the actual service. The proxy needs a public IP address and a valid SSL certificate (e.g. [Let's Encrypt](https://www.letsencrypt.org)).  This proxy service might be an external load balancer (e.g. [haproxy](www.haproxy.org)) or an ingress in your container orchestration system -- the details will vary depending on your deployment environment.  Whichever proxy or ingress is chosen, it must support x509 client proxy certificates.
-        - Note: although the diagram above shows a separate proxy for Storage site services and supporting services, this might not be necessary on all infrastructure.
+        - ➡️ Note: although the diagram above shows a separate proxy for Storage site services and supporting services, this might not be necessary on all infrastructure.
     - A [`Registry`](#configuration-registry) service: Used to map [_resourceIDs_](#term-resourceid) to the actual URLs where the service is deployed.  Client software, services, and applications will use a registry to look up the locations of services. The linked `cadc-registry-server` is provided as an example implementation.
     - A **Permissions services** ([`baldur`](#configuration-baldur)): permissions service which uses configurable rules to grant access based on resource identifiers (_Artifact.uri_ values or [_namespaces_](#term-namespace)).
     This service is required if Authentication and Authorization (A&A) is required for the SI deployment. Generally, **baldur** works along with a Group Membership Service (GMS) and/or User Service.
@@ -141,7 +141,7 @@ A Global site will be required different services than a Storage site, and both 
     - A **Query service** ([`luskan`](#configuration-luskan)): this is the same service, and is configured the same way as for a Storage site.
 - Resources:
     - An **Global Inventory database**: this is basically identical to a Storage site inventory database, except there is additional information regarding where each file is located.
-    - A Global site does not require file storage.
+    - ➡️ A Global site does not require file storage.
 - Applications:
     - both Storage sites and Global site will need a **Metadata synchronization** application ([fenwick](#configuration-fenwick)) -- a Storage site will only need to run one instance of `fenwick` but a Global site will need to run an instance of `fenwick` for each Storage site it needs to track.  See the [Metadata synchronization](#metadata-synchronization) description below.
     - both sites will also need to periodically run a **Metadata validation** application ([ratik](#configuration-ratik)) -- similar to `fenwick` a Storage site will only need to run one instance of `ratik` but a Global site will run an instance of `ratik` for each Storage site it is tracking.
@@ -271,7 +271,7 @@ Worker nodes:
 
     - Required for: Storage site and Global site
     - Required by: [critwall](#configuration-critwall), [fenwick](#configuration-fenwick), [luskan](#configuration-luskan), [minoc](#configuration-minoc), [ratik](#configuration-ratik), [raven](#configuration-raven), [ringhold](#configuration-ringhold), [tantar](#configuration-tantar)
-    - The database will be accessed by all SI site services and applications, so must be reachable from wherever you deploy your containers.
+    - The database will be accessed by all local SI site services and applications, so must be reachable from wherever you deploy your containers for that site.
     - Storage Inventory services have been tested with postgres 12.3.  Newer versions will likely work as well.
     - As the content in the database grows, you'll need to think about its storage requirements.  For the PG data and indices, this is roughly 1KB/artifact (storage site) or 1.5KB/artifact (global site)
     
