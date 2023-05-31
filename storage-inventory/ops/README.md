@@ -9,11 +9,11 @@ A representation of a file and its metadata in the SI database, specifically the
 - an artifact _URI_ is a unique idenitfier for a file (or object) stored in SI.  The last path component of a _URI_ is always the _filename_.
 
 <a id='term-bucket'>**bucket**</a>  
-SI can lump units of work (number of files or artifacts) into `buckets` and applications can be configured to work on subsets of these buckets.  
+SI can organize units of work (number of files or artifacts) by `buckets` and applications can be configured to work on subsets of these buckets.  
 - Buckets are represented by hex strings, e.g. `a74`.
 - When applications refer to buckets on storage, it refers to the location (e.g., an S3 bucket or a directory) in which files are stored.  This is dependent upon your storage configuration.
 - When applications refer to buckets in the SI database, it refers to the _inventory.Artifact.uriBucket_ column in the database.  This column is populated with a random hex string on artifact creation.
-- _storage_ buckets and _uri_ buckets are not the same thing, e.g. files in _storage_ bucket `04c` are not necessarily the same as artifacts in _uri_ bucket `04c`.
+- ❗_storage_ buckets and _uri_ buckets are not the same thing, e.g. files in _storage_ bucket `04c` are not necessarily the same as artifacts in _uri_ bucket `04c`.
 
 <a id='term-collection'>**collection**</a>  
 A _collection_ is a set of artifacts/files/observations that form a logical group in your site's operations.  For example, for a multi-mission data centre like the CADC, collections are often the set of all data from a telescope.  A collection could also be all artifacts/files that compose a special data release for a single telescope (e.g. 'DR1').  
@@ -44,6 +44,10 @@ Unique ID in a URI form associated with a deployed service. A `registry` service
 - `resourceIDs` may be shared within a site -- used by local services and applications -- but may also be shared across an _organization_.  Because the scope of a site's resourceIDs could be broad, some thought needs to be put into their definition.
 - a `resourceID` is a label which identifies a service in an abstract way.  Service URLs might change, but resourceIDs should not.
 - the `ivo:` scheme in the `resourceID` means that the `registry` service that will be used to resolve the `resourceID` complies with the [**IVOA** registry standard](https://www.ivoa.net/documents/RegistryInterface/).  The available CADC [`reg`](https://github.com/opencadc/reg/tree/master/cadc-registry-server) service is an example of an **IVOA** registry implementation.
+<center>
+<img src="Registry-lookup.drawio.png" width="500">
+</center>
+
 
 ### Storage Inventory Resources
 <a id='resource-repository'></a>
@@ -52,7 +56,7 @@ Unique ID in a URI form associated with a deployed service. A `registry` service
 - This is an OCI compliant image repository, so images can be downloaded using the standard URL format: `https://images.opencadc.org/<project>/<image>:<tag>`, where the list of projects, images, and tags can be found using the commands below.  Images specific to Storage Inventory will be found in the `storage-inventory` project, although images for supporting services may be in other projects (i.e. in `core`).
 - To see what projects are hosted here, use ([`jq`](https://stedolan.github.io/jq/) is a helpful command for parsing JSON): 
 ```
-  curl -s https://images.opencadc.org/api/v2.0/projects | jq '[.[].name] | sort'
+curl -s https://images.opencadc.org/api/v2.0/projects | jq '[.[].name] | sort'
 ```
 - To see what images are available in a project, use (e.g., for storage-inventory):
 ```
@@ -93,10 +97,9 @@ In general:
 
 ### Standalone Storage Site
 A Storage site maintains an inventory of the files stored at a particular location, and provides mechanisms to access (**minoc**) those files and query (**luskan**) the local inventory. 
-Below is an outline of the deployment for a stand-alone (no _Global_ site) Storage Inventory Storage site, with one storage system, one database, etc, in one data centre. If you have files in multiple data centres, or more than one storage platform in one data centre (e.g. some files on a posix file-system and some on Ceph object storage), you would 
+Below is an outline of a stand-alone (no _Global_ site) Storage Inventory _Storage_ site, with one storage system, one database, etc, in one data centre. If you have files in multiple data centres, or more than one storage platform in one data centre (e.g. some files on a posix file-system and some on Ceph object storage), you would 
 have more than one Storage site, and each site would run its own services, database, storage, and applications.  
 
-Note: In a Storage Inventory deployment which also involves a Global Site and multiple Storage Sites, there will be two more applications required at a Storage Site (`fenwick` and `ratik`).  These will be discussed elsewhere.
 
 <center>
 <img src="SingleSiteWithExternal.drawio.png" width="500">
@@ -104,30 +107,64 @@ Note: In a Storage Inventory deployment which also involves a Global Site and mu
 
 A standalone Storage Inventory Storage site will consist of following:
 - Front-end Web services:
-    - [`minoc`](https://github.com/opencadc/storage-inventory/tree/master/minoc): REST based file service that supports HEAD, GET, PUT, POST, DELETE operations.
-    - [`luskan`](https://github.com/opencadc/storage-inventory/tree/master/luskan): Web Service used to query artifact metadata contained in the Inventory database, using the [`IVOA Table Access Protocol`](https://www.ivoa.net/documents/TAP/) (TODO: Replace TAP link with user document, not reference to spec....)
+    - A **File service** ([`minoc`](#configuration-minoc)): provides a REST based file service that supports HEAD, GET, PUT, POST, DELETE operations.
+    - A **Query service** ([`luskan`](#configuration-luskan)): provides a Web Service for querying artifact metadata contained in the Inventory database, using the [`IVOA Table Access Protocol`](https://www.ivoa.net/documents/TAP/) (TODO: Replace TAP link with user document, not reference to spec....)
 - Resources:
-    - **Inventory database**: this is the ledger tracking all the files storage at the site. Applications and services will access this database in parallel so it will need to have good performance, especially as the content at the site grows.  Currently only Postgresql is supported.
-    - **Storage platform**: the actual back-end storage platform. Currently, SI supports two types of storage: POSIX-compliant file-systems (e.g. Lustre) and Swift API compatible Object Store (e.g. Ceph Object Store)
+    - An **Inventory database**: this is the ledger tracking all the files storage at the site. Applications and services will access this database in parallel so it will need to have good performance, especially as the content at the site grows.  Currently only [Postgresql](https://www.postgres.org) is supported.
+    - A **Storage platform**: the storage platform on which file will be stored. Currently, SI supports two types of storage: POSIX-compliant file-systems (e.g. Lustre) and Swift API compatible Object Store (e.g. Ceph Object Store)
         - SI services and applications interact with the back-end storage using a _Storage Adapter_:
-            - [POSIX filesystem adapter](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-fs)
-            - [Swift Object Store adapter](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-swift)
+            - [POSIX filesystem adapter](#POSIX)
+            - [Swift Object Store adapter](#Swift)
 - Applications:
-    - [`tantar`](https://github.com/opencadc/storage-inventory/tree/master/tantar): Artifact validation application that compares the inventory database with the contents of the back-end storage.
-    - [`ringhold`](https://github.com/opencadc/storage-inventory/tree/master/ringhold): Removes the local copy of artifacts. Use with caution: essentially the same as `\rm -r` on a [_namespace_](#term-namespace) at a storage site.
-- Supporting Infrastructure and Services
-    - **proxy/ingress**: All the calls the front-end Web services need to go through a proxy/ingress that provides SSL termination and ensures that authentication headers are correctly set before being routed to the actual service. The proxy needs a public IP address and a valid SSL certificate (e.g. [Let's Encrypt](https://www.letsencrypt.org)).  This proxy service might be an external load balancer (e.g. [haproxy](www.haproxy.org)) or an ingress in your container orchestration system -- the details will vary depending on your deployment environment.  Whichever proxy or ingress is chosen, it must support x509 client proxy certificates.
+    - A **File validation application** ([`tantar`](#configuration-tantar): Artifact validation application that compares the inventory database with the contents of the back-end storage.
+    - An **artifact removal tool** ([`ringhold`](#configuration-ringhold)): Removes the local copy of artifacts. Use with caution: essentially the same as `\rm -r` on a [_namespace_](#term-namespace) at a storage site.
+- Supporting Infrastructure and Services:
+    - A **proxy/ingress** service: All the calls the front-end Web services need to go through a proxy/ingress that provides SSL termination and ensures that authentication headers are correctly set before being routed to the actual service. The proxy needs a public IP address and a valid SSL certificate (e.g. [Let's Encrypt](https://www.letsencrypt.org)).  This proxy service might be an external load balancer (e.g. [haproxy](www.haproxy.org)) or an ingress in your container orchestration system -- the details will vary depending on your deployment environment.  Whichever proxy or ingress is chosen, it must support x509 client proxy certificates.
         - Note: although the diagram above shows a separate proxy for Storage site services and supporting services, this might not be necessary on all infrastructure.
-    - [`Registry`](https://github.com/opencadc/reg/tree/master/cadc-registry-server): Used to map serviceIDs and [_resourceIDs_](#term-resourceid) to the actual URLs where the service is deployed.  Client software, services, and applications will use a registry to look up the locations of services. The linked `cadc-registry-server` is provided as an example implementation.
-    - [`baldur`](https://github.com/opencadc/storage-inventory/tree/master/baldur): permissions service which uses configurable rules to grant access based on resource identifiers (_Artifact.uri_ values or [_namespaces_](#term-namespace)).
+    - A [`Registry`](#configuration-registry) service: Used to map [_resourceIDs_](#term-resourceid) to the actual URLs where the service is deployed.  Client software, services, and applications will use a registry to look up the locations of services. The linked `cadc-registry-server` is provided as an example implementation.
+    - A **Permissions services** ([`baldur`](#configuration-baldur)): permissions service which uses configurable rules to grant access based on resource identifiers (_Artifact.uri_ values or [_namespaces_](#term-namespace)).
     This service is required if Authentication and Authorization (A&A) is required for the SI deployment. Generally, **baldur** works along with a Group Membership Service (GMS) and/or User Service.
-    - `GMS`: Group Membership Service.  Needed for providing the [IVAO group membership look-up API](https://github.com/ivoa-std/GMS) used by `baldur` and other services when determining access permissions.  For an example implementation, built on top of [Indigio IAM](https://indigo-iam.github.io/v/current/), see https://gitlab.com/ska-telescope/src/group-membership-service (more implementation details to follow soon).
+    - A **Group Membership Service** (`GMS`): .  Needed for providing the [IVAO group membership look-up API](https://github.com/ivoa-std/GMS) used by `baldur` and other services when determining access permissions.  For an example implementation, built on top of [Indigio IAM](https://indigo-iam.github.io/v/current/), see https://gitlab.com/ska-telescope/src/group-membership-service (more implementation details to follow).
 
-### Global Inventory Site
+### Global Site with Multiple Storage Sites
 
 <center>
 <img src="GlobalSiteWithExternal.drawio.png" width="500">
 </center>
+
+If you need to replicate files among multiple Storage Sites, you will need a Global Site.  The Global site maintains a view of all Storage sites, allowing individual Storage sites to discover files that they need to copy.  This also provides a single site which users can query to find files, rather than having to know about and search individual Storage sites.
+
+A Global site will be required different services than a Storage site, and both Storage sites and Global sites will need to run additional applications to synchronize metadata and files.
+
+- Front-end Web services:
+    - A **File locator service** ([`raven`](#configuration-raven)): provides a REST-based service that returns all locations of a file, as they appear in the Global inventory database.
+    - A **Query service** ([`luskan`](#configuration-luskan)): this is the same service, and is configured the same way as for a Storage site.
+- Resources:
+    - An **Global Inventory database**: this is basically identical to a Storage site inventory database, except there is additional information regarding where each file is located.
+    - A Global site does not require file storage.
+- Applications:
+    - both Storage sites and Global site will need a **Metadata synchronization** application ([fenwick](#configuration-fenwick)) -- a Storage site will only need to run one instance of `fenwick` but a Global site will need to run an instance of `fenwick` for each Storage site it needs to track.  See the [Metadata synchronization](#metadata-synchronization) description below.
+    - both sites will also need to periodically run a **Metadata validation** application ([ratik](#configuration-ratik)) -- similar to `fenwick` a Storage site will only need to run one instance of `ratik` but a Global site will run an instance of `ratik` for each Storage site it is tracking.
+    - a **File synchronization** application ([critwall](#configuration-critwall)) -- only Storage sites will need to run this application.  It will query the local inventory database for artifacts which do not have assocated files in local storage, query the Global `raven` service for the locations of those files, and download them to the local storage.  See the [File synchronization](#file-synchronization) description below.
+
+#### Metadata synchronization
+
+<center>
+<img src="Metadata-sync.drawio.png" width="500">
+</center>
+
+#### File synchronization
+
+<center>
+<img src="File-sync.drawio.png" width="500">
+</center>
+
+1. User uses the `minoc` service (`site1.minoc`) to PUT a file to Site 1.
+1. `global.fenwick.site1` discovers the new inventory metadata for the file by querying `site1.luskan`.
+1. `site2.fenwick.global` discovers the new inventory metadata for the file by querying `global.luskan`.
+1. `site2.critwall` finds the locations of the new file via `global.raven` -- this returns a list of URLs from which the file can be downloaded.
+1. `site2.critwall` downloads the file from `site1.minoc`.
+
      
 ## Client Software
 Generic HTTP client tools such as [`curl`](https://curl.se) or [`wget`](https://www.gnu.org/software/wget/) can be used to interact with the SI, however multi-step operations such as transfer negotiations or transfer of large files with
@@ -144,14 +181,17 @@ The [`CADC Direct Data Service`](https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/en
 ## Deployment Prerequisites
 ### Hardware Requirements
 Database:
+- Required for: Storage site and Global site
 - storage: about 1KB/artifact (storage site) or 1.5KB/artifact (global site) for data and indices.
 - RAM/CPU: For a site with 200 million artifacts, 20 cores with 180GB RAM and NVMe storage gives sufficient performance.
 - PG 12.3 or newer 
 
 Storage platform:
+- Required for: Storage site only
 - Ceph Object store (version 14 or greater)
 
     **OR**
+
 - POSIX file-system.
 
 Worker nodes:
@@ -167,48 +207,55 @@ Worker nodes:
 ## Deployment 
 **Note on logging:** Storage inventory services and application containers all log to `stdout` by default -- for a production deployment, these should be captured and preserved by whatever mechanism is available on your system.
 
-1. <a id='storage-adapter-configuration'>**Storage Adapters**</a>
+1. <a id='configuration-storage-adapter'>**Storage Adapters**</a>
 
+    - Required for: Storage site only
+    - Required by: [critwall](#configuration-critwall), [minoc](#configuration-minoc), and [tantar](#configuration-tantar)
     - How to configure your storage is dependent upon your local hardware and data centre details.  However -- 
         - Currently, there are two types of storage supported, each of which requires a _storage adapter_ and associated configuration files:
             - [POSIX file-system](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-fs) <a id='POSIX'></a>
                 - for POSIX storage, the storage file-system will need to be mounted directly into the containers (e.g. a 'volume' path in Docker or a PVC in kubernetes).  Since the storage will be mounted by several containers, it will need to be a _shared_ file-system which supports writes from multiple hosts. 
                 - ❗<a id='note-on-uid'>NOTE:</a> the services in the containers run as a user with a UID:GID of 8675309:8675309.  This user must be allowed to read and write files on the configured file-system.  This is usually done by ensuring a _non-privileged_ (or even 'nologin') user is configured on your system with this UID:GID.
+
+                    <center>
+                    <img src="StorageAdapter.drawio.png" width="500">
+                    </center>
+
                 - in the `cadc-storage-adapter-fs.properties` configuration file for POSIX storage :
                    
                     - the `org.opencadc.inventory.storage.fs.baseDir` parameter must point to the location that the storage is mounted _inside the container._  For example,
-
-                            docker run --user tomcat:tomcat -v /path/on/host:/mount/in/container minoc:0.9.2
-
+                        ```
+                        docker run --user tomcat:tomcat -v /path/on/host:/mountpoint/in/container minoc:0.9.2
+                        ```
                         or
-
-                            apiVersion: app/v1
-                            kind: deployment
-                            <...snip....>
-                            volumeMounts:
-                              - mountPath: "/mount/in/container"
-                                name: lustre-volume
-                            securityContext:
-                             runAsUser: 8675309
-                             runAsGroup: 8676309
-                            volumes:
-                              - name: lustre-ceph-volume
+                        ```
+                        apiVersion: app/v1
+                        kind: deployment
+                        <...snip....>
+                        volumeMounts:
+                            - mountPath: "/mountpoint/in/container"
+                            name: lustre-volume
+                        securityContext:
+                            runAsUser: 8675309
+                            runAsGroup: 8676309
+                        volumes:
+                            - name: lustre-ceph-volume
                                 hostPath:
                                 path: /path/on/host
                                 type: Directory
-
-                    - the `org.opencadc.inventory.storage.fs.OpaqueFileSystemStorageAdapter.bucketLength` sets the _depth_ of the directory tree created to store files.  At each node in the tree, 16 hex (0-f) directories are created -- a `bucketLength` of 2 will create 16 directories (0-f) each with sixteen directories (0-f) -- only the 256 (16x16) directories at the bottom of the tree will be used to store files.   For efficiency of validation, you should choose a `bucketLength` which results in only a few thousand files in each directory. e.g, for a `bucketLength=3` and `baseDir = /mount/in/container`:
-
-                            [container]$ ls -F /mount/in/container/
-                            0/ 1/ 2/ 3/ 4/ 5/ 6/ 7/ 8/ 9/ a/ b/ c/ d/ e/ f/         # Depth=1/3
-                            [container]$ ls -F /mount/in/container/a/
-                            0/ 1/ 2/ 3/ 4/ 5/ 6/ 7/ 8/ 9/ a/ b/ c/ d/ e/ f/         # Depth=2/3
-                            [container]$ ls -F /mount/in/container/a/7/
-                            0/ 1/ 2/ 3/ 4/ 5/ 6/ 7/ 8/ 9/ a/ b/ c/ d/ e/ f/         # Depth=3/3
-                            [container]$ ls -F /mount/in/container/a/7/4/
-                            test0001.fits test0002.fits test0003.fits test0004.fits test0005.fits
-
-                    - in the above example the 'bucket' is the directory path: `a74`
+                        ```
+                    - the `org.opencadc.inventory.storage.fs.OpaqueFileSystemStorageAdapter.bucketLength` sets the _depth_ of the directory tree created to store files.  At each node in the tree, 16 hex (0-f) directories are created -- a `bucketLength` of 2 will create 16 directories (0-f) each with sixteen subdirectories (0-f) -- only the 256 (16x16) subdirectories at the bottom of the tree will be used to store files.   For efficiency of validation, you should choose a `bucketLength` which results in only a few thousand files in each directory. e.g, for a `bucketLength=3` and `baseDir = /mount/in/container`:
+                        ```
+                        [container]$ ls -F /mount/in/container/
+                        0/ 1/ 2/ 3/ 4/ 5/ 6/ 7/ 8/ 9/ a/ b/ c/ d/ e/ f/         # Depth=1/3
+                        [container]$ ls -F /mount/in/container/a/
+                        0/ 1/ 2/ 3/ 4/ 5/ 6/ 7/ 8/ 9/ a/ b/ c/ d/ e/ f/         # Depth=2/3
+                        [container]$ ls -F /mount/in/container/a/7/
+                        0/ 1/ 2/ 3/ 4/ 5/ 6/ 7/ 8/ 9/ a/ b/ c/ d/ e/ f/         # Depth=3/3
+                        [container]$ ls -F /mount/in/container/a/7/4/
+                        test0001.fits test0002.fits test0003.fits test0004.fits test0005.fits
+                        ```
+                    - in the above example the 'bucket' is the directory path: `a74`, and there will be a total of 4096 (16x16x16) buckets.
                     - **Note:** as you can see, the currently implemented version of this storage adapter is the 'OpaqueFileSystem' adapter -- the structure of subdirectories is not something which can easily be mounted and used elsewhere.  It would be possible to develop a filesystem adapter which provides a human readable directory structure.
             - [Swift Object Store API](https://github.com/opencadc/storage-inventory/tree/master/cadc-storage-adapter-swift) (e.g. CEPH Object Store)<a id='Swift'></a>
                 - for Swift storage, the Ceph gateway URL must be reachable from inside the containers.
@@ -218,92 +265,106 @@ Worker nodes:
         - **minoc** -- this service will write files to and retrieve files from storage.
         - **critwall** -- only required in a Storage Inventory deployment with more than one Storage site and a Global site.  This application will scan the site inventory database for artifacts with metadata but no associated local file copy in storage, then negotiate the transfer of those files with the Global site **raven** service.
         - **tantar** -- this application verifies the content of the storage system against the inventory database, so will need to read files from the storage.
-}
 
-1. <a id='database-configuration'>**Database**</a>
 
+1. <a id='configuration-database'>**Database**</a>
+
+    - Required for: Storage site and Global site
+    - Required by: [critwall](#configuration-critwall), [fenwick](#configuration-fenwick), [luskan](#configuration-luskan), [minoc](#configuration-minoc), [ratik](#configuration-ratik), [raven](#configuration-raven), [ringhold](#configuration-ringhold), [tantar](#configuration-tantar)
     - The database will be accessed by all SI site services and applications, so must be reachable from wherever you deploy your containers.
     - Storage Inventory services have been tested with postgres 12.3.  Newer versions will likely work as well.
     - As the content in the database grows, you'll need to think about its storage requirements.  For the PG data and indices, this is roughly 1KB/artifact (storage site) or 1.5KB/artifact (global site)
-    - In the following, the database being created is called `si_db`, but you can change that name as you see fit.  Whatever you choose, it will need to be referenced in the service and application configuration.
+    
+    1. In the following, the database being created is called `si_db`, but you can change that name as you see fit.  Whatever you choose, it will need to be referenced in the service and application configuration.
         - Initialize the database: `initdb -D /var/lib/postgresql/data --encoding=UTF8 --lc-collate=C --lc-ctype=C`
         - You might need to change the data location (`-D`), depending on your postgres installation and hardware layout.
-    - As the postgres user, create a file named [si.dll](si.dll) with the linked content, edit as appropriate, and run `psql -f si.dll -a`
-    - This will create three users:
-        - A TAP admin user (e.g. `tapadm`) - privileged user.  Manages the tap schema with permissions to create, alter, and drop tables. Used by:
-            - **luskan**
-        - A User TAP query user (e.g. `tapuser`) - unprivileged user.  Used by the `luskan` service to query the inventory database. Used by:
-            - **luskan**
-            - **raven**
-        - An Inventory admin user (e.g. `invadm`) - privileged user. Manages the inventory schema with privileges to create, alter, and drop tables, and is also used to insert, update, and delete rows in the inventory tables. Used by:
-            - **critwall**
-            - **fenwick**
-            - **minoc**
-            - **ratik**
-            - **ringhold**
-            - **tantar**
-            - ❗The first service or application configured with the Inventory admin user to connect to the local database will create the required tables and indices.
-    - **NOTE:** The first service to connect to the database will create and initialize the tables and indices using the above privileged user roles.
+    1. As the postgres user, create a file named [si.dll](si.dll) with the linked content, edit as appropriate, and run `psql -f si.dll -a`
+
+        - This will create three users:
+            - A TAP admin user (e.g. `tapadm`) - privileged user.  Manages the tap schema with permissions to create, alter, and drop tables. Used by:
+                - **luskan**
+            - A User TAP query user (e.g. `tapuser`) - unprivileged user.  Used by the `luskan` service to query the inventory database. Used by:
+                - **luskan**
+                - **raven**
+            - An Inventory admin user (e.g. `invadm`) - privileged user. Manages the inventory schema with privileges to create, alter, and drop tables, and is also used to insert, update, and delete rows in the inventory tables. Used by:
+                - **critwall**
+                - **fenwick**
+                - **minoc**
+                - **ratik**
+                - **ringhold**
+                - **tantar**
+    - ❗ **NOTE:** The first service or application configured with the Inventory admin user to connect to the database will create and initialize the tables and indices using the above privileged user roles.
     - a basic example of a developer deployment of a compatible database can be found in [here](https://github.com/opencadc/docker-base/tree/master/cadc-postgresql-dev). (Except _pgsphere_ is not required...)
 
-1. <a id='proxy-configuration'>**Proxy**</a>
+1. <a id='configuration-proxy'>**Proxy**</a>
 
+    - Required for: Storage site and Global site
     - ❗x509 proxy certificates -- the longer certificate chain for these might not be supported by all balancers/proxies.  These proxy certificates are required for some A&A mechanisms.
         - **haproxy**
             - haproxy will need to be compiled against `openssl 1.0.2k` or a compatible version. Newer versions of `openssl` do not support proxy certificates.
             -  the environment variable `OPENSSL_ALLOW_PROXY_CERTS=1` needs to be set in the proxy environment.
+            - a basic example of a developer deployment of a compatible instance of haproxy can be found [here](https://github.com/opencadc/docker-base/tree/master/cadc-haproxy-dev) and [here](examples/haproxy/haproxy.cfg).
         - **nginx**
             - untested, but likely has the same requirements and restrictions as haproxy for proxy certificates.
     - SSL termination -- although you will need to support https connections to your proxy, the SI containers do not accept https connections.  Because of this, your proxy must terminate the SSL connection and pass only non-SSL http connections to the containers.
-    - a basic example of a developer deployment of a compatible instance of haproxy can be found [here](https://github.com/opencadc/docker-base/tree/master/cadc-haproxy-dev).
+    
 
-1. <a id='registry-configuration'>**Registry service**</a>
+1. <a id='configuration-registry'>**Registry service**</a>
 
+    - Required for: Storage site and Global site (Note: could be the same registry instance for both)
     - Container image: Use the latest `core/reg` image from [`images.opencadc.org`](#resource-repository) or a different IVOA-compatible registry service.
     - See the [opencadc registry server](https://github.com/opencadc/reg/tree/master/cadc-registry-server) documentation for configuarion details.
     - [`resourceIDs`](#term-resourceid)
         - you will need to choose resourceIDs for services and resources that you deploy, and which need to be referenced by other services and applications.  For example, if your `minoc` service is available at the URL `https://www.example.org/minoc` and you choose a resourceID of `ivo://example.org/minoc`, the registry config for that resource (in the `reg-resource-caps.properties` file for the registry service) would look like:
-            
+        ```
                 ivo://example.org/minoc = https://www.example.org/minoc
-            
-            This resourceID will appear in, for example, the `minoc.properties` file in the `minoc` service config:
-            
+        ```
+        This resourceID will appear in, for example, the `minoc.properties` file in the `minoc` service config:
+        ```
                 org.opencadc.minoc.resourceID = ivo://example.org/minoc
-            
+        ```
     - test with, e.g., `curl https://www.example.org/reg/resource-caps`
 
-1. <a id='baldur-configuration'>**baldur**</a> - Permission service
+1. <a id='configuration-baldur'>**baldur**</a> - Permission service
 
+    - Required for: Storage site and Global site (Note: would likely be the same baldur instance for both)
     - Container image: Use the latest `storage-inventory/baldur` image from [`images.opencadc.org`](#resource-repository)
     - Uses an IVOA compatible GMS service and configured [namespaces](#term-namespace) to determine file access permissions.
     - Configuration notes:
         - `baldur.properties`:
-            - The `org.opencadc.baldur.allowedUser` x509 DN specified here is generally a 'service' user -- the services that call `baldur` need to be configured with this user's certificate (notably `minoc` and `raven`).
+            - The `org.opencadc.baldur.allowedUser` x509 DN specified here is generally a 'service' user -- the services that call `baldur` need to be configured with this user's certificate.
+                - in `minoc` and `raven` coniguration, this is the `cadcproxy.pem` file for these services.
             - The `org.opencadc.baldur.allowedGroup` is an IVOA GMS group [resourceID](#term-resourceid).  
                 - The GMS service must be registered in the available Registry service.
                 - the configured `readOnlyGroup` and `readWriteGroup` entries are also IVOA GMS group [resourceIDs](#term-resourceid).
     - See the [opencadc storage inventory baldur](https://github.com/opencadc/storage-inventory/tree/master/baldur) documentation for more configuration details.
     - test with, e.g., `curl https://www.example.org/baldur/availability`
 
-1. <a id='gms-configuration'>**GMS**</a> - Group Membership service
+1. <a id='configuration-gms'>**GMS**</a> - Group Membership service
 
+    - Required for: Storage site and Global site (Note: could be the same gms instance for both)
     - TBD.  See the deployment and build documentation for this implementation built on top of [Indigio IAM](https://indigo-iam.github.io/v/current/): https://gitlab.com/ska-telescope/src/group-membership-service 
 
-1. <a id='minoc-configuration'>**minoc**</a> - File service
+1. <a id='configuration-minoc'>**minoc**</a> - File service
 
+    - Required for: Storage site only
     - Container image: Use the latest `storage-inventory/minoc` image from [`images.opencadc.org`](#resource-repository)
     - Configuation notes:
         - `minoc.properties`:
-            - the [_resourceID_](#term-resourceid) configured in `org.opencadc.minoc.resourceID` will need to be configured in your registry.  It is used to advertise _this_ instance of minoc's _resourceID_ to other services.
-            - if you are using a [baldur](#baldur-configuration) service to manage file access permissions, you would put its _resourceID_ in `org.opencadc.minoc.readGrantProvider` and `org.opencadc.minoc.readGrantProvider`.  It is possible to have multiple instances of these providers, by specifing the `GrantProvider` options for each provider (each use of the option is _additive_ to the previous ones).
+            - `org.opencadc.minoc.resourceID`:
+                - this is the [_resourceID_](#term-resourceid) of _this_ instance of minoc, and will need to be configured in your registry.  It is used by the Global inventory as the location for artifacts at a site.
+            - if you are using a [baldur](#configuration-baldur) service to manage file access permissions, you would put its _resourceID_ in `org.opencadc.minoc.readGrantProvider` and `org.opencadc.minoc.readGrantProvider`.  It is possible to have multiple instances of these providers, by specifing the `GrantProvider` options for each provider (each use of the option is _additive_ to the previous ones).
+            - `org.opencadc.minoc.publicKeyFile`:
+                - (optional) this is the public key specified in the [raven](#configuration-raven) configuration key `org.opencadc.raven.publicKeyFile`.
         - `catalina.properties` (from [cadc-tomcat config](https://github.com/opencadc/docker-base/tree/master/cadc-tomcat)):
-            - the `org.opencadc.minoc.inventory.username` database account is the 'Inventory admin user' configured when creating the [database](#database-configuration)
+            - the `org.opencadc.minoc.inventory.username` database account is the 'Inventory admin user' configured when creating the [database](#configuration-database)
     - See the [opencadc storage inventory minoc](https://github.com/opencadc/storage-inventory/tree/master/minoc) documentation for more configuration details.
     - when configuring the storage adapter for minoc to use (see **Storage** above) be sure to test that the containers deployed on your system can access the provided storage.
     - test with, e.g., `curl https://www.example.org/minoc/availability`
 
-1. <a id='luskan-configuration'>**luskan**</a> - Query service
+1. <a id='configuration-luskan'>**luskan**</a> - Query service
 
+    - Required for: Storage site and Global site
     - Container image: Use the latest `storage-inventory/luskan` image from [`images.opencadc.org`](#resource-repository)
     - Configuration notes:
         - `luskan.properties`:
@@ -311,7 +372,7 @@ Worker nodes:
             - `org.opencadc.luskan.allowedGroup` is an IVOA GMS group [resourceID](#term-resourceid).
                 - the GMS service must be configured in the available Registry service.
         - `catalina.properties`:
-            - the `org.opencadc.luskan.uws.username` database account is generally the same as the 'TAP admin user' configured when creating the [database](#database-configuration).
+            - the `org.opencadc.luskan.uws.username` database account is generally the same as the 'TAP admin user' configured when creating the [database](#configuration-database).
             - the `org.opencadc.luskan.tapadm.username` database account is the same 'TAP admin user'.
             - the `org.opencadc.luskan.query.username` database account is the 'TAP query user' account.
         - `cadc-tap-tmp.properties`:
@@ -322,19 +383,28 @@ Worker nodes:
     - See the [opencadc storage inventory luskan](https://github.com/opencadc/storage-inventory/tree/master/luskan) documentation for more configuration details.
     - test with, e.g., `curl https://www.example.org/luskan/availability`
 
-1. <a id='raven-configuration'>**raven**</a> - File location service
+1. <a id='configuration-raven'>**raven**</a> - File location service
 
+    - Required for: Global site only
     - Container image: Use the latest `storage-inventory/raven` image from [`images.opencadc.org`](#resource-repository)
     - Configuration notes:
         - `raven.properties`
-            - `org.opencadc.raven.publicKeyFile` and `org.opencadc.raven.privateKeyFile`:
-                - Used so that raven can generate 'pre-authorized' URLs for files, reducing the number of authentication queries required for a user to download a file.  The authentication information is embedded in a specially encoded URL.
-                - any valid x509 public and private key file can be used here, but the CA that the key is signed with must be trusted.
+            - (optional) `org.opencadc.raven.publicKeyFile` and `org.opencadc.raven.privateKeyFile`:
+                - These are optional but needed so that raven can generate 'pre-authorized' URLs for files, reducing the number of authentication queries required for a user to download a file.  The authentication information is embedded in a specially encoded URL.
+                - these are RSA public and private key files which can be generated using [cadc-keygen](https://github.com/opencadc/core/tree/master/cadc-keygen) or the commands below:
+
+                        ssh-keygen -b 2048 -t rsa -m pkcs8 -f temp_rsa
+                        ssh-keygen -e -m pkcs8 -f temp_rsa.pub > raven-public.key
+                        mv temp_rsa raven-private.key
+                        rm temp_rsa.pub
+
                 - the `publicKeyFile` will be required by services which need to verify the pre-authorized URLS (`minoc`).
     - See the [opencadc storage inventory raven](https://github.com/opencadc/storage-inventory/tree/master/raven) documentation for more configuration details.
     - test with, e.g., `curl https://www.example.org/raven/availability`
 
-1. <a id='fenwick-configuration'>**fenwick**</a> - Metadata sync application
+1. <a id='configuration-fenwick'>**fenwick**</a> - Metadata sync application
+
+    - Required for: Storage site and Global site
     - Container image: Use the latest `storage-inventory/fenwick` image from [`images.opencadc.org`](#resource-repository)
     - Configuration notes:
         - `fenwick.properites`:
@@ -342,17 +412,42 @@ Worker nodes:
                 - fenwick is used to synchronise artifact metadata between a Storage site and a Global site.  The `queryService` is the [resourceID](#term-resourceid) for the _remote_ `luskan` service -- ie. if fenwick is running at a Storage site, `queryService` should refer to the remote Global site `luskan`; if fenwick is running at the Global site, `queryService` should refer to the remote Storage site `luskan` service.  A Global site will need to run a fenwick instance for _each_ Storage site.
     - See the [opencadc storage inventory fenwick](https://github.com/opencadc/storage-inventory/tree/master/fenwick) documentation for more configuration details.
 
-1. <a id='tantar-configuration'>**tantar**</a> - File validation application
-    - Container image: Use the latest `storage-inventory/fenwick` image from [`images.opencadc.org`](#resource-repository)
+1. <a id='configuration-tantar'>**tantar**</a> - File validation application
+
+    - Required for: Storage site only
+    - Container image: Use the latest `storage-inventory/tantar` image from [`images.opencadc.org`](#resource-repository)
     - Configuration notes:
-        - `org.opencadc.tantar.buckets`:
-            - See the description of [buckets](#term-bucket).  Tantar operates on _storage_ buckets.
-    - See the [opencadc storage inventory fenwick](https://github.com/opencadc/storage-inventory/tree/master/tantar) documentation for more configuration details.
+        - `tantar.properties`
+            -   `org.opencadc.tantar.buckets`:
+                - See the description of [buckets](#term-bucket).  Tantar operates on _storage_ buckets.
+                - If you're only running one instance of tantar it should be configured to operate on all buckets (`0-f`); for multiple instances of tantar, you would want to configure these to operate on non-overlapping subsets of buckets (e.g. `0-7`, `8-f`).
+    - See the [opencadc Storage Inventory tantar](https://github.com/opencadc/storage-inventory/tree/master/tantar) documentation for more configuration details.
     
-1. <a id='critwall-configuration'>**critwall**</a> - File sync application
+1. <a id='configuration-critwall'>**critwall**</a> - File sync application
 
+    - Required for: Storage site only
+    - Container image: Use the latest `storage-inventory/critwall` image from [`images.opencadc.org`](#resource-repository)
+    - Configuration notes:
+        - `critwall.properties`
+            - `org.opencadc.critwall.locatorService`:
+                - This should be configured to point to the [resourceID](#term-resourceid) of your Global site instance of `raven`.
+            - `org.opencadc.critwall.buckets`:
+                - See the description of [buckets](#term-bucket).  Critwall operates on _URI_ buckets.
+                - As with tantar, you can run one or more instances of critwall, specifying a single bucket or a range of buckets for each instance.
+    - See the [opencadc Storage Inventory critwall](https://github.com/opencadc/storage-inventory/tree/master/critwall) documentation for more configuration details.
 
+1. <a id='configuration-ratik'>**ratik**</a> - Metadata validation
 
+    - Required for: Storage site and Global site
+    - Container image: Use the latest `storage-inventory/ratik` image from [`images.opencadc.org`](#resource-repository)
+    - Configuration notes:
+        - `ratik.properties`
+            - `org.opencadc.ratik.queryService`:
+                - ratik is used to validate the artifact metadata at one site against another site, usually a Storage site vs a Global site or vice versa.  The `queryService` is the [resourceID](#term-resourceid) for the _remote_ `luskan` service -- ie. if ratik is running at a Storage site, `queryService` should refer to the remote Global site `luskan`; if ratik is running at the Global site, `queryService` should refer to the remote Storage site `luskan` service.  A Global site will need to run a ratik instance for _each_ Storage site.
+            - `org.opencadc.ratik.buckets`:
+                - See the description of [buckets](#term-bucket).  Ratik operates on _URI_ buckets.
+                - As with tantar, you can run one or more instances of ratik, specifying a single bucket or a range of buckets for each instance.
+    - See the [opencadc Storage Inventory ratik](https://github.com/opencadc/storage-inventory/tree/master/ratik) documentation for more configuration details.
     
 
 ##  Healthchecks and Monitoring
