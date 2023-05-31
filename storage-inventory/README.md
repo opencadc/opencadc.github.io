@@ -25,7 +25,7 @@
 		* [Query service](ops/README.md#configuration-luskan) - luskan
 		* [File Location service](ops/README.md#configuration-raven) - raven
 		* [Metadata sync application](ops/README.md#configuration-fenwick) - fenwick
-		* [File validation application](ops/REAME.md#configuarion-tantar) - tantar
+		* [File validation application](ops/README.md#configuarion-tantar) - tantar
 		* [File sync application](ops/README.md#configuration-critwall) - critwall
 		* [Metadata validation application](ops/README.md#configuration-ratik) - ratik
 	1. [Healthchecks and Monitoring](ops/README.md#healthchecks-and-monitoring)    
