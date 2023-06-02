@@ -398,7 +398,7 @@ Worker nodes:
                         mv temp_rsa raven-private.key
                         rm temp_rsa.pub
 
-                - the `publicKeyFile` will be required by services which need to verify the pre-authorized URLS (`minoc`).
+                - the `publicKeyFile` will be required by services which need to verify the pre-authorized URLs (`minoc`).
     - See the [opencadc storage inventory raven](https://github.com/opencadc/storage-inventory/tree/master/raven) documentation for more configuration details.
     - test with, e.g., `curl https://www.example.org/raven/availability`
 
