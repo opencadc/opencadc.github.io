@@ -8,20 +8,17 @@
 A representation of a file and its metadata in the SI database, specifically the _inventory.Artifact_ table (see the [SI data model](https://github.com/opencadc/storage-inventory/tree/master/storage-inventory-dm)).  The term _artifact_ is often used to refer to both the database representation of a file and the file itself as one thing, but when an SI application is acting on an _artifact_, it specifically refers to the database.
 - ➡️ an artifact _URI_ is a unique idenitfier for a file (or object) stored in SI.  The last path component of a _URI_ is always the _filename_.
 
-<a id='term-bucket'>**bucket**</a>  
-SI can organize units of work (number of files or artifacts) by `buckets` and applications can be configured to work on subsets of these buckets.  
+<a id='term-bucket'>**bucket**</a> 
+SI assigns a `bucket` to files on storage and to artifacts in the inventory database.  The bucket for an artifact and the bucket for the file described by that artifact are not necessarily the same. 
 - Buckets are represented by hex strings, e.g. `a74`.
-- When applications refer to buckets on storage, it refers to the location (e.g., an S3 bucket or a directory) in which files are stored.  This is dependent upon your storage configuration.
-- When applications refer to buckets in the SI database, it refers to the _inventory.Artifact.uriBucket_ column in the database.  This column is populated with a random hex string on artifact creation.
+- Some SI applications can work on subsets of buckets, allowing some degree of parallelization.
+- The bucket of a file can also refer to the location of the file on storage.  The file bucket and storage location will be the same on a storage platform that uses the concept of buckets (e.g. S3/Swift); on a POSIX file-system, the bucket will be parsed into subdirectories (e.g. /a/7/4/).
+- When applications refer to buckets in the inventory database, they are refering to the _inventory.Artifact.uriBucket_ column in the database.  This column is populated with a random hex string on artifact creation.
 - ❗ _storage_ buckets and _uri_ buckets are not the same thing, e.g. files in _storage_ bucket `04c` are not necessarily the same as artifacts in _uri_ bucket `04c`.
 
-<a id='term-collection'>**collection**</a>  
-A _collection_ is a set of artifacts/files/observations that form a logical group in your site's operations.  For example, for a multi-mission data centre like the CADC, collections are often the set of all data from a telescope.  A collection could also be all artifacts/files that compose a special data release for a single telescope (e.g. 'DR1').  
-- The terms _collection_ and _namespace_ are occasionally used interchangeably, but _namespace_ has a key role in artifact metadata whereas _collection_ is just a term used to understand how artifacts are logically grouped.
-
 <a id='term-namespace'>**namespace**</a>  
-A _namespace_ is an SI identifier for a _collection_ or part of a _collection_.  For example, `cadc:CFHT/` might be used to identify all CFHT files held at the CADC (the CFHT 'collection'); `cadc:CFHT/raw/` might be used to identify all of the raw CFHT files held at the CADC -- both `cadc:CFHT/` and `cadc:CFHT/raw/` are _namespaces_ but they identify different scopes of the CFHT _collection_.  SI services and applications often act on namespaces which are defined using regex patterns -- such as during file replication and determining access permissions -- so some thought must be put into what is used.  See the [SI data model page](https://github.com/opencadc/storage-inventory/tree/master/storage-inventory-dm) for more detail on the concepts of _URI_ and _namespace_.
-- when matching a namespace to an artifact URI, URIs are parsed using `:` and `/` as delimiters.
+A _namespace_ is an SI identifier for a collection of artifacts, and can be used to define the logical structure of data within SI.  For example, `cadc:CFHT/` might be used to identify all CFHT files held at the CADC; `cadc:CFHT/raw/` might be used to identify all of the raw CFHT files held at the CADC -- both `cadc:CFHT/` and `cadc:CFHT/raw/` are _namespaces_ but they identify different scopes of CFHT artifacts.  SI services and applications often act on namespaces defined using regex patterns -- such as during file replication and determining access permissions -- so some thought must be put into what is used.  See the [SI data model page](https://github.com/opencadc/storage-inventory/tree/master/storage-inventory-dm) for more detail on the concepts of _URI_ and _namespace_.
+- A namespaces is defined part of an artifact URI that ends in `:` or `/`.
     - ❗A namespace must always end at a delimiter to avoid confusion with other namespaces (e.g. cadc:TEST and cadc:TESTDATA, instead of cadc:TEST/ and cadc:TESTDATA/).
 - the URI for an artifact is '_namespace/filepath_'.  A _namespace_ which includes an artifact can include any delimited path defined by the artifact's URI, e.g. all of the following are namespaces which include the artifact `cadc:TEST/data/raw/example/test1.fits`:
     - `cadc:`
@@ -30,19 +27,14 @@ A _namespace_ is an SI identifier for a _collection_ or part of a _collection_. 
     - `cadc:TEST/data/raw/`
     - `cadc:TEST/data/raw/example/`
 - ❗ A _URI_ which has a _filepath_ of just the _filename_ (e.g. `cadc:test1.fits`) is not recommended.
-- The part of the namespace preceding the `:` is referred to as the 'scheme' elsewhere in the documentation.  This could be thought of as defining a group of collections (e.g. `cadc:DAO`, `cadc:CFHT`, `cadc:JCMT`)
-- The namespace hierarchy should be chosen to suit your project or telescope operations: a practical example of defining a namespace for a collection _might_ be:
-    - `cadc:DAO/` - the namespace for all files from the DAO telescope which are unique to the CADC.
-    - `cadc:DAO/camera1/raw/` - the namespace for all files from the DAO which are unprocessed raw observations using camera 1.
-    - `cadc:DAO/camera1/raw/biases/` - the namespace for the subset of all camera 1 raw files which are bias frames.
-    - `cadc:DAO/camera1/processed/` - the namespace for the subset of all processed frames from camera 1.
-    - `cadc:DAO/pi2023011/` - the namespace for the PI project designated '2023011'.
-    - alternatively, you could choose a simple flat namespace for all files, e.g. `cadc:DAO/`.
+    -  It is possible to have files with the same name, as long as they are in different namespaces.
+- The part of the namespace preceding the `:` is referred to as the 'scheme' elsewhere in the documentation.  This part of the namespace usually refers to an organization (e.g. `cadc:DAO`, `mast:JWST`)
 
 <a id='term-resourceid'>**resourceID**</a>  
-Unique ID in a URI form associated with a deployed service. A `registry` service provides a look-up to translate these IDs into service URLs.  Example: `ivo://opencadc.org/minoc`, which might resolve to `https://www.opencadc.org/minoc`.
+This is an unique ID for a deployed service. A [`registry`](#configuration-registry) service provides a look-up to translate these IDs into service URLs.  Example: `ivo://opencadc.org/minoc`, which might resolve to `https://www.opencadc.org/minoc`.
+- a `resourceID` is a label which identifies a service in an abstract way.
+    - ➡️ Service locations could change, but resourceIDs should not.
 - `resourceIDs` may be shared within a site -- used by local services and applications -- but may also be shared across an _organization_.  Because the scope of a site's resourceIDs could be broad, some thought needs to be put into their definition.
-- a `resourceID` is a label which identifies a service in an abstract way.  Service URLs might change, but resourceIDs should not.
 - the `ivo:` scheme in the `resourceID` means that the `registry` service that will be used to resolve the `resourceID` complies with the [**IVOA** registry standard](https://www.ivoa.net/documents/RegistryInterface/).  The available CADC [`reg`](https://github.com/opencadc/reg/tree/master/cadc-registry-server) service is an example of an **IVOA** registry implementation.
 <center>
 <img src="Registry-lookup.drawio.png" width="500">
@@ -159,7 +151,7 @@ A Global site will be required different services than a Storage site, and both 
 <img src="File-sync.drawio.png" width="500">
 </center>
 
-1. User uses the `minoc` service (`site1.minoc`) to PUT a file to Site 1.
+1. User PUTs a file to the `site1.minoc` service, either directly or via negotiation with a global [`raven`](#configuration-raven) service.
 1. `global.fenwick.site1` discovers the new inventory metadata for the file by querying `site1.luskan`.
 1. `site2.fenwick.global` discovers the new inventory metadata for the file by querying `global.luskan`.
 1. `site2.critwall` finds the locations of the new file via `global.raven` -- this returns a list of URLs from which the file can be downloaded.
@@ -329,6 +321,7 @@ Worker nodes:
 
     - Required for: Storage site and Global site (Note: would likely be the same baldur instance for both)
     - Container image: Use the latest `storage-inventory/baldur` image from [`images.opencadc.org`](#resource-repository)
+    - See the [opencadc storage inventory baldur](https://github.com/opencadc/storage-inventory/tree/master/baldur) documentation for more configuration details.
     - Uses an IVOA compatible GMS service and configured [namespaces](#term-namespace) to determine file access permissions.
     - Configuration notes:
         - `baldur.properties`:
@@ -337,7 +330,6 @@ Worker nodes:
             - The `org.opencadc.baldur.allowedGroup` is an IVOA GMS group [resourceID](#term-resourceid).  
                 - The GMS service must be registered in the available Registry service.
                 - the configured `readOnlyGroup` and `readWriteGroup` entries are also IVOA GMS group [resourceIDs](#term-resourceid).
-    - See the [opencadc storage inventory baldur](https://github.com/opencadc/storage-inventory/tree/master/baldur) documentation for more configuration details.
     - test with, e.g., `curl https://www.example.org/baldur/availability`
 
 1. <a id='configuration-gms'>**GMS**</a> - Group Membership service
@@ -349,6 +341,7 @@ Worker nodes:
 
     - Required for: Storage site only
     - Container image: Use the latest `storage-inventory/minoc` image from [`images.opencadc.org`](#resource-repository)
+    - See the [opencadc storage inventory minoc](https://github.com/opencadc/storage-inventory/tree/master/minoc) documentation for details.
     - Configuation notes:
         - `minoc.properties`:
             - `org.opencadc.minoc.resourceID`:
@@ -358,7 +351,6 @@ Worker nodes:
                 - (optional) this is the public key specified in the [raven](#configuration-raven) configuration key `org.opencadc.raven.publicKeyFile`.
         - `catalina.properties` (from [cadc-tomcat config](https://github.com/opencadc/docker-base/tree/master/cadc-tomcat)):
             - the `org.opencadc.minoc.inventory.username` database account is the 'Inventory admin user' configured when creating the [database](#configuration-database)
-    - See the [opencadc storage inventory minoc](https://github.com/opencadc/storage-inventory/tree/master/minoc) documentation for more configuration details.
     - when configuring the storage adapter for minoc to use (see **Storage** above) be sure to test that the containers deployed on your system can access the provided storage.
     - test with, e.g., `curl https://www.example.org/minoc/availability`
 
@@ -366,6 +358,7 @@ Worker nodes:
 
     - Required for: Storage site and Global site
     - Container image: Use the latest `storage-inventory/luskan` image from [`images.opencadc.org`](#resource-repository)
+    - See the [opencadc storage inventory luskan](https://github.com/opencadc/storage-inventory/tree/master/luskan) documentation for details.
     - Configuration notes:
         - `luskan.properties`:
             - `org.opencadc.luskan.isStorageSite` - for a storage site, this should be set to `true`.  The content of the inventory database is different between a storage site and a global site.
@@ -376,17 +369,18 @@ Worker nodes:
             - the `org.opencadc.luskan.tapadm.username` database account is the same 'TAP admin user'.
             - the `org.opencadc.luskan.query.username` database account is the 'TAP query user' account.
         - `cadc-tap-tmp.properties`:
-            - `org.opencadc.tap.tmp.TempStorageManager.baseURL` is the URL for _this_ `luskan` service, plus the `/results` path.
-                - the `{server name}` in the `baseURL` is the public name of the proxy fronting your `luskan` service (e.g. `www.example.org`).
-                - the `{luskan path}` is the path to your `luskan service` (likely just 'luskan', e.g. `www.example.org/luskan`).
+            - see the [cadc-tap-tmp](https://github.com/opencadc/tap/tree/master/cadc-tap-tmp) library documentation for more information.
+            - `org.opencadc.tap.tmp.TempStorageManager.baseURL` is the URL for _this_ `luskan` service, plus a path where query results can be retrieved from.
+                - e.g. if your luskan service is at `https://www.example.org/luskan`, then this `baseURL` could be `https://www.example.org/luskan/results`
             - the above `/results` path will be mapped to the path _in the container_ specified by `org.opencadc.tap.tmp.TempStorageManager.baseStorageDir`.  Ideally, this path will be a file-system that is shared among all `luskan` instances for your site.
-    - See the [opencadc storage inventory luskan](https://github.com/opencadc/storage-inventory/tree/master/luskan) documentation for more configuration details.
+                - e.g. if `baseStorageDir = /tmpdata` in your configuration, the luskan will store query results here (e.g. `/tmpdata/xyz.xml`) and that result will be retrievable as `https://www.example.org/luskan/results/xyz.xml`.
     - test with, e.g., `curl https://www.example.org/luskan/availability`
 
 1. <a id='configuration-raven'>**raven**</a> - File location service
 
     - Required for: Global site only
     - Container image: Use the latest `storage-inventory/raven` image from [`images.opencadc.org`](#resource-repository)
+    - See the [opencadc storage inventory raven](https://github.com/opencadc/storage-inventory/tree/master/raven) documentation for details.
     - Configuration notes:
         - `raven.properties`
             - (optional) `org.opencadc.raven.publicKeyFile` and `org.opencadc.raven.privateKeyFile`:
@@ -399,34 +393,34 @@ Worker nodes:
                         rm temp_rsa.pub
 
                 - the `publicKeyFile` will be required by services which need to verify the pre-authorized URLS (`minoc`).
-    - See the [opencadc storage inventory raven](https://github.com/opencadc/storage-inventory/tree/master/raven) documentation for more configuration details.
     - test with, e.g., `curl https://www.example.org/raven/availability`
 
 1. <a id='configuration-fenwick'>**fenwick**</a> - Metadata sync application
 
     - Required for: Storage site and Global site
     - Container image: Use the latest `storage-inventory/fenwick` image from [`images.opencadc.org`](#resource-repository)
+    - See the [opencadc storage inventory fenwick](https://github.com/opencadc/storage-inventory/tree/master/fenwick) documentation for details.
     - Configuration notes:
         - `fenwick.properites`:
             - `org.opencadc.fenwick.queryService`: 
                 - fenwick is used to synchronise artifact metadata between a Storage site and a Global site.  The `queryService` is the [resourceID](#term-resourceid) for the _remote_ `luskan` service -- ie. if fenwick is running at a Storage site, `queryService` should refer to the remote Global site `luskan`; if fenwick is running at the Global site, `queryService` should refer to the remote Storage site `luskan` service.  A Global site will need to run a fenwick instance for _each_ Storage site.
-    - See the [opencadc storage inventory fenwick](https://github.com/opencadc/storage-inventory/tree/master/fenwick) documentation for more configuration details.
 
 1. <a id='configuration-tantar'>**tantar**</a> - File validation application
 
     - Required for: Storage site only
     - Container image: Use the latest `storage-inventory/tantar` image from [`images.opencadc.org`](#resource-repository)
+    - See the [opencadc Storage Inventory tantar](https://github.com/opencadc/storage-inventory/tree/master/tantar) documentation for details.
     - Configuration notes:
         - `tantar.properties`
             -   `org.opencadc.tantar.buckets`:
                 - See the description of [buckets](#term-bucket).  Tantar operates on _storage_ buckets.
                 - If you're only running one instance of tantar it should be configured to operate on all buckets (`0-f`); for multiple instances of tantar, you would want to configure these to operate on non-overlapping subsets of buckets (e.g. `0-7`, `8-f`).
-    - See the [opencadc Storage Inventory tantar](https://github.com/opencadc/storage-inventory/tree/master/tantar) documentation for more configuration details.
     
 1. <a id='configuration-critwall'>**critwall**</a> - File sync application
 
     - Required for: Storage site only
     - Container image: Use the latest `storage-inventory/critwall` image from [`images.opencadc.org`](#resource-repository)
+    - See the [opencadc Storage Inventory critwall](https://github.com/opencadc/storage-inventory/tree/master/critwall) documentation for details.
     - Configuration notes:
         - `critwall.properties`
             - `org.opencadc.critwall.locatorService`:
@@ -434,12 +428,12 @@ Worker nodes:
             - `org.opencadc.critwall.buckets`:
                 - See the description of [buckets](#term-bucket).  Critwall operates on _URI_ buckets.
                 - As with tantar, you can run one or more instances of critwall, specifying a single bucket or a range of buckets for each instance.
-    - See the [opencadc Storage Inventory critwall](https://github.com/opencadc/storage-inventory/tree/master/critwall) documentation for more configuration details.
 
 1. <a id='configuration-ratik'>**ratik**</a> - Metadata validation
 
     - Required for: Storage site and Global site
     - Container image: Use the latest `storage-inventory/ratik` image from [`images.opencadc.org`](#resource-repository)
+    - See the [opencadc Storage Inventory ratik](https://github.com/opencadc/storage-inventory/tree/master/ratik) documentation for details.
     - Configuration notes:
         - `ratik.properties`
             - `org.opencadc.ratik.queryService`:
@@ -447,7 +441,6 @@ Worker nodes:
             - `org.opencadc.ratik.buckets`:
                 - See the description of [buckets](#term-bucket).  Ratik operates on _URI_ buckets.
                 - As with tantar, you can run one or more instances of ratik, specifying a single bucket or a range of buckets for each instance.
-    - See the [opencadc Storage Inventory ratik](https://github.com/opencadc/storage-inventory/tree/master/ratik) documentation for more configuration details.
     
 
 ##  Healthchecks and Monitoring
