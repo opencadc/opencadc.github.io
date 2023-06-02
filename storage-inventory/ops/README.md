@@ -384,7 +384,7 @@ Worker nodes:
     - Configuration notes:
         - `raven.properties`
             - (optional) `org.opencadc.raven.publicKeyFile` and `org.opencadc.raven.privateKeyFile`:
-                - These are optional but needed so that raven can generate 'pre-authorized' URLs for files, reducing the number of authentication queries required for a user to download a file.  The authentication information is embedded in a specially encoded URL.
+                - These are optional optimizations needed so that raven can generate 'pre-authorized' URLs for files, allowing the minocs that serve the file to skip this step before delivering the file.  The authentication information is embedded in a specially encoded URL.
                 - these are RSA public and private key files which can be generated using [cadc-keygen](https://github.com/opencadc/core/tree/master/cadc-keygen) or the commands below:
 
                         ssh-keygen -b 2048 -t rsa -m pkcs8 -f temp_rsa
@@ -392,7 +392,8 @@ Worker nodes:
                         mv temp_rsa raven-private.key
                         rm temp_rsa.pub
 
-                - the `publicKeyFile` will be required by services which need to verify the pre-authorized URLS (`minoc`).
+                - the `publicKeyFile` will be required by services which need to verify the pre-authorized URLs (`minoc`).
+    - See the [opencadc storage inventory raven](https://github.com/opencadc/storage-inventory/tree/master/raven) documentation for more configuration details.
     - test with, e.g., `curl https://www.example.org/raven/availability`
 
 1. <a id='configuration-fenwick'>**fenwick**</a> - Metadata sync application
