@@ -12,7 +12,7 @@ A representation of a file and its metadata in the SI database, specifically the
 SI assigns a `bucket` label to files on storage and to artifacts in the inventory database. 
 - Some SI applications can work on subsets of buckets, allowing some degree of parallelization.
 - Buckets labels are represented by hex strings, e.g. `a74`.
-- Although the bucket label of a file can also refer to the location of the file on storage, the two are not necessarily related.  On a storage platform that uses the concept of buckets (e.g. S3/Swift), a file's bucket label is currently used as part of the storage platform's bucket, but this is just an optimization; on a POSIX file-system, the bucket will be parsed into subdirectories (e.g. /a/7/4/).
+- Although the bucket label of a file can also refer to the location of the file on storage, the two are not necessarily related.  On a storage platform that uses the concept of buckets (e.g. Swift), a file's bucket label is currently used as part of the storage platform's bucket, but this is just an optimization; on a POSIX file-system, the bucket will be parsed into subdirectories (e.g. /a/7/4/).
 - When applications refer to buckets in the inventory database, they are refering to the _inventory.Artifact.uriBucket_ column in the database.  This column is populated with a random hex string on artifact creation.
 - ❗ _storage_ buckets and _uri_ buckets are not the same thing, e.g. files in _storage_ bucket `04c` are not necessarily the same as artifacts in _uri_ bucket `04c`.
 
