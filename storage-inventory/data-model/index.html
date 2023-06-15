@@ -1,0 +1,1015 @@
+<html xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:vo-dml="http://www.ivoa.net/xml/VODML/v1">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>Storage Inventory Data Model</title>
+      <link rel="stylesheet" href="http://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/style/ivoa_wg.css" type="text/css">
+      <link rel="stylesheet" href="http://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/style/xmi.css" type="text/css">
+   </head>
+   <body>
+      <div>
+         <p>
+            This is the primary Storage Inventory Data Model documentation.
+            This documentation is generated from the <a href="http://www.ivoa.net/documents/VODML/">VO-DML</a> 
+            description of the data model.
+            
+         </p>
+      </div><br><hr>
+      <h1>Storage Inventory Data Model</h1>
+      <h2><a id="contents" name="contents">Table of Contents</a></h2>
+      <div class="head">
+         <table class=".toc">
+            <tr>
+               <td></td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#abstract">Abstract</a></td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#status">Status</a></td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#acknowledgments">Acknowledgements</a></td>
+            </tr>
+            <tr>
+               <td>1.</td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#model_section">model: si</a></td>
+            </tr>
+            <tr>
+               <td>2.</td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#packages">Packages and Types</a></td>
+            </tr>
+            <tr>
+               <td>2.1</td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rootpackage">[root package]</a></td>
+            </tr>
+            <tr>
+               <td>2.1.1</td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#uuid">primitiveType:uuid</a></td>
+            </tr>
+            <tr>
+               <td>2.2</td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#si">package: si</a></td>
+            </tr>
+            <tr>
+               <td>2.2.1</td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Artifact">objectType: Artifact</a></td>
+            </tr>
+            <tr>
+               <td>2.2.2</td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#DeletedArtifactEvent">objectType: DeletedArtifactEvent</a></td>
+            </tr>
+            <tr>
+               <td>2.2.3</td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#DeletedStorageLocationEvent">objectType: DeletedStorageLocationEvent</a></td>
+            </tr>
+            <tr>
+               <td>2.2.4</td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Entity">objectType: Entity</a></td>
+            </tr>
+            <tr>
+               <td>2.2.5</td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#SiteLocation">objectType: SiteLocation</a></td>
+            </tr>
+            <tr>
+               <td>2.2.6</td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#StorageLocation">objectType: StorageLocation</a></td>
+            </tr>
+            <tr>
+               <td>2.2.7</td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#StorageLocationEvent">objectType: StorageLocationEvent</a></td>
+            </tr>
+            <tr>
+               <td>2.2.8</td>
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#StorageSite">objectType: StorageSite</a></td>
+            </tr>
+            <tr>
+               <td>3.</td>
+               <td>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<a href="#vodml-ids">vodml-id-s</a></td>
+            </tr>
+            <tr>
+               <td>4.</td>
+               <td>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<a href="#modelimports">Imported Models</a></td>
+            </tr>
+            <tr>
+               <td>4.1</td>
+               <td>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<a href="#ivoa">ivoa</a></td>
+            </tr>
+         </table>
+      </div>
+      <hr><a name="abstract"></a><h1>Abstract</h1>
+      <div>
+         <p>
+            The Storage Inventory Data Model is used to track existence and location of data files.
+            
+         </p>
+      </div><br><hr><a name="status"></a><h1>Status</h1>
+      <div>
+         <p>
+            The Storage Inventory Data Model is a work-in-progress and incomplete.
+            
+         </p>
+         <!--
+<p> 
+    The <span style="outline-color: #b00000; outline-style: solid; outline-width: 1px">red outlines around attributes or classes</span>
+    in the UML diagrams below indicate changes relative to the previous version.
+</p>
+-->
+      </div><br><hr>
+      <h1><a name="model_section">1. Model: Storage Inventory Data Model (si)</a></h1>
+      <table>
+         <tr>
+            <td align="right"><b>Authors</b></td>
+            <td> : </td>
+            <td>Patrick Dowler, Canadian Astronomy Data Centre</td>
+         </tr>
+         <tr>
+            <td align="right"><b>Date</b></td>
+            <td> : </td>
+            <td>2021-05-12T15:00:00</td>
+         </tr>
+         <tr>
+            <td align="right"><b>Version</b></td>
+            <td> : </td>
+            <td>0.6</td>
+         </tr>
+         <tr>
+            <td align="right" valign="top"><b>Description</b></td>
+            <td valign="top"> : </td>
+            <td>a general purpose data model for managing storage inventory</td>
+         </tr>
+      </table><img src="storage-inventory-0.6.png"><hr>
+      <h1>2.<a name="packages">Model contents: Packages and Types</a></h1>
+      <p>
+         The following sub-sections present all packages in the model with their types.
+         The packages are listed here in alphabetical order.
+         Each sub-section contains a description of the package and a table containing its
+         various features.
+         
+      </p>
+      <h3><a name="rootpackage"></a>2.1 [root package]
+      </h3>
+      <table border="1" cellspacing="2" width="100%">
+         <tr>
+            <td class="objecttype-title" width="20%">Model</td>
+            <td class="objecttype-name">si</td>
+         </tr>
+         <tr>
+            <td width="20%" class="info-title">child package(s)</td>
+            <td colspan="2" class="feature-detail"><a href="#si">si</a> 
+            </td>
+         </tr>
+         <tr>
+            <td width="20%" class="info-title">Primitive types</td>
+            <td colspan="2" class="feature-detail"><a href="#uuid">uuid</a> 
+            </td>
+         </tr>
+      </table>
+      <h3><a name="uuid"></a>2.1.1 primitiveType: uuid
+      </h3>
+      <table border="1" width="100%" cellspacing="2">
+         <tr>
+            <td class="objecttype-title" width="20%">vodml-id</td>
+            <td class="objecttype-name" colspan="1">uuid</td>
+         </tr>
+         <tr>
+            <td class="info-title">description</td>
+            <td class="feature-detail" colspan="1">represents a 128-bit binary ID in the canonical ascii UUID format</td>
+         </tr>
+      </table><br><h3><a name="si"></a>2.2 package: si
+      </h3>
+      <table border="1" cellspacing="2" width="100%">
+         <tr>
+            <td class="objecttype-title" width="20%">vodml-id</td>
+            <td class="objecttype-name" colspan="1">si</td>
+         </tr>
+         <tr>
+            <td class="info-title">description</td>
+            <td class="feature-detail" colspan="1">this package contains the SI object types and enumerations</td>
+         </tr>
+         <tr>
+            <td width="20%" class="info-title">parent</td>
+            <td colspan="2" class="feature-detail"><a href="#model_section">si</a></td>
+         </tr>
+         <tr>
+            <td width="20%" class="info-title">Object types</td>
+            <td colspan="2" class="feature-detail"><a href="#Artifact">Artifact</a> <a href="#DeletedArtifactEvent">DeletedArtifactEvent</a> <a href="#DeletedStorageLocationEvent">DeletedStorageLocationEvent</a> <a href="#Entity">Entity</a> <a href="#SiteLocation">SiteLocation</a> <a href="#StorageLocation">StorageLocation</a> <a href="#StorageLocationEvent">StorageLocationEvent</a> <a href="#StorageSite">StorageSite</a> 
+            </td>
+         </tr>
+      </table>
+      <h3><a name="Artifact"></a>2.2.1 objectType: Artifact
+      </h3>
+      <div align="center">
+         <table border="1" width="100%" cellspacing="2">
+            <tr>
+               <td class="objecttype-title" width="20%">vodml-id</td>
+               <td class="objecttype-name" colspan="1">Artifact</td>
+            </tr>
+            <tr>
+               <td class="info-title">description</td>
+               <td class="feature-detail" colspan="1">an item in the storage system; usually a file</td>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                     <tr>
+                        <td colspan="2" bgcolor="#cacaca">
+                           <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                              <tr>
+                                 <td width="20%" class="info-title">package</td>
+                                 <td colspan="3" class="feature-detail"><a href="#si">si</a></td>
+                              </tr>
+                              <tr>
+                                 <td width="20%" class="info-title">extends</td>
+                                 <td colspan="3" class="feature-detail"><a href="#Entity">Entity [si:Entity]</a></td>
+                              </tr>
+                              <tr>
+                                 <td colspan="3" class="info-title">attributes</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading" width="20%">name</td>
+                                 <td class="feature-heading" width="10%">feature</td>
+                                 <td class="feature-heading" width="70%">value</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="Artifact.uri"></a><b>uri</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#anyURI">anyURI</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Artifact.uri</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">an globally uniquer logical identifier for the artifact</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="Artifact.uriBucket"></a><b>uriBucket</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#string">string</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Artifact.uriBucket</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">a short 5 letter code generated from the uri so that validation code can 
+                                    work in batches; the value must be generated from the Artifact.uri such that an
+                                    artifact is always in the same bucket; the code could be generated by taking the 
+                                    first 5 characters from a checksum of the uri (5 hex chars gives up to 1 million 
+                                    buckets)
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="Artifact.contentChecksum"></a><b>contentChecksum</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#anyURI">anyURI</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Artifact.contentChecksum</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">the checksum of the artifact data; 
+                                    the URI must conform to the pattern {algorithm}:{value}, for example: md5:4be91751541fd804e7207663a0822f56
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="Artifact.contentLastModified"></a><b>contentType</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#string">string</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Artifact.contentLastModified</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">timestamp of the last modification of the stored bytes (file)</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="Artifact.contentLength"></a><b>contentLength</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#integer">integer</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Artifact.contentLength</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">the size of the resolved artifact; file size in bytes</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="Artifact.contentType"></a><b>contentType</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#string">string</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Artifact.contentType</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">label specifying the format of the resolved artifact; typically a MIME-type</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="Artifact.contentEncoding"></a><b>contentEncoding</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#string">string</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Artifact.contentEncoding</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">label specifying the encoding of the file; typically a compression type</td>
+                              </tr>
+                           </table>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+            </tr>
+         </table>
+      </div><br><h3><a name="DeletedArtifactEvent"></a>2.2.2 objectType: DeletedArtifactEvent
+      </h3>
+      <div align="center">
+         <table border="1" width="100%" cellspacing="2">
+            <tr>
+               <td class="objecttype-title" width="20%">vodml-id</td>
+               <td class="objecttype-name" colspan="1">DeletedArtifactEvent</td>
+            </tr>
+            <tr>
+               <td class="info-title">description</td>
+               <td class="feature-detail" colspan="1">an entity used to signal/track deletion of an artifact</td>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                     <tr>
+                        <td colspan="2" bgcolor="#cacaca">
+                           <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                              <tr>
+                                 <td width="20%" class="info-title">package</td>
+                                 <td colspan="3" class="feature-detail"><a href="#si">si</a></td>
+                              </tr>
+                              <tr>
+                                 <td width="20%" class="info-title">extends</td>
+                                 <td colspan="3" class="feature-detail"><a href="#Entity">Entity [si:Entity]</a></td>
+                              </tr>
+                           </table>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+            </tr>
+         </table>
+      </div><br><h3><a name="DeletedStorageLocationEvent"></a>2.2.3 objectType: DeletedStorageLocationEvent
+      </h3>
+      <div align="center">
+         <table border="1" width="100%" cellspacing="2">
+            <tr>
+               <td class="objecttype-title" width="20%">vodml-id</td>
+               <td class="objecttype-name" colspan="1">DeletedStorageLocationEvent</td>
+            </tr>
+            <tr>
+               <td class="info-title">description</td>
+               <td class="feature-detail" colspan="1">an entity used to signal/track deletion of a copy of an artifact at a storage site</td>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                     <tr>
+                        <td colspan="2" bgcolor="#cacaca">
+                           <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                              <tr>
+                                 <td width="20%" class="info-title">package</td>
+                                 <td colspan="3" class="feature-detail"><a href="#si">si</a></td>
+                              </tr>
+                              <tr>
+                                 <td width="20%" class="info-title">extends</td>
+                                 <td colspan="3" class="feature-detail"><a href="#Entity">Entity [si:Entity]</a></td>
+                              </tr>
+                           </table>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+            </tr>
+         </table>
+      </div><br><h3><a name="Entity"></a>2.2.4 objectType: Entity
+      </h3>
+      <div align="center">
+         <table border="1" width="100%" cellspacing="2">
+            <tr>
+               <td class="objecttype-title" width="20%">vodml-id</td>
+               <td class="objecttype-name" colspan="1">Entity</td>
+            </tr>
+            <tr>
+               <td class="info-title">description</td>
+               <td class="feature-detail" colspan="1">base entity class to support persistence;
+                  entity attributes are generally set or updated by persistence implementations
+               </td>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                     <tr>
+                        <td colspan="2" bgcolor="#cacaca">
+                           <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                              <tr>
+                                 <td width="20%" class="info-title">package</td>
+                                 <td colspan="3" class="feature-detail"><a href="#si">si</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="info-title" width="20%">abstract</td>
+                                 <td class="feature-detail" colspan="3">True</td>
+                              </tr>
+                              <tr>
+                                 <td class="info-title" width="20%">Subclasses in this model</td>
+                                 <td class="feature-detail" colspan="3"><a href="#Artifact">Artifact</a> <a href="#DeletedArtifactEvent">DeletedArtifactEvent</a> <a href="#DeletedStorageLocationEvent">DeletedStorageLocationEvent</a> <a href="#StorageLocationEvent">StorageLocationEvent</a> 
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td colspan="3" class="info-title">attributes</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading" width="20%">name</td>
+                                 <td class="feature-heading" width="10%">feature</td>
+                                 <td class="feature-heading" width="70%">value</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="Entity.id"></a><b>id</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#uuid">uuid [si:uuid]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Entity.id</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">globally unique identifier (primary key)</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="Entity.lastModified"></a><b>lastModified</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#datetime">datetime</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Entity.lastModified</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">timestamp of last modification of this entity; the timestamp is intended to be assigned
+                                    and/or updated when the entity is stored (e.g. in a database); value can be null for
+                                    new entities
+                                    that have not been persisted
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="Entity.metaChecksum"></a><b>metaChecksum</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#anyURI">anyURI</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">Entity.metaChecksum</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">metadata checksum of this entity; 
+                                    the URI must conform to the pattern {algorithm}:{value}, for example: md5:4be91751541fd804e7207663a0822f56;
+                                    value can be null for new entities that have not been persisted; the algorithm for
+                                    computing the metadata 
+                                    checksum is the same as for CAOM and has been refactored into a common library
+                                 </td>
+                              </tr>
+                           </table>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+            </tr>
+         </table>
+      </div><br><h3><a name="SiteLocation"></a>2.2.5 objectType: SiteLocation
+      </h3>
+      <div align="center">
+         <table border="1" width="100%" cellspacing="2">
+            <tr>
+               <td class="objecttype-title" width="20%">vodml-id</td>
+               <td class="objecttype-name" colspan="1">SiteLocation</td>
+            </tr>
+            <tr>
+               <td class="info-title">description</td>
+               <td class="feature-detail" colspan="1">location of an artifact at a site; instances are created and maintained in a global
+                  inventory
+               </td>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                     <tr>
+                        <td colspan="2" bgcolor="#cacaca">
+                           <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                              <tr>
+                                 <td width="20%" class="info-title">package</td>
+                                 <td colspan="3" class="feature-detail"><a href="#si">si</a></td>
+                              </tr>
+                              <tr>
+                                 <td colspan="3" class="info-title">attributes</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading" width="20%">name</td>
+                                 <td class="feature-heading" width="10%">feature</td>
+                                 <td class="feature-heading" width="70%">value</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="SiteLocation.site"></a><b>site</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#uuid">uuid [si:uuid]</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">SiteLocation.site</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">reference to the site</td>
+                              </tr>
+                           </table>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+            </tr>
+         </table>
+      </div><br><h3><a name="StorageLocation"></a>2.2.6 objectType: StorageLocation
+      </h3>
+      <div align="center">
+         <table border="1" width="100%" cellspacing="2">
+            <tr>
+               <td class="objecttype-title" width="20%">vodml-id</td>
+               <td class="objecttype-name" colspan="1">StorageLocation</td>
+            </tr>
+            <tr>
+               <td class="info-title">description</td>
+               <td class="feature-detail" colspan="1">storage location of a file; instances are created and maintained in a storage site</td>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                     <tr>
+                        <td colspan="2" bgcolor="#cacaca">
+                           <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                              <tr>
+                                 <td width="20%" class="info-title">package</td>
+                                 <td colspan="3" class="feature-detail"><a href="#si">si</a></td>
+                              </tr>
+                              <tr>
+                                 <td colspan="3" class="info-title">attributes</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading" width="20%">name</td>
+                                 <td class="feature-heading" width="10%">feature</td>
+                                 <td class="feature-heading" width="70%">value</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="StorageLocation.storageID"></a><b>storageID</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#anyURI">anyURI</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">StorageLocation.storageID</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">storage site/system internal identifier</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="StorageLocation.storageBucket"></a><b>storageBucket</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#string">string</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">StorageLocation.storageBucket</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">0..1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">a short string code so that validation code can work in batches; 
+                                    this could be the same as the Artifact.uriBucket, it could be part of the Artifact.uri,
+                                    or it
+                                    could be a completely independent value generated by the storage system
+                                    
+                                 </td>
+                              </tr>
+                           </table>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+            </tr>
+         </table>
+      </div><br><h3><a name="StorageLocationEvent"></a>2.2.7 objectType: StorageLocationEvent
+      </h3>
+      <div align="center">
+         <table border="1" width="100%" cellspacing="2">
+            <tr>
+               <td class="objecttype-title" width="20%">vodml-id</td>
+               <td class="objecttype-name" colspan="1">StorageLocationEvent</td>
+            </tr>
+            <tr>
+               <td class="info-title">description</td>
+               <td class="feature-detail" colspan="1">an entity used to signal/track a new copy of an artifact at a storage site</td>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                     <tr>
+                        <td colspan="2" bgcolor="#cacaca">
+                           <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                              <tr>
+                                 <td width="20%" class="info-title">package</td>
+                                 <td colspan="3" class="feature-detail"><a href="#si">si</a></td>
+                              </tr>
+                              <tr>
+                                 <td width="20%" class="info-title">extends</td>
+                                 <td colspan="3" class="feature-detail"><a href="#Entity">Entity [si:Entity]</a></td>
+                              </tr>
+                           </table>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+            </tr>
+         </table>
+      </div><br><h3><a name="StorageSite"></a>2.2.8 objectType: StorageSite
+      </h3>
+      <div align="center">
+         <table border="1" width="100%" cellspacing="2">
+            <tr>
+               <td class="objecttype-title" width="20%">vodml-id</td>
+               <td class="objecttype-name" colspan="1">StorageSite</td>
+            </tr>
+            <tr>
+               <td class="info-title">description</td>
+               <td class="feature-detail" colspan="1">description of a storage site</td>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                     <tr>
+                        <td colspan="2" bgcolor="#cacaca">
+                           <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                              <tr>
+                                 <td width="20%" class="info-title">package</td>
+                                 <td colspan="3" class="feature-detail"><a href="#si">si</a></td>
+                              </tr>
+                              <tr>
+                                 <td colspan="3" class="info-title">attributes</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading" width="20%">name</td>
+                                 <td class="feature-heading" width="10%">feature</td>
+                                 <td class="feature-heading" width="70%">value</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="StorageSite.resourceID"></a><b>resourceID</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#anyURI">anyURI</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">StorageSite.resourceID</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">resource identifier for the web service API of a site</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="StorageSite.name"></a><b>name</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#string">string</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">StorageSite.name</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">common (display) name of a site</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="StorageSite.allowRead"></a><b>allowRead</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#boolean">boolean</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">StorageSite.allowRead</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">site is configured to allow callers to get metadata and/or content of files</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-detail" valign="top" rowspan="4"><a name="StorageSite.allowWrite"></a><b>allowWrite</b></td>
+                                 <td class="feature-heading">type</td>
+                                 <td class="feature-detail"><a href="#ivoa">ivoa</a>:<a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html#boolean">boolean</a></td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">vodml-id</td>
+                                 <td class="feature-detail">StorageSite.allowWrite</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">multiplicity</td>
+                                 <td class="feature-detail">1</td>
+                              </tr>
+                              <tr>
+                                 <td class="feature-heading">description</td>
+                                 <td class="feature-detail">site is configured to allow callers to write and delete files and modify file metadata</td>
+                              </tr>
+                           </table>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+            </tr>
+         </table>
+      </div><br><hr>
+      <h1>3.<a name="vodml-ids">Element Identifiers/VO-DMLrefs</a></h1>  
+      The following table shows all fully qualified vodml-ids for this data model.
+      It is ordered alphabetically and the identifiers are hyper-linked to the location
+      in the document where the actual element is fully defined.
+      
+      
+      <table style="border-style:solid;border-width:1px;" border="1" cellspacing="0" cellpadding="0">
+         <tr>
+            <td class="feature-heading">vodml-id</td>
+            <td class="feature-heading">feature type</td>
+            <td class="feature-heading">description</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#"></a></td>
+            <td class="feature-detail">vo-dml:model</td>
+            <td class="feature-detail">a general purpose data model for managing storage inventory</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#uuid">uuid</a></td>
+            <td class="feature-detail">primitiveType</td>
+            <td class="feature-detail">represents a 128-bit binary ID in the canonical ascii UUID format</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#si">si</a></td>
+            <td class="feature-detail">package</td>
+            <td class="feature-detail">this package contains the SI object types and enumerations</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Artifact">Artifact</a></td>
+            <td class="feature-detail">objectType</td>
+            <td class="feature-detail">an item in the storage system; usually a file</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Artifact.contentChecksum">Artifact.contentChecksum</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">the checksum of the artifact data; 
+               the URI must conform to the pattern {algorithm}:{value}, for example: md5:4be91751541fd804e7207663a0822f56
+            </td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Artifact.contentEncoding">Artifact.contentEncoding</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">label specifying the encoding of the file; typically a compression type</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Artifact.contentLength">Artifact.contentLength</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">the size of the resolved artifact; file size in bytes</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Artifact.contentLastModified">Artifact.contentLastModified</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">timestamp of the last modification of the stored bytes (file)</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Artifact.contentType">Artifact.contentType</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">label specifying the format of the resolved artifact; typically a MIME-type</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Artifact.uri">Artifact.uri</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">an globally uniquer logical identifier for the artifact</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Artifact.uriBucket">Artifact.uriBucket</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">a short 5 letter code generated from the uri so that validation code can 
+               work in batches; the value must be generated from the Artifact.uri such that an
+               artifact is always in the same bucket; the code could be generated by taking the 
+               first 5 characters from a checksum of the uri (5 hex chars gives up to 1 million 
+               buckets)
+            </td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#DeletedArtifactEvent">DeletedArtifactEvent</a></td>
+            <td class="feature-detail">objectType</td>
+            <td class="feature-detail">an entity used to signal/track deletion of an artifact</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#DeletedStorageLocationEvent">DeletedStorageLocationEvent</a></td>
+            <td class="feature-detail">objectType</td>
+            <td class="feature-detail">an entity used to signal/track deletion of a copy of an artifact at a storage site</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Entity">Entity</a></td>
+            <td class="feature-detail">objectType</td>
+            <td class="feature-detail">base entity class to support persistence;
+               entity attributes are generally set or updated by persistence implementations
+            </td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Entity.id">Entity.id</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">globally unique identifier (primary key)</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Entity.lastModified">Entity.lastModified</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">timestamp of last modification of this entity; the timestamp is intended to be assigned
+               and/or updated when the entity is stored (e.g. in a database); value can be null for
+               new entities
+               that have not been persisted
+            </td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#Entity.metaChecksum">Entity.metaChecksum</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">metadata checksum of this entity; 
+               the URI must conform to the pattern {algorithm}:{value}, for example: md5:4be91751541fd804e7207663a0822f56;
+               value can be null for new entities that have not been persisted; the algorithm for
+               computing the metadata 
+               checksum is the same as for CAOM and has been refactored into a common library
+            </td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#SiteLocation">SiteLocation</a></td>
+            <td class="feature-detail">objectType</td>
+            <td class="feature-detail">location of an artifact at a site; instances are created and maintained in a global
+               inventory
+            </td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#SiteLocation.site">SiteLocation.site</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">reference to the site</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#StorageLocation">StorageLocation</a></td>
+            <td class="feature-detail">objectType</td>
+            <td class="feature-detail">storage location of a file; instances are created and maintained in a storage site</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#StorageLocation.storageBucket">StorageLocation.storageBucket</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">a short string code so that validation code can work in batches; 
+               this could be the same as the Artifact.uriBucket, it could be part of the Artifact.uri,
+               or it
+               could be a completely independent value generated by the storage system
+               
+            </td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#StorageLocation.storageID">StorageLocation.storageID</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">storage site/system internal identifier</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#StorageLocationEvent">StorageLocationEvent</a></td>
+            <td class="feature-detail">objectType</td>
+            <td class="feature-detail">an entity used to signal/track a new copy of an artifact at a storage site</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#StorageSite">StorageSite</a></td>
+            <td class="feature-detail">objectType</td>
+            <td class="feature-detail">description of a storage site</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#StorageSite.allowRead">StorageSite.allowRead</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">site is configured to allow callers to get metadata and/or content of files</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#StorageSite.allowWrite">StorageSite.allowWrite</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">site is configured to allow callers to write and delete files and modify file metadata</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#StorageSite.name">StorageSite.name</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">common (display) name of a site</td>
+         </tr>
+         <tr>
+            <td class="feature-detail"><a href="#StorageSite.resourceID">StorageSite.resourceID</a></td>
+            <td class="feature-detail">attribute</td>
+            <td class="feature-detail">resource identifier for the web service API of a site</td>
+         </tr>
+      </table>
+      <hr>
+      <h1>4.<a name="modelimports">Imported Models</a></h1>
+      <p>This section lists the external models imported by the current data model.
+         For each imported model we list URLs to the VO-DML and HTML representations and the
+         prefix used for vodml-ids from inside the model.
+      </p>
+      <h2><a name="ivoa"></a>4.1 ivoa
+      </h2>
+      <table border="1" cellspacing="2" width="100%">
+         <tr>
+            <td class="objecttype-title" width="20%">Model vodml-id</td>
+            <td class="objecttype-name">ivoa</td>
+         </tr>
+         <tr>
+            <td width="30%" class="info-title">url</td>
+            <td><a href="https://www.ivoa.net/xml/VODML/IVOA-v1.vo-dml.xml">https://www.ivoa.net/xml/VODML/IVOA-v1.vo-dml.xml</a></td>
+         </tr>
+         <tr>
+            <td width="30%" class="info-title">documentation url</td>
+            <td><a href="https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html">https://volute.g-vo.org/svn/trunk/projects/dm/vo-dml/models/ivoa/vo-dml/IVOA-v1.0.html</a></td>
+         </tr>
+      </table>
+   </body>
+</html>
