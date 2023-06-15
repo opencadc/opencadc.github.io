@@ -1,5 +1,6 @@
-# Storage Inventory Operator and Deployment Documentation
+# Storage Inventory Documentation
 
+- [Storage Inventory Data Model](data-model/)
 - [Operator Documentation](ops/README.md)
 	1. [Introduction](ops/README.md#introduction)
     	* [Storage Inventory Terms and Concepts](ops/README.md#storage-inventory-terms-and-concepts)
