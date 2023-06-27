@@ -299,6 +299,7 @@ Worker nodes:
         - **nginx**
             - untested, but likely has the same requirements and restrictions as haproxy for proxy certificates.
     - SSL termination -- although you will need to support https connections to your proxy, the SI containers do not accept https connections.  Because of this, your proxy must terminate the SSL connection and pass only non-SSL http connections to the containers.
+    - To make a service available under a different name or path than the default, complex proxy rules are not required: see [war-rename.conf](#faq-servicerename) in the FAQ.
     
 
 1. <a id='configuration-registry'>**Registry service**</a>
@@ -455,11 +456,11 @@ Worker nodes:
 ## FAQ 
 Additional FAQ can be found [`here`](https://github.com/opencadc/storage-inventory/blob/master/docs/FAQ.md)
 
-- **Database failing to initialize**
+- <a id='faq-dbinit'>**Database failing to initialize**</a>
     - I'm sure that my service/application is configured with the correct inventory database url/username/password but it is failing to initialize!
         - check that the database pg_hba.conf file allows connections from the host that you're running the service on. If you're running services in a docker swarm or a kubernetes cluster, the egress IP might not be obvious.
         - in the service configuration files, check that the configuration keys are correct. For example, the key for the database url for the application fenwick is `org.opencadc.fenwick.inventory.url`; the key for the database URL for the service minoc is `org.opencadc.minoc.inventory.url`. It is easy to cut and paste between config files and forget to change the key.
-- **How do I remove artifacts and files from a Storage site but not from other Storage sites?**
+- <a id='faq-artifactremoval'>**How do I remove artifacts and files from a Storage site but not from other Storage sites?**</a>
     - This might occur if you have multiple storage sites but one storage site runs out of storage space for some reason.
     - The correct way to do this is to start with `ratik` -- this will remove the artifacts from the site while ensuring that _at least one other copy of the artifact exists elsewhere in your Storage Inventory system._
         1. Configure `artifact-selector.sql` for `ratik` and `fenwick` at the site you wish to remove the artifacts from to exclude their [namespace]('#term-namespace').
@@ -476,11 +477,17 @@ Additional FAQ can be found [`here`](https://github.com/opencadc/storage-invento
         1. Run `ringhold`.
         1. Configure `org.opencadc.tantar.purgeNamespace` for `tantar` at the site to include the namespace of the artifacts being removed.
         1. Run `tantar` at the site.  This will remove the files from storage.
-- **tantar log interpretation**
+- <a id='faq-tantarlogs'>**tantar log interpretation**</a>
     - tantar is comparing the inventory.Artifact table to the contents of the configured storage system.  The `org.opencadc.tantar.policy.ResolutionPolicy` determines whether the storage is definitive ('StorageIsAlwaysRight') or the inventory database is definitive ('InventoryIsAlwaysRight').  Usually, you will be using 'InventoryIsAlwaysRight'.
     - _InventoryIsAlwaysRight.deleteStorageLocation_ - tantar found a file in storage which didn't match the database, either its checksum didn't match what the artifact insisted it should be (_and_ there was still a file with the matching checksum in storage) or there was no matching artifact in the database.  The `reason` field in the log line gives the rationale for this decision:
         - `reason=no-matching-artifact` - the file didn't match anything in the database, so should be deleted.
         - `reason=old-storageLocation` - the file didn't match the storage ID of the artifact, and the correct file with the matching storage ID was available.
+- <a id='faq-servicerename'>**Making a service available under a different name**</a> - `war-rename.conf`
+    - SI services (`baldur`,`luskan`,`minoc`,`raven`) expect to be available via a URL like _https://example.org/minoc_ -- i.e. the service name immediately follows the domain name, with a path of '/', and the name of the service in the URL is unchanged.  
+        - The services need to know what name and path they are located at in order to be able to issue sensible redirects back to themselves when necessary.
+    - It is possible to change the name or path to the service at deployment time by putting a config file named `war-rename.conf` in the service's `/config` directory.  
+        - The content of the `war-rename.conf` file is a simple Unix shell-like 'mv' command to rename the service _war_ file, e.g. _mv minoc.war newname.war_ - in this example, the `minoc` service would be available as, e.g., _https://example.org/newname_.
+        - To add a path element to the name, e.g., to make the service available as _https://example.org/site1/minoc_ instead of _https://example.org/minoc_, include the path element like so: _mv minoc.war site1#minoc.war_.
 
 
 
