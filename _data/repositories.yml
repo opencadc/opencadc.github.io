@@ -74,13 +74,13 @@
     image_path: 'cadc-access-control-server.jpg'
     github: '/ac/cadc-access-control-server'
 
-- name: 'notebook-tutorials'
-  title: 'Notebook Tutorials'
+- name: 'science-platform'
+  title: 'CANFAR Science Platform'
   enabled: 'true'
-  description: 'Jupyter notebook tutorials for CADC astroquery'
+  description: 'CANFAR Science Platform, Portal, and Containers'
   img: ''
-  github: '/notebook-tutorials'
-  documentation: '/notebook-tutorials'
+  github: '/science-containers
+  documentation: '/science-containers
   projects:
 
 - name: 'storage-inventory'
@@ -91,3 +91,13 @@
   github: '/storage-inventory'
   documentation: '/storage-inventory'
   projects:
+
+- name: 'notebook-tutorials'
+  title: 'Notebook Tutorials'
+  enabled: 'true'
+  description: 'Jupyter notebook tutorials for CADC astroquery'
+  img: ''
+  github: '/notebook-tutorials'
+  documentation: '/notebook-tutorials'
+  projects:
+
