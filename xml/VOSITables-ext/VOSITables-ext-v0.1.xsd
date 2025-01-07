@@ -8,6 +8,9 @@
     <xs:attribute name="columnID">
         <xs:annotation>
             <xs:documentation>
+                An attribute intended for use on a column element only,
+                that uniquely identifies a column in a TAP service,
+                allowing reading and writing of an identifier.
             </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
