@@ -8,7 +8,6 @@
     <xs:attribute name="columnID">
         <xs:annotation>
             <xs:documentation>
-                Defines a TapSchema column for service descriptors, enabling service descriptor output in a VOSITable.
             </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
