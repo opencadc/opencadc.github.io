@@ -1,1 +1,49 @@
-ProductType.html
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>ProductType vocabulary</title>
+</head>
+<body>
+<h1>ProductType vocabulary</h1>
+<p>The ProductType vocabulary is a re-use of the 
+<a href="https://www.ivoa.net/rdf/datalink/core">IVOA DataLink Core</a> vocabulary.</p>
+<p>
+Terms from the vocabulary may be used in CAOM instances as values of the caom2:Artifact.productType 
+field. Terms in the base vocabulary are to be used without the URI prefix (e.g. "this" instead of 
+http://www.opencadc.org/caom2/productType#this). As used in CAOM, Artifact.protuctType terms describe 
+the relationship of the artifact to the plane; this is slightly different from describing what 
+<em>type of file</em> the artifact is.
+</p>
+
+<p>
+The following terms from the DataLink Core vocabulary are currently allowed in CAOM:
+</p>
+
+<ul>
+<li>auxiliary
+<li>bias
+<li>calibration
+<li>coderived
+<li>dark
+<li>documentation
+<li>error
+<li>flat
+<li>noise
+<li>preview
+<li>preview-image
+<li>preview-plot
+<li>thumbnail
+<li>weight
+</ul>
+
+<p>
+The term "science" is currently allowed for backwards compatibility, but usage should
+be replaced with "this" in future.
+</p>
+
+<p>
+The term "calibration" was previously used to describe calibration artifacts in observations
+with intent="calibration". This usage should also be replaced by "this" to indicate those
+artifacts that are primary within the context of the observation and plane that contains them.
+</p>
+</body>
+</html>
