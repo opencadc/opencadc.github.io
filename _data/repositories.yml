@@ -79,8 +79,8 @@
   enabled: 'true'
   description: 'CANFAR Science Platform, Portal, and Containers'
   img: ''
-  github: '/science-containers'
-  documentation: '/science-containers'
+  github: '/canfar'
+  documentation: '/canfar'
   projects:
 
 - name: 'storage-inventory'
@@ -100,4 +100,5 @@
   github: '/notebook-tutorials'
   documentation: '/notebook-tutorials'
   projects:
+
 
